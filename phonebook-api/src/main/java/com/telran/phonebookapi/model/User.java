@@ -26,6 +26,10 @@ public class User {
     @Setter
     private String password;
 
+    //@Transient
+   // private String passwordConfirmation;
+
+    @Setter
     private boolean isActive = false;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
