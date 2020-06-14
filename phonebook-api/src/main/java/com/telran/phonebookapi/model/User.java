@@ -22,7 +22,12 @@ public class User {
     @Setter
     private String password;
 
+    @Setter
     private boolean isActive = false;
+
+    @Setter
+    @Column(name = "confirmation_token")
+    private String confirmationToken;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Contact> contacts = new ArrayList<>();
