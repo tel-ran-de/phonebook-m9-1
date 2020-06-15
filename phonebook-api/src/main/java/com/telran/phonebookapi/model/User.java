@@ -5,10 +5,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
-import javax.validation.constraints.Email;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,26 +30,14 @@ public class User {
     private String lastName;
 
     @Id
-    @Email(message = "Please provide a valid e-mail")
-    @NotEmpty(message = "Please provide an e-mail")
     private String email;
 
-    @NotBlank(message = "Password cannot be empty")
     @Setter
     private String password;
 
     @Setter
-    @Transient
-    @NotBlank(message = "Password confirmation cannot be empty")
-    private String password2;
-
-
-    @Setter
     private boolean isActive = false;
 
-    @Setter
-    @Column(name = "confirmation_token")
-    private String confirmationToken;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Contact> contacts = new ArrayList<>();
@@ -56,6 +45,7 @@ public class User {
     public User(String email, String password) {
         this.email = email;
         this.password = password;
+        isActive=false;
     }
 
     public void addContact(Contact contact) {

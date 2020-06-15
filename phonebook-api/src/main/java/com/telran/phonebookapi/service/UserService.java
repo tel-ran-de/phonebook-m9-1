@@ -1,76 +1,67 @@
 package com.telran.phonebookapi.service;
 
+import com.telran.phonebookapi.dto.UserDto;
+import com.telran.phonebookapi.errorHandler.TokenNotFoundException;
+import com.telran.phonebookapi.errorHandler.UserExistsException;
+import com.telran.phonebookapi.model.ConfirmationToken;
 import com.telran.phonebookapi.model.User;
+import com.telran.phonebookapi.persistence.ConfirmationTokenRepository;
 import com.telran.phonebookapi.persistence.IUserRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
-import java.text.MessageFormat;
-import java.util.UUID;
+import java.util.Optional;
 
 
 @Service
 @AllArgsConstructor
-public class UserService implements UserDetailsService {
+public class UserService {
+
     private IUserRepository userRepository;
     private EmailSenderService emailSenderService;
+    private ConfirmationTokenRepository confirmationTokenRepository;
+    private BCryptPasswordEncoder encoder;
+
+    private final String MESSAGE="Thank you for registration on PhoneBook Appl. Please, visit next link: http://localhost:8080/confirmation?token=" ;
 
 
-    public User findByConfirmationToken(String confirmationToken){
-        return userRepository.findByConfirmationToken(confirmationToken);
+    public void saveUser(UserDto userToSave) {
+        Optional<User> userFromDB = userRepository.findById(userToSave.getEmail());
+
+        if (userFromDB.isPresent()) {
+            throw new UserExistsException(userToSave.getEmail());
+        } else {
+            String encodedPass = encoder.encode(userToSave.getPassword());
+            User user = new User(userToSave.getEmail(), encodedPass);
+            userRepository.save(user);
+
+            ConfirmationToken token = new ConfirmationToken(user);
+            confirmationTokenRepository.save(token);
+
+
+            emailSenderService.sendMail(userToSave.getEmail(),
+                    "tel-ran@gmail.com",
+                    "mail confirmation",
+                    String.format(MESSAGE + token.getConfirmationToken()));
+
+        }
 
     }
 
-   public User findByEmail(String email){
-        return userRepository.findByEmail(email);
 
-    }
-    public boolean saveUser(User userToSave){
-        User byEmailFromDB = userRepository.findByEmail(userToSave.getEmail());
-        if(byEmailFromDB!=null){
-            return false;
+    public void activateUser(String token) {
+        ConfirmationToken tokenFromDB = confirmationTokenRepository.findByConfirmationToken(token);
+
+        if (tokenFromDB == null) {
+            throw new TokenNotFoundException();
         }
-        userToSave.setActive(true);
-        userToSave.setConfirmationToken(UUID.randomUUID().toString());
-        userRepository.save(userToSave);
-        if(!StringUtils.isEmpty(userToSave.getEmail())){
-            String messageToSend= String.format(
-                    "Hello, %s! \n"+
-                            "Thank you for registration on PhoneBook Appl. Please, visit next link: //localhost:8080/activate/%s",
-                    userToSave.getName(),
-                    userToSave.getConfirmationToken()
-            );
-            emailSenderService.sendMail(userToSave.getEmail(),"Registration Confirmation", messageToSend);
+        User user = tokenFromDB.getUser();
+        user.setActive(true);
+        userRepository.save(user);
 
-        }
-        return true;
-    }
+        confirmationTokenRepository.deleteById(tokenFromDB.getId());
 
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User byEmail = userRepository.findByEmail(email);
 
-        if (byEmail!=null){
-            return (UserDetails) byEmail;
-        }
-        else {
-            throw new UsernameNotFoundException(MessageFormat.format("User with email {0} cannot be found.", email));
-        }
-    }
-
-    public boolean activateUser(String token) {
-        User userByTokenFromDB = userRepository.findByConfirmationToken(token);
-
-        if(userByTokenFromDB==null){
-            return false;
-        }
-        userByTokenFromDB.setConfirmationToken(null);
-        userRepository.save(userByTokenFromDB);
-
-       return true;
     }
 }
