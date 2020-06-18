@@ -35,20 +35,19 @@ public class EmailSenderServiceTest {
 
     @Test
     public void send_mail2() {
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-
 
         String mailTo = "mailTo";
         String text = "text";
         String subject = "subject";
 
-        emailSenderService.sendMail(mailTo, subject, text);
+
+        emailSenderService.sendMail(mailTo, mailFrom, subject, text);
 
         verify(javaMailSender, times(1)).send(messageArgumentCaptor.capture());
 
         SimpleMailMessage capturedMessage = messageArgumentCaptor.getValue();
 
-       // assertEquals(mailFrom, capturedMessage.getFrom());
+        assertEquals(mailFrom, capturedMessage.getFrom());
         assertEquals(mailTo, Objects.requireNonNull(capturedMessage.getTo())[0]);
         assertEquals(text, capturedMessage.getText());
         assertEquals(subject, capturedMessage.getSubject());

@@ -7,6 +7,7 @@ import com.telran.phonebookapi.model.User;
 import com.telran.phonebookapi.persistence.IConfirmationTokenRepository;
 import com.telran.phonebookapi.persistence.IUserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,9 @@ public class UserService {
     private final String SUBJ="activation of you account";
 
 
+    @Value("${spring.mail.username}")
+    private String mailFrom;
+
     public void saveUser(String email, String password) {
         Optional<User> userFromDB = userRepository.findById(email);
 
@@ -41,7 +45,7 @@ public class UserService {
             confirmationTokenRepository.save(token);
 
 
-            emailSenderService.sendMail(email,
+            emailSenderService.sendMail(email, mailFrom,
                             SUBJ,
                     MESSAGE + token.getConfirmationToken());
 

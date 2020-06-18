@@ -23,7 +23,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleUserExistsException(UserExistsException exception, WebRequest request){
         Map<String, Object> body=new HashMap<>();
         body.put("timestamp", LocalDateTime.now());
-        body.put("message", "User not found");
+        body.put("message", exception.getMessage());
 
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
@@ -32,7 +32,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleTokenNotFoundException(TokenNotFoundException exception, WebRequest request){
         Map<String, Object> body=new HashMap<>();
         body.put("timestamp", LocalDateTime.now());
-        body.put("message", "User is not registered");
+        body.put("message", exception.getMessage());
 
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }

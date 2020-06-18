@@ -28,8 +28,8 @@ public class UserController {
         userService.saveUser(userDto.getEmail(), userDto.getPassword());
     }
 
-    @GetMapping("/confirmation/{token}")
-    public void emailConfirmation(@RequestParam(value = "token") String token){
+    @GetMapping("/activation/{token}")
+    public void emailConfirmation(@PathVariable String token){
         userService.activateUser(token);
     }
 }

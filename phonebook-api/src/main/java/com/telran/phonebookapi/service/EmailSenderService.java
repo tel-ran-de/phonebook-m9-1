@@ -23,7 +23,7 @@ public class EmailSenderService {
 
 
     @Async
-    public void sendMail(String mailTo, String subject, String message){
+    public void sendMail(String mailTo, String mailFrom, String subject, String message){
         SimpleMailMessage mailMessage=new SimpleMailMessage();
 
         mailMessage.setFrom(mailFrom);

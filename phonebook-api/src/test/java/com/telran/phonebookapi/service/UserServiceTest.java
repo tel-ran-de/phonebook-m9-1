@@ -11,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Optional;
 
@@ -30,6 +31,8 @@ public class UserServiceTest {
 
     @InjectMocks
     UserService userService;
+    @Value("${spring.mail.username}")
+    private String mailFrom;
 
 
     @Test
@@ -40,7 +43,7 @@ public class UserServiceTest {
 
         ConfirmationToken confirmationToken=new ConfirmationToken(user);
         tokenRepository.save(confirmationToken);
-        emailSenderService.sendMail(user.getEmail(), "conf","link");
+        emailSenderService.sendMail(user.getEmail(), mailFrom, "conf","link");
 
         verify(userRepository, times(1)).save(user);
         verify(tokenRepository,times(1)).save(any());
