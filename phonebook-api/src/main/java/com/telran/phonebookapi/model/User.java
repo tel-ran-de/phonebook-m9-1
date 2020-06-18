@@ -9,8 +9,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,14 +17,10 @@ import java.util.List;
 @NoArgsConstructor
 public class User {
 
-    @NotBlank(message = "Username cannot be empty")
-    @Size(min=1, max=10)
     @Setter
     private String name;
 
     @Setter
-    @NotBlank(message = "User lastname cannot be empty")
-    @Size(min=2,max=20)
     private String lastName;
 
     @Id

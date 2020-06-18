@@ -4,7 +4,9 @@ package com.telran.phonebookapi.model;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import java.util.UUID;
 
 @Entity(name = "Token")
@@ -13,9 +15,6 @@ import java.util.UUID;
 public class ConfirmationToken {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
-
     private String confirmationToken;
 
     @OneToOne(targetEntity = User.class)

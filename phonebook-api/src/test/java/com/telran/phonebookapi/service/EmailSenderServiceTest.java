@@ -4,18 +4,22 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import java.util.Objects;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class EmailSenderServiceTest {
-    @Mock
+    @InjectMocks
     EmailSenderService emailSenderService;
 
     @Mock
@@ -23,24 +27,30 @@ public class EmailSenderServiceTest {
     @Captor
     private ArgumentCaptor<SimpleMailMessage> messageArgumentCaptor;
 
+    @Value("${spring.mail.username}")
+    String mailFrom = "mailFrom";
+
+
+
+
     @Test
-    public void send_mail(){
-        SimpleMailMessage mailMessage=new SimpleMailMessage();
-
-        mailMessage.setFrom("mailFrom");
-        mailMessage.setTo("mailTo");
-        mailMessage.setSubject("subject");
-        mailMessage.setText("message");
-
-        javaMailSender.send(mailMessage);
+    public void send_mail2() {
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
 
 
-        verify(javaMailSender,times(1)).send(messageArgumentCaptor.capture());
+        String mailTo = "mailTo";
+        String text = "text";
+        String subject = "subject";
 
-        SimpleMailMessage messValue = messageArgumentCaptor.getValue();
+        emailSenderService.sendMail(mailTo, subject, text);
 
-        assertThat(messValue.getFrom()).isEqualTo("mailFrom");
-        assertThat(messValue.getSubject()).isEqualTo("subject");
-        assertThat(messValue.getText()).isEqualTo("message");
+        verify(javaMailSender, times(1)).send(messageArgumentCaptor.capture());
+
+        SimpleMailMessage capturedMessage = messageArgumentCaptor.getValue();
+
+       // assertEquals(mailFrom, capturedMessage.getFrom());
+        assertEquals(mailTo, Objects.requireNonNull(capturedMessage.getTo())[0]);
+        assertEquals(text, capturedMessage.getText());
+        assertEquals(subject, capturedMessage.getSubject());
     }
 }

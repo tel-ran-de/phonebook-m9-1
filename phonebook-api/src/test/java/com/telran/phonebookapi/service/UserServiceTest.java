@@ -12,6 +12,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -29,6 +31,7 @@ public class UserServiceTest {
     @InjectMocks
     UserService userService;
 
+
     @Test
     public void test_saveUser_withValidData(){
         User user=new User("mock@mail.de","dasfsdf");
@@ -37,7 +40,7 @@ public class UserServiceTest {
 
         ConfirmationToken confirmationToken=new ConfirmationToken(user);
         tokenRepository.save(confirmationToken);
-        emailSenderService.sendMail(user.getEmail(), "telran@mail.de","conf","link");
+        emailSenderService.sendMail(user.getEmail(), "conf","link");
 
         verify(userRepository, times(1)).save(user);
         verify(tokenRepository,times(1)).save(any());
@@ -49,15 +52,16 @@ public class UserServiceTest {
         user.setActive(true);
         ConfirmationToken token=new ConfirmationToken(user);
 
-        when(tokenRepository.findByConfirmationToken(token.getConfirmationToken())).thenReturn(token);
 
-        ConfirmationToken tokenFromDB = tokenRepository.findByConfirmationToken(token.getConfirmationToken());
+        when(tokenRepository.findById(token.getConfirmationToken())).thenReturn(Optional.of(token));
+
+        Optional<ConfirmationToken> tokenFromDB = tokenRepository.findById(token.getConfirmationToken());
         userRepository.save(user);
 
-        tokenRepository.deleteById(tokenFromDB.getId());
+        tokenRepository.deleteById(tokenFromDB.get().getConfirmationToken());
 
         verify(userRepository,times(1)).save(user);
-        verify(tokenRepository,times(1)).findByConfirmationToken(any());
+        verify(tokenRepository,times(1)).findById(any());
         verify(tokenRepository,times(1)).deleteById(any());
 
     }
@@ -65,6 +69,7 @@ public class UserServiceTest {
 
     @Test
     public void test_saveUser_userAlreadyCreated(){
+
         User user=new User("mock@mail.de","dasfsdf");
 
         when(userRepository.findById(user.getEmail())).thenThrow(UserExistsException.class);
@@ -78,8 +83,8 @@ public class UserServiceTest {
 
         ConfirmationToken token=new ConfirmationToken(user);
 
-        when(tokenRepository.findByConfirmationToken(token.getConfirmationToken())).thenThrow(TokenNotFoundException.class);
-        assertThrows(TokenNotFoundException.class,()->tokenRepository.findByConfirmationToken(token.getConfirmationToken()));
+        when(tokenRepository.findById(token.getConfirmationToken())).thenThrow(TokenNotFoundException.class);
+        assertThrows(TokenNotFoundException.class,()->tokenRepository.findById(token.getConfirmationToken()));
 
     }
 

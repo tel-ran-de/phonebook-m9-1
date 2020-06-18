@@ -22,15 +22,17 @@ public class UserService {
     private IConfirmationTokenRepository confirmationTokenRepository;
     private BCryptPasswordEncoder encoder;
 
-    private final String MESSAGE="Thank you for registration on PhoneBook Appl. Please, visit next link: http://localhost:8080/confirmation?token=" ;
+    private final String MESSAGE="Thank you for registration on PhoneBook Appl. Please, visit next link:" +
+            " http://localhost:8080/api/user/confirmation/" ;
+    private final String SUBJ="activation of you account";
 
 
     public void saveUser(String email, String password) {
         Optional<User> userFromDB = userRepository.findById(email);
 
         if (userFromDB.isPresent()) {
-            throw new UserExistsException(email);
-        } else {
+            throw new UserExistsException();
+        } else {  //new user
             String encodedPass = encoder.encode(password);
             User user = new User(email, encodedPass);
             userRepository.save(user);
@@ -40,9 +42,8 @@ public class UserService {
 
 
             emailSenderService.sendMail(email,
-                    "tel-ran@gmail.com",
-                    "mail confirmation",
-                    String.format(MESSAGE + token.getConfirmationToken()));
+                            SUBJ,
+                    MESSAGE + token.getConfirmationToken());
 
         }
 
@@ -50,16 +51,16 @@ public class UserService {
 
 
     public void activateUser(String token) {
-        ConfirmationToken tokenFromDB = confirmationTokenRepository.findByConfirmationToken(token);
+        Optional<ConfirmationToken> tokenFromDB = confirmationTokenRepository.findById(token);
 
-        if (tokenFromDB == null) {
+        if (tokenFromDB.isEmpty()) {
             throw new TokenNotFoundException();
         }
-        User user = tokenFromDB.getUser();
+        User user = tokenFromDB.get().getUser();
         user.setActive(true);
         userRepository.save(user);
 
-        confirmationTokenRepository.deleteById(tokenFromDB.getId());
+        confirmationTokenRepository.deleteById(tokenFromDB.get().getConfirmationToken());
 
 
     }

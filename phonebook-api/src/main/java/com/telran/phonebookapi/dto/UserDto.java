@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 public class UserDto {
 
-    @Email(regexp ="^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[a-zA-Z]{2,}$" )
+    @Email(regexp ="^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[a-zA-Z]{2,10}$" )
     @NotEmpty(message = "Please provide an e-mail")
     public String email;
 

@@ -9,7 +9,7 @@ import javax.validation.Valid;
 
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 public class UserController {
 
     private final UserService userService;
@@ -29,7 +29,7 @@ public class UserController {
     }
 
     @GetMapping("/confirmation/{token}")
-    public void emailConfirmation(@RequestParam(value = "token") String token) {
+    public void emailConfirmation(@RequestParam(value = "token") String token){
         userService.activateUser(token);
     }
 }
