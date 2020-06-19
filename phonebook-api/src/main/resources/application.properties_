@@ -1,0 +1,5 @@
+spring.datasource.url=jdbc:postgresql://localhost:5432/phonebook
+spring.datasource.username=<db username>
+spring.datasource.password=<password>
+
+spring.jpa.hibernate.ddl-auto=<create, update or something>

@@ -12,7 +12,7 @@ import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
+@Entity (name = "Users")
 @Getter
 @NoArgsConstructor
 public class User {
