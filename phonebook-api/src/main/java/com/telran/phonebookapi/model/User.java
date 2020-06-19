@@ -21,7 +21,7 @@ public class User {
     private String email;
     @Setter
     private String password;
-
+    @Setter
     private boolean isActive = false;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
