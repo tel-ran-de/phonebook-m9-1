@@ -1,6 +1,5 @@
 package com.telran.phonebookapi.service;
 
-import com.telran.phonebookapi.errorHandler.TokenNotFoundException;
 import com.telran.phonebookapi.errorHandler.UserExistsException;
 import com.telran.phonebookapi.model.ConfirmationToken;
 import com.telran.phonebookapi.model.User;
@@ -53,19 +52,4 @@ public class UserService {
 
     }
 
-
-    public void activateUser(String token) {
-        Optional<ConfirmationToken> tokenFromDB = confirmationTokenRepository.findById(token);
-
-        if (tokenFromDB.isEmpty()) {
-            throw new TokenNotFoundException();
-        }
-        User user = tokenFromDB.get().getUser();
-        user.setActive(true);
-        userRepository.save(user);
-
-        confirmationTokenRepository.deleteById(tokenFromDB.get().getConfirmationToken());
-
-
-    }
 }

@@ -3,8 +3,6 @@ package com.telran.phonebookapi.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.telran.phonebookapi.dto.UserDto;
 import com.telran.phonebookapi.errorHandler.UserExistsException;
-import com.telran.phonebookapi.model.ConfirmationToken;
-import com.telran.phonebookapi.model.User;
 import com.telran.phonebookapi.persistence.IConfirmationTokenRepository;
 import com.telran.phonebookapi.persistence.IUserRepository;
 import com.telran.phonebookapi.service.EmailSenderService;
@@ -20,9 +18,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.Mockito.doThrow;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
@@ -118,20 +114,7 @@ public class UserControllerTest {
 
 
     }
-
-    @Test
-    public void test_confirmation() throws Exception {
-        User user = new User("mock@mail.de", "fhdsjkfs");
-        user.setActive(true);
-        ConfirmationToken token = new ConfirmationToken(user);
-
-
-        mockMvc.perform(
-                get("/api/user/activation/{token}", token.getConfirmationToken()))
-
-                .andExpect(status().isOk()).andDo(print());
-
-    }
+    
 
 }
 
