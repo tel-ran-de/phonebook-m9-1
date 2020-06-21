@@ -1,6 +1,7 @@
 package com.telran.phonebookapi.controller;
 
 import com.telran.phonebookapi.dto.UserDto;
+import com.telran.phonebookapi.service.EmailSenderService;
 import com.telran.phonebookapi.service.UserService;
 import org.springframework.web.bind.annotation.*;
 

@@ -6,7 +6,6 @@ import com.telran.phonebookapi.model.ConfirmationToken;
 import com.telran.phonebookapi.model.User;
 import com.telran.phonebookapi.persistence.IConfirmationTokenRepository;
 import com.telran.phonebookapi.persistence.IUserRepository;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,7 +14,6 @@ import java.util.Optional;
 
 
 @Service
-@AllArgsConstructor
 public class UserService {
 
     private IUserRepository userRepository;
@@ -23,19 +21,33 @@ public class UserService {
     private IConfirmationTokenRepository confirmationTokenRepository;
     private BCryptPasswordEncoder encoder;
 
-    private final String MESSAGE="Thank you for registration on PhoneBook Appl. Please, visit next link:" +
-            " http://localhost:8080/api/user/confirmation/" ;
+    public UserService(IUserRepository userRepository, EmailSenderService emailSenderService, IConfirmationTokenRepository confirmationTokenRepository, BCryptPasswordEncoder encoder) {
+        this.userRepository = userRepository;
+        this.emailSenderService = emailSenderService;
+        this.confirmationTokenRepository = confirmationTokenRepository;
+        this.encoder = encoder;
+    }
+
+    @Value("${com.telran.mail.api.host}")
+    private String host;
+
+    private final String MESSAGE="Thank you for registration on PhoneBook Appl." +
+                                  " Please, visit next link:" +
+                                    host+
+                                  "api/user/confirmation/" ;
     private final String SUBJ="activation of you account";
+    private final String USER_EXISTS="User already exists";
+    private final String NO_REGISTRATION="Please, register";
 
 
     @Value("${spring.mail.username}")
     private String mailFrom;
 
-    public void saveUser(String email, String password) {
+    public void saveUser(String email, String password){
         Optional<User> userFromDB = userRepository.findById(email);
 
         if (userFromDB.isPresent()) {
-            throw new UserExistsException();
+            throw new UserExistsException(USER_EXISTS);
         } else {  //new user
             String encodedPass = encoder.encode(password);
             User user = new User(email, encodedPass);
@@ -58,13 +70,13 @@ public class UserService {
         Optional<ConfirmationToken> tokenFromDB = confirmationTokenRepository.findById(token);
 
         if (tokenFromDB.isEmpty()) {
-            throw new TokenNotFoundException();
+            throw new TokenNotFoundException(NO_REGISTRATION);
         }
         User user = tokenFromDB.get().getUser();
         user.setActive(true);
         userRepository.save(user);
 
-        confirmationTokenRepository.deleteById(tokenFromDB.get().getConfirmationToken());
+        confirmationTokenRepository.delete(tokenFromDB.get());
 
 
     }
