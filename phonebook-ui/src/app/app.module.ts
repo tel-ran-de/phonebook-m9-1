@@ -5,15 +5,15 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RegistrationComponent } from './registration/registration.component';
-import { RegistrationPendingComponent } from './registration-pending/registration-pending.component';
-import { RegistrationConfirmationComponent } from './registration-confirmation/registration-confirmation.component';
+import { PendingComponent } from './pending/pending.component';
+import { ActivationComponent } from './activation/activation.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     RegistrationComponent,
-    RegistrationPendingComponent,
-    RegistrationConfirmationComponent
+    PendingComponent,
+    ActivationComponent
   ],
   imports: [
     BrowserModule,
