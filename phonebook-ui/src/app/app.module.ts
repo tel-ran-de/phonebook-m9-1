@@ -7,21 +7,30 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RegistrationComponent } from './registration/registration.component';
 import { PendingComponent } from './pending/pending.component';
 import { ActivationComponent } from './activation/activation.component';
+import { ConfirmPasswordValidatorDirective } from './directive/confirm-password-validator.directive';
 
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
 import {MatCardModule} from '@angular/material/card';
+
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
     AppComponent,
     RegistrationComponent,
     PendingComponent,
-    ActivationComponent
+    ActivationComponent,
+    ConfirmPasswordValidatorDirective
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    MatCardModule
+    MatFormFieldModule,
+    MatInputModule,
+    MatCardModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
