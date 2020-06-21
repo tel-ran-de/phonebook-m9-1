@@ -8,6 +8,8 @@ import { RegistrationComponent } from './registration/registration.component';
 import { PendingComponent } from './pending/pending.component';
 import { ActivationComponent } from './activation/activation.component';
 
+import {MatCardModule} from '@angular/material/card';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -18,7 +20,8 @@ import { ActivationComponent } from './activation/activation.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MatCardModule
   ],
   providers: [],
   bootstrap: [AppComponent]
