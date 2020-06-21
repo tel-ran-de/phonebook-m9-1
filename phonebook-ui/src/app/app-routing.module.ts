@@ -6,10 +6,10 @@ import {ActivationComponent} from "./activation/activation.component";
 
 
 const routes: Routes = [
-  {path: '', redirectTo: '/registration', pathMatch: 'full'},
-  {path: 'registration', component: RegistrationComponent},
-  {path: 'pending', component: PendingComponent},
-  {path: 'activation', component: ActivationComponent},
+  {path: '', redirectTo: 'user/registration', pathMatch: 'full'},
+  {path: 'user/registration', component: RegistrationComponent},
+  {path: 'user/pending', component: PendingComponent},
+  {path: 'user/activation', component: ActivationComponent},
 ];
 
 @NgModule({

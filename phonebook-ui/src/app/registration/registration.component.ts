@@ -3,6 +3,8 @@ import { FormGroup, FormControl, FormGroupDirective, NgForm } from '@angular/for
 import { Validators } from '@angular/forms';
 import {confirmPasswordValidator} from "../directive/confirm-password-validator.directive";
 import {ErrorStateMatcher} from '@angular/material/core';
+import {UserService} from "../service/user.service";
+import {RegistrationUser} from "../model/registration-user.model";
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -37,7 +39,7 @@ export class RegistrationComponent implements OnInit {
 
   confirmPasswordMatcher = new MyErrorStateMatcher();
 
-  constructor() { }
+  constructor(private userService: UserService) { }
 
   ngOnInit(): void {
   }
@@ -76,7 +78,12 @@ export class RegistrationComponent implements OnInit {
   }
 
   onSubmit() {
-    // TODO: Use EventEmitter with form value
-    console.warn(this.registrationForm.value);
+    let user: RegistrationUser = {
+      email: this.registrationForm.get('email').value,
+      password: this.registrationForm.get('password').value
+    };
+
+    this.userService.registerNewUser(user)
+      .subscribe(response => {});
   }
 }
