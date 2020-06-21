@@ -12,22 +12,27 @@
   <!--[if lt IE 9]><script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 </head>
 <body>
-<h1 class="register-title">Welcome/Herzlich willkommen!</h1>
+<h1 class="register-title">Registration</h1>
 
-<form class="register">
-  <input type="email" class="register-input" placeholder="Email address">
-  <input type="password" class="register-input" placeholder="Password">
-  <input type="password" class="register-input" placeholder="Retype password">
+<form class="register" [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
 
-  <input type="submit" value="Create Account" class="register-button">
+  <mat-form-field appearance="standard">
+    <input matInput type="text" placeholder="Email address" formControlName="email">
+    <mat-error *ngIf="registrationForm.get('email').invalid">{{getEmailErrorMessage()}}</mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="standard">
+    <input matInput type="password" placeholder="Password" formControlName="password">
+    <mat-error *ngIf="registrationForm.get('password').invalid">{{getPasswordErrorMessage()}}</mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="standard">
+    <input matInput type="password" placeholder="Confirm password" formControlName="confirmPassword" [errorStateMatcher]="confirmPasswordMatcher">
+    <mat-error *ngIf="registrationForm.errors?.differentPasswords && (registrationForm.touched || registrationForm.dirty)">Confirm password does not match</mat-error>
+  </mat-form-field>
+
+  <input type="submit" value="Create Account" class="register-button" [disabled]="!registrationForm.valid">
 </form>
 
-<mat-card>
-  <button mat-raised-button color="accent">Powered by Angular Material</button>
-</mat-card>
-
-<div>
-
-</div>
 </body>
 </html>

@@ -140,6 +140,10 @@ input {
 .register-button:focus {
   outline: 0;
 }
+.register-button:disabled {
+  color: #aaaaaa;
+  cursor: default;
+}
 
 .register-switch {
   height: 32px;
