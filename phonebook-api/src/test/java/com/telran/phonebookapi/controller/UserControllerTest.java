@@ -3,7 +3,6 @@ package com.telran.phonebookapi.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.telran.phonebookapi.dto.UserDto;
 import com.telran.phonebookapi.errorHandler.UserExistsException;
-import com.telran.phonebookapi.model.ConfirmationToken;
 import com.telran.phonebookapi.model.User;
 import com.telran.phonebookapi.persistence.IConfirmationTokenRepository;
 import com.telran.phonebookapi.persistence.IUserRepository;
@@ -123,11 +122,10 @@ public class UserControllerTest {
     public void test_confirmation() throws Exception {
         User user = new User("mock@mail.de", "fhdsjkfs");
         user.setActive(true);
-        ConfirmationToken token = new ConfirmationToken(user);
-
+        String tokenString = "1233";
 
         mockMvc.perform(
-                get("/api/user/activation/{token}", token.getConfirmationToken()))
+                get("/api/user/activation/{token}", tokenString))
 
                 .andExpect(status().isOk()).andDo(print());
 

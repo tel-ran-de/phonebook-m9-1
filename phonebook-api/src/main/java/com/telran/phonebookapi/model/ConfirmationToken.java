@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
-import java.util.UUID;
 
 @Entity(name = "Token")
 @Getter
@@ -20,8 +19,8 @@ public class ConfirmationToken {
     @OneToOne(targetEntity = User.class)
     private User user;
 
-    public ConfirmationToken(User user){
+    public ConfirmationToken(User user, String confirmationToken){
         this.user=user;
-        this.confirmationToken=UUID.randomUUID().toString();
+        this.confirmationToken=confirmationToken;
     }
 }

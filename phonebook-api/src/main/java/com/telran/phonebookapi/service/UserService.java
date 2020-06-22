@@ -11,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 
 @Service
@@ -34,7 +35,7 @@ public class UserService {
     private final String MESSAGE="Thank you for registration on PhoneBook Appl." +
                                   " Please, visit next link:" +
                                     host+
-                                  "api/user/confirmation/" ;
+                                  "user/activation/" ;
     private final String SUBJ="activation of you account";
     private final String USER_EXISTS="User already exists";
     private final String NO_REGISTRATION="Please, register";
@@ -50,16 +51,17 @@ public class UserService {
             throw new UserExistsException(USER_EXISTS);
         } else {  //new user
             String encodedPass = encoder.encode(password);
-            User user = new User(email, encodedPass);
+            User user = new User(email,encodedPass);
             userRepository.save(user);
 
-            ConfirmationToken token = new ConfirmationToken(user);
-            confirmationTokenRepository.save(token);
+            String tokenString= UUID.randomUUID().toString();
 
+            ConfirmationToken token = new ConfirmationToken(user,tokenString);
+            confirmationTokenRepository.save(token);
 
             emailSenderService.sendMail(email, mailFrom,
                             SUBJ,
-                    MESSAGE + token.getConfirmationToken());
+                    MESSAGE + tokenString);
 
         }
 
@@ -67,17 +69,12 @@ public class UserService {
 
 
     public void activateUser(String token) {
-        Optional<ConfirmationToken> tokenFromDB = confirmationTokenRepository.findById(token);
+        ConfirmationToken confirmationToken = confirmationTokenRepository.findById(token).orElseThrow(() -> new TokenNotFoundException(NO_REGISTRATION));
 
-        if (tokenFromDB.isEmpty()) {
-            throw new TokenNotFoundException(NO_REGISTRATION);
-        }
-        User user = tokenFromDB.get().getUser();
+        User user = confirmationToken.getUser();
         user.setActive(true);
         userRepository.save(user);
 
-        confirmationTokenRepository.delete(tokenFromDB.get());
-
-
+        confirmationTokenRepository.delete(confirmationToken);
     }
 }
