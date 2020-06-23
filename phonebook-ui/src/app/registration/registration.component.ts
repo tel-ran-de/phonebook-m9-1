@@ -5,6 +5,7 @@ import {confirmPasswordValidator} from "../directive/confirm-password-validator.
 import {ErrorStateMatcher} from '@angular/material/core';
 import {UserService} from "../service/user.service";
 import {RegistrationUser} from "../model/registration-user.model";
+import {Router} from "@angular/router";
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -25,7 +26,7 @@ export class RegistrationComponent implements OnInit {
   registrationForm = new FormGroup({
     email: new FormControl('', [
       Validators.required,
-      Validators.email,
+      Validators.pattern('^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\.[a-zA-Z]{2,10}$'),
       Validators.minLength(6),
       Validators.maxLength(50)
     ]),
@@ -39,7 +40,7 @@ export class RegistrationComponent implements OnInit {
 
   confirmPasswordMatcher = new MyErrorStateMatcher();
 
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService, private router: Router) { }
 
   ngOnInit(): void {
   }
@@ -48,7 +49,7 @@ export class RegistrationComponent implements OnInit {
     if (this.registrationForm.get('email').hasError('required')) {
       return 'Required field';
     }
-    else if (this.registrationForm.get('email').hasError('email')) {
+    else if (this.registrationForm.get('email').hasError('pattern')) {
       return 'Invalid email';
     }
     else if (this.registrationForm.get('email').hasError('minlength')) {
@@ -84,6 +85,11 @@ export class RegistrationComponent implements OnInit {
     };
 
     this.userService.registerNewUser(user)
-      .subscribe(response => {});
+      .subscribe(response => {
+        this.router.navigate(['user/pending'])//,
+          // error => {
+          // this.ErrorMessage()
+          //}
+      });
   }
 }

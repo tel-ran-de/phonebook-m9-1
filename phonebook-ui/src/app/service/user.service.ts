@@ -8,7 +8,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class UserService {
 
-  private registrationUrl = 'api/user/registration';
+  private readonly registrationUrl = 'api/user/registration';
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
