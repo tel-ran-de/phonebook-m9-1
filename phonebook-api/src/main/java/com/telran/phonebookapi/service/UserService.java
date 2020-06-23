@@ -32,35 +32,35 @@ public class UserService {
     @Value("${com.telran.mail.api.host}")
     private String host;
 
-    private final String MESSAGE="Thank you for registration on PhoneBook Appl." +
-                                  " Please, visit next link:" +
-                                    host+
-                                  "user/activation/" ;
-    private final String SUBJ="activation of you account";
-    private final String USER_EXISTS="User already exists";
-    private final String NO_REGISTRATION="Please, register";
+    private final String MESSAGE = "Thank you for registration on PhoneBook Appl." +
+            " Please, visit next link:" +
+            host +
+            "user/activation/";
+    private final String SUBJ = "activation of you account";
+    private final String USER_EXISTS = "User already exists";
+    private final String NO_REGISTRATION = "Please, register";
 
 
     @Value("${spring.mail.username}")
     private String mailFrom;
 
-    public void saveUser(String email, String password){
+    public void saveUser(String email, String password) {
         Optional<User> userFromDB = userRepository.findById(email);
 
         if (userFromDB.isPresent()) {
             throw new UserExistsException(USER_EXISTS);
         } else {  //new user
             String encodedPass = encoder.encode(password);
-            User user = new User(email,encodedPass);
+            User user = new User(email, encodedPass);
             userRepository.save(user);
 
-            String tokenString= UUID.randomUUID().toString();
+            String tokenString = UUID.randomUUID().toString();
 
-            ConfirmationToken token = new ConfirmationToken(user,tokenString);
+            ConfirmationToken token = new ConfirmationToken(user, tokenString);
             confirmationTokenRepository.save(token);
 
             emailSenderService.sendMail(email, mailFrom,
-                            SUBJ,
+                    SUBJ,
                     MESSAGE + tokenString);
 
         }
