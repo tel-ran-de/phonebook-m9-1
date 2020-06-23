@@ -21,8 +21,8 @@ public class User {
     private String email;
     @Setter
     private String password;
-    @Setter
-    private boolean isActive = false;
+
+    private boolean isActive;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Contact> contacts = new ArrayList<>();
@@ -30,6 +30,7 @@ public class User {
     public User(String email, String password) {
         this.email = email;
         this.password = password;
+        isActive = false;
     }
 
     public void addContact(Contact contact) {

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("api/user")
 public class UserController {
 
     private final UserService userService;
@@ -20,14 +20,14 @@ public class UserController {
         this.emailSenderService = emailSenderService;
     }
 
-    @PostMapping("/password-recover")
-    public void passwordRecover(@RequestBody @Valid UserDto userDto) {
-        userService.findUser(userDto.getEmail());
+    @PostMapping("password-recover")
+    public void passwordRecoverRequest(@RequestBody @Valid UserDto userDto) {
+        userService.requestRecoveryPassword(userDto.getEmail());
     }
 
-    @GetMapping("/new-password/{token}")
-    public void emailConfirmation (@PathVariable String token, @RequestParam String password) {
-        userService.changePassword(token, password);
+    @PostMapping("new-password/{token}")
+    public void changePassword (@PathVariable String token, @RequestBody @Valid UserDto userDto) {
+        userService.changePassword(token, userDto.password);
     }
 
 }
