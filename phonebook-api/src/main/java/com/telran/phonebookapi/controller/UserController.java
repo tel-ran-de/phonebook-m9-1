@@ -29,7 +29,7 @@ public class UserController {
     }
 
     @GetMapping("/activation/{token}")
-    public void emailConfirmation(@PathVariable String token){
+    public void emailConfirmation(@PathVariable String token) {
         userService.activateUser(token);
     }
 }
