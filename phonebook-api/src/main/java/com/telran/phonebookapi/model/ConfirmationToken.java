@@ -8,7 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
-@Entity(name = "ConfirmationToken")
+@Entity
 @Getter
 @NoArgsConstructor
 public class ConfirmationToken {
