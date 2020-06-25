@@ -27,7 +27,7 @@ public class UserController {
 
     @PostMapping("new-password")
     public void changePassword(@RequestBody @Valid RecoveryPasswordDto recoveryPasswordDto) {
-        userService.changePassword(recoveryPasswordDto.password, recoveryPasswordDto.getRecoveryToken());
+        userService.changePassword(recoveryPasswordDto.getRecoveryToken(), recoveryPasswordDto.password);
     }
 
 }
