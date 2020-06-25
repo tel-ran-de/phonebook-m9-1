@@ -1,7 +1,6 @@
 package com.telran.phonebookapi.controller;
 
 import com.telran.phonebookapi.dto.UserDto;
-import com.telran.phonebookapi.service.EmailSenderService;
 import com.telran.phonebookapi.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,17 +13,13 @@ public class UserController {
 
     private final UserService userService;
 
-    private final EmailSenderService emailSenderService;
-
-    public UserController(UserService userService, EmailSenderService emailSenderService) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.emailSenderService = emailSenderService;
     }
 
 
-    @PostMapping("/registration")
-    public void addUser(@RequestBody  @Valid UserDto userDto)
-    {
+    @PostMapping("/")
+    public void addUser(@RequestBody @Valid UserDto userDto) {
         userService.saveUser(userDto.getEmail(), userDto.getPassword());
     }
 

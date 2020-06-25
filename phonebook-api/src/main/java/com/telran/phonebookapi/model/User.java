@@ -12,7 +12,7 @@ import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity (name = "Users")
+@Entity(name = "Users")
 @Getter
 @NoArgsConstructor
 public class User {
@@ -32,14 +32,12 @@ public class User {
     @Setter
     private boolean isActive = false;
 
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Contact> contacts = new ArrayList<>();
 
     public User(String email, String password) {
         this.email = email;
         this.password = password;
-        isActive=false;
     }
 
     public void addContact(Contact contact) {

@@ -51,7 +51,7 @@ public class UserControllerTest {
 
         UserDto userDto = new UserDto("mock@mail.de", "edqwfdsd");
         mockMvc.perform(
-                post("/api/user/registration")
+                post("/api/user/")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userDto)))
                 .andExpect(status().isOk());
@@ -63,7 +63,7 @@ public class UserControllerTest {
         UserDto userDto = new UserDto("mock@mailde", "edqwfdsd");
 
         mockMvc.perform(
-                post("/api/user/registration")
+                post("/api/user/")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userDto)))
                 .andExpect(status().isBadRequest());
@@ -76,7 +76,7 @@ public class UserControllerTest {
         UserDto userDto = new UserDto("mock@mail.de", "fd");
 
         mockMvc.perform(
-                post("/api/user/registration")
+                post("/api/user/")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userDto)))
                 .andExpect(status().isBadRequest());
@@ -88,7 +88,7 @@ public class UserControllerTest {
         UserDto userDto = new UserDto("mock@mail.de", null);
 
         mockMvc.perform(
-                post("/api/user/registration")
+                post("/api/user/")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userDto)))
                 .andExpect(status().isBadRequest());
@@ -104,13 +104,13 @@ public class UserControllerTest {
         doThrow(UserExistsException.class).when(userService).saveUser(userDto2.getEmail(), userDto2.getPassword());
 
         mockMvc.perform(
-                post("/api/user/registration")
+                post("/api/user/")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userDto)))
                 .andExpect(status().isOk());
 
         mockMvc.perform(
-                post("/api/user/registration")
+                post("/api/user/")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userDto2)))
                 .andExpect(status().isBadRequest());

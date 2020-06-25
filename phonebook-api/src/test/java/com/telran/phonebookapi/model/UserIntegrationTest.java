@@ -7,29 +7,28 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DataJpaTest
-class UserTest {
+@DataJpaTest()
+class UserIntegrationTest {
 
     @Autowired
     TestEntityManager entityManager;
 
     @Test
     public void testAddContact_userWithoutContacts_oneContact() {
-        User user = new User("email", "password");
-        Contact contact = new Contact();
-        contact.setName("ContactName");
+        User user = new User("email7", "password");
+        Contact contact = new Contact("ContactName8", user);
 
         user.addContact(contact);
 
         entityManager.persist(user);
-        entityManager.persist(contact);
         entityManager.flush();
         entityManager.clear();
 
-        assertEquals("ContactName", contact.getName());
-        assertEquals(1, user.getContacts().size());
+        User userFromDb = entityManager.find(User.class, "email7");
 
-        Contact contactFromDB = entityManager.find(Contact.class, 1);
-        assertEquals(contactFromDB.getName(), "ContactName");
+        assertEquals(1, userFromDb.getContacts().size());
+
+        Contact contactFromDB = user.getContacts().get(0);
+        assertEquals(contactFromDB.getName(), "ContactName8");
     }
 }

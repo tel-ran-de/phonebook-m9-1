@@ -29,8 +29,8 @@ public class Contact {
     private List<String> emails;
 
     @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    User user;
+//    @OnDelete(action = OnDeleteAction.CASCADE)
+            User user;
 
     @OneToMany(mappedBy = "contact", cascade = {CascadeType.ALL}, orphanRemoval = true)
     private List<PhoneNumber> numbers = new ArrayList<>();
