@@ -1,22 +1,42 @@
-.auth-info {
-  width: 340px;
-  background: rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(50px);
-  border-radius: 12px;
-  padding: 40px 30px;
+*:focus {
+  outline: none;
 }
 
-.info-title {
-  display: flex;
-  align-content: center;
-  justify-content: center;
-  font-weight: bold;
+body {
+  margin: 0;
+  padding: 0;
+  background: #DDD;
+  font-size: 16px;
+  color: #222;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+}
+
+#pending-box {
+  position: relative;
+  margin: 5% auto;
+  width: 600px;
+  height: 600px;
+  background: #FFF;
+  border-radius: 2px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.left {
+  position: absolute;
+  top: 0;
+  left: 0;
+  box-sizing: border-box;
+  padding: 40px;
+  width: 600px;
+  height: 400px;
+}
+
+h1 {
+  margin: 0 0 20px 0;
+  font-weight: 300;
   font-size: 28px;
-  text-align: -moz-left;
-  color: #2B2B2B;
-  margin-bottom: 20px;
 }
-
 .message {
   color: #000000;
   opacity: 0.36;
