@@ -9,9 +9,9 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 @NoArgsConstructor
-@Getter
 @AllArgsConstructor
-public class UserDto {
+@Getter
+public class RecoveryPasswordDto {
 
     @Email(regexp = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[a-zA-Z]{2,10}$")
     @NotEmpty(message = "Please provide an e-mail")
@@ -20,4 +20,7 @@ public class UserDto {
     @Size(min = 5, max = 10)
     @NotEmpty(message = "Please provide a password")
     public String password;
+
+    private String recoveryToken;
+
 }

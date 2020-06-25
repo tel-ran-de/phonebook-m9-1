@@ -1,4 +1,4 @@
-package com.telran.phonebookapi.controller;
+package com.telran.phonebookapi.errorHandler;
 
 public class UserDoesntExistException extends RuntimeException {
 

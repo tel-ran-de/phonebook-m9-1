@@ -4,9 +4,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.UUID;
 
-@Entity(name = "RecoveryPasswordToken")
+@Entity()
 @Getter
 @NoArgsConstructor
 public class RecoveryPasswordToken {
@@ -17,8 +16,8 @@ public class RecoveryPasswordToken {
     @OneToOne(targetEntity = User.class)
     private User user;
 
-    public RecoveryPasswordToken(User user) {
+    public RecoveryPasswordToken(User user, String recoveryPasswordToken) {
         this.user = user;
-        this.recoveryPasswordToken = UUID.randomUUID().toString();
+        this.recoveryPasswordToken = recoveryPasswordToken;
     }
 }

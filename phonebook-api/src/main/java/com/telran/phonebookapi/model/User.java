@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity (name = "Users")
+@Entity(name = "Users")
 @Getter
 @NoArgsConstructor
 public class User {
@@ -21,7 +21,7 @@ public class User {
     private String email;
     @Setter
     private String password;
-
+    @Setter
     private boolean isActive;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)

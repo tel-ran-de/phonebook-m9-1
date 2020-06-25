@@ -1,7 +1,7 @@
 package com.telran.phonebookapi.service;
 
-import com.telran.phonebookapi.controller.TokenNotFoundException;
-import com.telran.phonebookapi.controller.UserDoesntExistException;
+import com.telran.phonebookapi.errorHandler.TokenNotFoundException;
+import com.telran.phonebookapi.errorHandler.UserDoesntExistException;
 import com.telran.phonebookapi.model.RecoveryPasswordToken;
 import com.telran.phonebookapi.model.User;
 import com.telran.phonebookapi.persistence.IRecoveryPasswordToken;
@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -27,7 +27,7 @@ public class UserService {
     @Value("${com.telran.mail.api.host}")
     private String host;
 
-    private final String MESSAGE_RECOVER_PASSWORD_REQUEST = "You have requested the recovery password option." + " Please, visit next link:" + host + "/user/new-password?token=";
+    private final String MESSAGE_RECOVER_PASSWORD_REQUEST = "You have requested the recovery password option." + " Please, visit next link:" + host + "/user/new-password/";
     private final String RECOVERY_PASSWORD = "Recovery password";
     public static final String USER_DOESNT_EXISTS = "Person not found";
     public static final String INVALID_TOKEN = "Please, request your link once again";
@@ -39,25 +39,29 @@ public class UserService {
         this.encoder = encoder;
     }
 
-    public void requestRecoveryPassword(String email) {
-        Optional<User> userFromDB = Optional.ofNullable(userRepository.findById(email).orElseThrow(() -> new UserDoesntExistException(USER_DOESNT_EXISTS)));
+    public String generateToken() {
+        return UUID.randomUUID().toString();
+    }
 
-        User foundedUser = userFromDB.get();
-        RecoveryPasswordToken token = new RecoveryPasswordToken(foundedUser);
-        recoveryPasswordTokenRepo.save(token);
-        emailSenderService.sendMail(email, mailFrom, RECOVERY_PASSWORD, MESSAGE_RECOVER_PASSWORD_REQUEST + token.getRecoveryPasswordToken());
+    public void requestRecoveryPassword(String email) {
+        User userFromDB = userRepository.findById(email).orElseThrow(() -> new UserDoesntExistException(USER_DOESNT_EXISTS));
+
+        String generatedToken = generateToken();
+        RecoveryPasswordToken recoveryToken = new RecoveryPasswordToken(userFromDB, generatedToken);
+        recoveryPasswordTokenRepo.save(recoveryToken);
+        emailSenderService.sendMail(email, mailFrom, RECOVERY_PASSWORD, MESSAGE_RECOVER_PASSWORD_REQUEST + generatedToken);
 
     }
 
     public void changePassword(String token, String password) {
-        Optional<RecoveryPasswordToken> tokenFromDB = Optional.ofNullable(recoveryPasswordTokenRepo.findById(token).orElseThrow(() -> new TokenNotFoundException(INVALID_TOKEN)));
+        RecoveryPasswordToken tokenFromDB = recoveryPasswordTokenRepo.findById(token).orElseThrow(() -> new TokenNotFoundException(INVALID_TOKEN));
 
-        RecoveryPasswordToken recoveryPasswordToken = tokenFromDB.get();
-        User user = recoveryPasswordToken.getUser();
+        User user = tokenFromDB.getUser();
         String encodedPass = encoder.encode(password);
         user.setPassword(encodedPass);
         userRepository.save(user);
-        recoveryPasswordTokenRepo.delete(tokenFromDB.get());
+        recoveryPasswordTokenRepo.delete(tokenFromDB);
 
     }
+
 }

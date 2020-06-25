@@ -18,9 +18,10 @@ public class EmailSenderService {
     public EmailSenderService(JavaMailSender javaMailSender) {
         this.javaMailSender = javaMailSender;
     }
+
     @Async
-    public void sendMail(String mailTo, String mailFrom, String subject, String message){
-        SimpleMailMessage mailMessage=new SimpleMailMessage();
+    public void sendMail(String mailTo, String mailFrom, String subject, String message) {
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
 
         mailMessage.setFrom(mailFrom);
         mailMessage.setTo(mailTo);
@@ -29,6 +30,5 @@ public class EmailSenderService {
 
         javaMailSender.send(mailMessage);
     }
-
 
 }
