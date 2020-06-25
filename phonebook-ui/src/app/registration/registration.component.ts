@@ -10,7 +10,7 @@ import {Router} from "@angular/router";
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
     const invalidCtrl = !!(control && control.invalid && control.parent.dirty);
-    const invalidParent = !!(control && control.parent && control.parent.invalid && control.parent.hasError('differentPasswords') && control.parent.dirty);
+    const invalidParent = !!(control && control.parent && control.parent.invalid && control.parent.hasError('differentPasswords') && (control.dirty || control.touched));
 
     return (invalidCtrl || invalidParent);
   }
@@ -39,6 +39,8 @@ export class RegistrationComponent implements OnInit {
   }, { validators: confirmPasswordValidator });
 
   confirmPasswordMatcher = new MyErrorStateMatcher();
+
+  errorMessage = '';
 
   constructor(private userService: UserService, private router: Router) { }
 
@@ -85,11 +87,13 @@ export class RegistrationComponent implements OnInit {
     };
 
     this.userService.registerNewUser(user)
-      .subscribe(response => {
-        this.router.navigate(['user/pending'])//,
-          // error => {
-          // this.ErrorMessage()
-          //}
-      });
+      .subscribe(
+        () => {
+          this.router.navigate(['user/pending'])
+        },
+        (error) => {
+          this.errorMessage = error;
+        }
+      );
   }
 }
