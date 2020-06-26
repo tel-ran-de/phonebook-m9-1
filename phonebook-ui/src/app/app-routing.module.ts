@@ -18,6 +18,7 @@ const routes: Routes = [
   {path: 'user/login', component: LoginComponent},
   {path: 'user/recovery', component: RecoveryComponent},
   {path: 'user/new-password-page', component:NewPasswordPageComponent },
+  { path: 'user/recovery', component: RecoveryComponent},
 ];
 
 @NgModule({

@@ -1,19 +1,22 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core'
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RegistrationComponent } from './registration/registration.component';
+import {BrowserModule} from '@angular/platform-browser';
+import {NgModule} from '@angular/core'
+import {AppRoutingModule} from './app-routing.module';
+import {AppComponent} from './app.component';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {RegistrationComponent} from './registration/registration.component';
 
-import { LayoutModule } from '@angular/cdk/layout';
-import {  MatButtonModule } from  '@angular/material/button';
+import {LayoutModule} from '@angular/cdk/layout';
+import {MatButtonModule} from '@angular/material/button';
 
 import {MatCardModule} from '@angular/material/card';
-import { MaterialModule } from './material.module';
-import { PendingPageComponent } from './pending-page/pending-page.component';
-import { LoginComponent } from './login/login.component';
-import { NewPasswordPageComponent } from './new-password-page/new-password-page.component';
-
+import {MaterialModule} from './material.module';
+import {PendingPageComponent} from './pending-page/pending-page.component';
+import {LoginComponent} from './login/login.component';
+import {NewPasswordPageComponent} from './new-password-page/new-password-page.component';
+import {RecoveryComponent} from "./recovery/recovery.component";
+import {HttpClientModule} from "@angular/common/http";
+import {UserService} from "./logic-service/user.service";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
 
 @NgModule({
@@ -23,7 +26,7 @@ import { NewPasswordPageComponent } from './new-password-page/new-password-page.
     PendingPageComponent,
     LoginComponent,
     NewPasswordPageComponent,
-
+    RecoveryComponent,
 
 
   ],
@@ -34,11 +37,15 @@ import { NewPasswordPageComponent } from './new-password-page/new-password-page.
     LayoutModule,
     MatButtonModule,
     MaterialModule,
-    MatCardModule
+    MatCardModule,
+    HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
 
 
-  providers: [],
+  providers: [UserService],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

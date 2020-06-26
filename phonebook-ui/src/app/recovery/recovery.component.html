@@ -1,20 +1,31 @@
+<form [formGroup]="recoveryForm" class="border border-light p-5" (ngSubmit)="onSubmit()">
+  <div id="recovery-box">
+    <div class="left">
+      <h1>Recovery Password</h1>
+      <p>When you fill in your registered email address, you will be sent instructions on how to reset your
+        password.</p>
 
+      <input type="text" name="email" placeholder="E-mail"/>
+    </div>
+    <div
+      *ngIf="recoveryForm.controls['email'].invalid && (recoveryForm.controls['email'].dirty || recoveryForm.controls['email'].touched)"
+      class="alert alert-danger">
 
-<div id="recovery-box">
-  <div class="left">
-    <h1>Recovery Password</h1>
-    <p>When you fill in your registered email address, you will be sent instructions on how to reset your password.</p>
+      <div *ngIf="recoveryForm.controls['email'].errors.required">
 
-    <input type="text" name="email" placeholder="E-mail" />
+        Email is required.
+      </div>
 
+      <div>
 
+        <div *ngIf="recoveryForm.controls['email'].errors.email">
+          Email must be a valid email address.
+        </div>
+      </div>
 
-    <input type="submit" name="signup_submit" value="Submit" />
+      <input type="submit" name="signup_submit" value="Submit"/>
+
+    </div>
   </div>
-
-
-
-</div>
-
-
+</form>
 
