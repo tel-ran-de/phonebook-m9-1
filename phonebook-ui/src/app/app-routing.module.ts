@@ -9,7 +9,7 @@ const routes: Routes = [
   {path: '', redirectTo: 'user/registration', pathMatch: 'full'},
   {path: 'user/registration', component: RegistrationComponent},
   {path: 'user/pending', component: PendingComponent},
-  {path: 'user/activation', component: ActivationComponent},
+  {path: 'user/activation/:token', component: ActivationComponent},
 ];
 
 @NgModule({

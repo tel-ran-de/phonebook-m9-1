@@ -81,6 +81,8 @@ export class RegistrationComponent implements OnInit {
   }
 
   onSubmit() {
+    this.errorMessage = '';
+
     let user: RegistrationUser = {
       email: this.registrationForm.get('email').value,
       password: this.registrationForm.get('password').value
