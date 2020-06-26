@@ -1,6 +1,8 @@
 package com.telran.phonebookapi.controller;
 
+import com.telran.phonebookapi.dto.ChangePasswordDto;
 import com.telran.phonebookapi.dto.UserDto;
+import com.telran.phonebookapi.dto.RecoveryPasswordDto;
 import com.telran.phonebookapi.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,8 +19,7 @@ public class UserController {
         this.userService = userService;
     }
 
-
-    @PostMapping("/")
+    @PostMapping("")
     public void addUser(@RequestBody @Valid UserDto userDto) {
         userService.saveUser(userDto.getEmail(), userDto.getPassword());
     }
@@ -27,4 +28,15 @@ public class UserController {
     public void emailConfirmation(@PathVariable String token) {
         userService.activateUser(token);
     }
+
+    @PostMapping("/password-recover")
+    public void recoverPasswordRequest(@RequestBody @Valid RecoveryPasswordDto recoveryPasswordDto) {
+        userService.requestRecoveryPassword(recoveryPasswordDto.getEmail());
+    }
+
+    @PostMapping("/new-password")
+    public void changePassword(@RequestBody @Valid ChangePasswordDto changePasswordDto) {
+        userService.changePassword(changePasswordDto.recoveryToken, changePasswordDto.password);
+    }
+
 }

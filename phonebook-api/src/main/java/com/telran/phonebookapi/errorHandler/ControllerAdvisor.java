@@ -32,4 +32,13 @@ public class ControllerAdvisor {
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(UserDoesntExistException.class)
+    public ResponseEntity<Object> handleUserDoesntExistException(UserDoesntExistException exception){
+        Map<String, Object> body=new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("message", exception.getMessage());
+
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
+
 }

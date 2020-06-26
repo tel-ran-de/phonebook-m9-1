@@ -1,16 +1,16 @@
 package com.telran.phonebookapi.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.telran.phonebookapi.dto.ChangePasswordDto;
 import com.telran.phonebookapi.dto.UserDto;
+import com.telran.phonebookapi.errorHandler.TokenNotFoundException;
+import com.telran.phonebookapi.errorHandler.UserDoesntExistException;
 import com.telran.phonebookapi.errorHandler.UserExistsException;
 import com.telran.phonebookapi.model.User;
-import com.telran.phonebookapi.persistence.IConfirmationTokenRepository;
-import com.telran.phonebookapi.persistence.IUserRepository;
 import com.telran.phonebookapi.service.EmailSenderService;
 import com.telran.phonebookapi.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -32,10 +32,6 @@ public class UserControllerTest {
     @Autowired
     MockMvc mockMvc;
 
-    @Mock
-    IUserRepository userRepository;
-    @Mock
-    IConfirmationTokenRepository tokenRepository;
     @Autowired
     ObjectMapper objectMapper;
 
@@ -45,17 +41,15 @@ public class UserControllerTest {
     @MockBean
     EmailSenderService emailSenderService;
 
-
     @Test
     public void test_registration_valid() throws Exception {
-
         UserDto userDto = new UserDto("mock@mail.de", "edqwfdsd");
+
         mockMvc.perform(
                 post("/api/user/")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userDto)))
                 .andExpect(status().isOk());
-
     }
 
     @Test
@@ -67,8 +61,6 @@ public class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userDto)))
                 .andExpect(status().isBadRequest());
-
-
     }
 
     @Test
@@ -80,7 +72,6 @@ public class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userDto)))
                 .andExpect(status().isBadRequest());
-
     }
 
     @Test
@@ -114,8 +105,6 @@ public class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userDto2)))
                 .andExpect(status().isBadRequest());
-
-
     }
 
     @Test
@@ -128,7 +117,60 @@ public class UserControllerTest {
                 get("/api/user/activation/{token}", tokenString))
 
                 .andExpect(status().isOk()).andDo(print());
+    }
 
+    @Test
+    public void testPasswordRecoverRequest_userExists_valid() throws Exception {
+        UserDto userDto = new UserDto("test@mail.de", "112233");
+
+        mockMvc.perform(
+                post("/api/user/password-recover")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(userDto)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testPasswordRecoverRequest_userDoesntExist_invalid() throws Exception {
+        UserDto userDto = new UserDto("test@mailde", "112233");
+
+        doThrow(UserDoesntExistException.class).when(userService).requestRecoveryPassword(userDto.getEmail());
+
+        mockMvc.perform(
+                post("/api/user/password-recover")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(userDto)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testChangePassword_TokenExists_PasswordChanged() throws Exception {
+        String newPassword = "112233";
+        String generatedToken = "445566";
+
+        ChangePasswordDto changePasswordDto = new ChangePasswordDto(generatedToken, newPassword);
+
+        mockMvc.perform(
+                post("/api/user/new-password")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(changePasswordDto)))
+                .andExpect(status().isOk()).andDo(print());
+    }
+
+    @Test
+    public void testChangePassword_TokenNotFound_Invalid() throws Exception {
+        String newPassword = "112233";
+        String generatedToken = "445566";
+
+        ChangePasswordDto changePasswordDto = new ChangePasswordDto(generatedToken, newPassword);
+
+        doThrow(TokenNotFoundException.class).when(userService).changePassword(changePasswordDto.getRecoveryToken(), changePasswordDto.getPassword());
+
+        mockMvc.perform(
+                post("/api/user/new-password")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(changePasswordDto)))
+                .andExpect(status().isNotFound());
     }
 
 }

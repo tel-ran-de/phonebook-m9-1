@@ -30,7 +30,7 @@ public class User {
     private String password;
 
     @Setter
-    private boolean isActive = false;
+    private boolean isActive;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Contact> contacts = new ArrayList<>();
