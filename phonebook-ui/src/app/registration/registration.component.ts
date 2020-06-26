@@ -5,11 +5,12 @@ import {confirmPasswordValidator} from "../directive/confirm-password-validator.
 import {ErrorStateMatcher} from '@angular/material/core';
 import {UserService} from "../service/user.service";
 import {RegistrationUser} from "../model/registration-user.model";
+import {Router} from "@angular/router";
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
     const invalidCtrl = !!(control && control.invalid && control.parent.dirty);
-    const invalidParent = !!(control && control.parent && control.parent.invalid && control.parent.hasError('differentPasswords') && control.parent.dirty);
+    const invalidParent = !!(control && control.parent && control.parent.invalid && control.parent.hasError('differentPasswords') && (control.dirty || control.touched));
 
     return (invalidCtrl || invalidParent);
   }
@@ -25,7 +26,7 @@ export class RegistrationComponent implements OnInit {
   registrationForm = new FormGroup({
     email: new FormControl('', [
       Validators.required,
-      Validators.email,
+      Validators.pattern('^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\.[a-zA-Z]{2,10}$'),
       Validators.minLength(6),
       Validators.maxLength(50)
     ]),
@@ -39,7 +40,9 @@ export class RegistrationComponent implements OnInit {
 
   confirmPasswordMatcher = new MyErrorStateMatcher();
 
-  constructor(private userService: UserService) { }
+  errorMessage = '';
+
+  constructor(private userService: UserService, private router: Router) { }
 
   ngOnInit(): void {
   }
@@ -48,7 +51,7 @@ export class RegistrationComponent implements OnInit {
     if (this.registrationForm.get('email').hasError('required')) {
       return 'Required field';
     }
-    else if (this.registrationForm.get('email').hasError('email')) {
+    else if (this.registrationForm.get('email').hasError('pattern')) {
       return 'Invalid email';
     }
     else if (this.registrationForm.get('email').hasError('minlength')) {
@@ -78,12 +81,21 @@ export class RegistrationComponent implements OnInit {
   }
 
   onSubmit() {
+    this.errorMessage = '';
+
     let user: RegistrationUser = {
       email: this.registrationForm.get('email').value,
       password: this.registrationForm.get('password').value
     };
 
     this.userService.registerNewUser(user)
-      .subscribe(response => {});
+      .subscribe(
+        () => {
+          this.router.navigate(['user/pending'])
+        },
+        (error) => {
+          this.errorMessage = error;
+        }
+      );
   }
 }

@@ -1,0 +1,24 @@
+.auth-info {
+  width: 340px;
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(50px);
+  border-radius: 12px;
+  padding: 40px 30px;
+}
+
+.info-title {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 28px;
+  text-align: -moz-left;
+  color: #2B2B2B;
+  margin-bottom: 20px;
+}
+
+.message {
+  color: #000000;
+  opacity: 0.36;
+  line-height: 35px;
+}

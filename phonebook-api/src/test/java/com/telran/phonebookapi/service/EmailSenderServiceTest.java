@@ -21,10 +21,12 @@ import static org.mockito.Mockito.verify;
 public class EmailSenderServiceTest {
     @InjectMocks
     EmailSenderService emailSenderService;
+
     @Mock
     JavaMailSender javaMailSender;
     @Captor
     private ArgumentCaptor<SimpleMailMessage> messageArgumentCaptor;
+
     @Value("${spring.mail.username}")
     String mailFrom = "mailFrom";
 
@@ -43,7 +45,6 @@ public class EmailSenderServiceTest {
 
         SimpleMailMessage capturedMessage = messageArgumentCaptor.getValue();
 
-        // assertEquals(mailFrom, capturedMessage.getFrom());
         assertEquals(mailFrom, capturedMessage.getFrom());
         assertEquals(mailTo, Objects.requireNonNull(capturedMessage.getTo())[0]);
         assertEquals(text, capturedMessage.getText());

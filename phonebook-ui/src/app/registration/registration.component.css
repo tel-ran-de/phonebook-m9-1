@@ -211,3 +211,16 @@ input {
   border: 0;
   padding: 0;
 }
+
+.alert-danger {
+  background-color: #ffa0a0; /* Red */
+}
+.alert-success {
+  background-color: #a0ffa0;
+}
+.alert{
+  padding: 20px;
+  color: white;
+  margin-bottom: 15px;
+  text-align: center;
+}
