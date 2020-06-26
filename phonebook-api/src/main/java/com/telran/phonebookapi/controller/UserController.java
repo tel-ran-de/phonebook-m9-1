@@ -1,5 +1,6 @@
 package com.telran.phonebookapi.controller;
 
+import com.telran.phonebookapi.dto.ChangePasswordDto;
 import com.telran.phonebookapi.dto.UserDto;
 import com.telran.phonebookapi.dto.RecoveryPasswordDto;
 import com.telran.phonebookapi.service.UserService;
@@ -18,7 +19,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/")
+    @PostMapping("")
     public void addUser(@RequestBody @Valid UserDto userDto) {
         userService.saveUser(userDto.getEmail(), userDto.getPassword());
     }
@@ -29,13 +30,13 @@ public class UserController {
     }
 
     @PostMapping("/password-recover")
-    public void passwordRecoverRequest(@RequestBody @Valid UserDto userDto) {
-        userService.requestRecoveryPassword(userDto.getEmail());
+    public void recoverPasswordRequest(@RequestBody @Valid RecoveryPasswordDto recoveryPasswordDto) {
+        userService.requestRecoveryPassword(recoveryPasswordDto.getEmail());
     }
 
     @PostMapping("/new-password")
-    public void changePassword(@RequestBody @Valid RecoveryPasswordDto recoveryPasswordDto) {
-        userService.changePassword(recoveryPasswordDto.getRecoveryToken(), recoveryPasswordDto.getPassword());
+    public void changePassword(@RequestBody @Valid ChangePasswordDto changePasswordDto) {
+        userService.changePassword(changePasswordDto.recoveryToken, changePasswordDto.password);
     }
 
 }

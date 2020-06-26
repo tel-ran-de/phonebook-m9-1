@@ -1,7 +1,7 @@
 package com.telran.phonebookapi.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.telran.phonebookapi.dto.RecoveryPasswordDto;
+import com.telran.phonebookapi.dto.ChangePasswordDto;
 import com.telran.phonebookapi.dto.UserDto;
 import com.telran.phonebookapi.errorHandler.TokenNotFoundException;
 import com.telran.phonebookapi.errorHandler.UserDoesntExistException;
@@ -148,12 +148,12 @@ public class UserControllerTest {
         String newPassword = "112233";
         String generatedToken = "445566";
 
-        RecoveryPasswordDto recoveryPasswordDto = new RecoveryPasswordDto(generatedToken, newPassword);
+        ChangePasswordDto changePasswordDto = new ChangePasswordDto(generatedToken, newPassword);
 
         mockMvc.perform(
                 post("/api/user/new-password")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(recoveryPasswordDto)))
+                        .content(objectMapper.writeValueAsString(changePasswordDto)))
                 .andExpect(status().isOk()).andDo(print());
     }
 
@@ -162,14 +162,14 @@ public class UserControllerTest {
         String newPassword = "112233";
         String generatedToken = "445566";
 
-        RecoveryPasswordDto recoveryPasswordDto = new RecoveryPasswordDto(generatedToken, newPassword);
+        ChangePasswordDto changePasswordDto = new ChangePasswordDto(generatedToken, newPassword);
 
-        doThrow(TokenNotFoundException.class).when(userService).changePassword(recoveryPasswordDto.getRecoveryToken(), recoveryPasswordDto.getPassword());
+        doThrow(TokenNotFoundException.class).when(userService).changePassword(changePasswordDto.getRecoveryToken(), changePasswordDto.getPassword());
 
         mockMvc.perform(
                 post("/api/user/new-password")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(recoveryPasswordDto)))
+                        .content(objectMapper.writeValueAsString(changePasswordDto)))
                 .andExpect(status().isNotFound());
     }
 

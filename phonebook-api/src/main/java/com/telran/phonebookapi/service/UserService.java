@@ -34,19 +34,19 @@ public class UserService {
     }
 
     @Value("${com.telran.phonebook.ui.host}")
-    private String uiHost;
+    String uiHost;
 
     private final String REGISTRATION_MESSAGE = "Thank you for registration on PhoneBook Appl." +
-            " Please, visit the following link:" +
-            uiHost +
-            "user/activation/";
-    private static final String SUBJ = "activation of you account";
-    private static final String USER_EXISTS = "User already exists";
-    private static final String NO_REGISTRATION = "Please, register";
-    private final String MESSAGE_RECOVER_PASSWORD_REQUEST = "You have requested the recovery password option." + " Please, visit next link:" + uiHost + "/user/new-password/";
-    private static final String RECOVERY_PASSWORD = "Recovery password";
-    private static final String USER_DOESNT_EXIST = "Person not found";
-    private static final String INVALID_TOKEN = "Please, request your link once again";
+            " Please, visit the following link: %s" +
+            "user/activation/%s";
+    static final String SUBJ = "activation of you account";
+    static final String USER_EXISTS = "User already exists";
+    static final String NO_REGISTRATION = "Please, register";
+    final String MESSAGE_RECOVER_PASSWORD_REQUEST = "You have requested the recovery password option." +
+            " Please, visit next link: %s/user/new-password/%s";
+    static final String RECOVERY_PASSWORD = "Recovery password";
+    static final String USER_DOESNT_EXIST = "Person not found";
+    static final String INVALID_TOKEN = "Please, request your link once again";
 
     @Value("${spring.mail.username}")
     private String mailFrom;
@@ -66,9 +66,10 @@ public class UserService {
             ConfirmationToken token = new ConfirmationToken(user, tokenString);
             confirmationTokenRepository.save(token);
 
+            String message = String.format(REGISTRATION_MESSAGE, uiHost, tokenString);
             emailSenderService.sendMail(email, mailFrom,
                     SUBJ,
-                    REGISTRATION_MESSAGE + tokenString);
+                    message);
         }
     }
 
@@ -87,14 +88,15 @@ public class UserService {
     }
 
     public void requestRecoveryPassword(String email) {
-        Optional<User> user = Optional.ofNullable(userRepository.findById(email).orElseThrow(() -> new UserDoesntExistException(USER_DOESNT_EXIST)));
+        User user = userRepository.findById(email).orElseThrow(() -> new UserDoesntExistException(USER_DOESNT_EXIST));
 
         String generatedToken = generateToken();
 
-        RecoveryPasswordToken recoveryToken = new RecoveryPasswordToken(user.get(), generatedToken);
+        RecoveryPasswordToken recoveryToken = new RecoveryPasswordToken(user, generatedToken);
         recoveryPasswordTokenRepo.save(recoveryToken);
-        emailSenderService.sendMail(email, mailFrom, RECOVERY_PASSWORD, MESSAGE_RECOVER_PASSWORD_REQUEST + generatedToken);
 
+        String message = String.format(MESSAGE_RECOVER_PASSWORD_REQUEST, uiHost, generatedToken);
+        emailSenderService.sendMail(email, mailFrom, RECOVERY_PASSWORD, message);
     }
 
     public void changePassword(String token, String password) {
@@ -105,6 +107,5 @@ public class UserService {
         user.setPassword(encodedPass);
         userRepository.save(user);
         recoveryPasswordTokenRepo.delete(tokenFromDB);
-
     }
 }

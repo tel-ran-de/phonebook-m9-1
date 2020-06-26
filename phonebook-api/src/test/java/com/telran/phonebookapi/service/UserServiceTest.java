@@ -32,7 +32,7 @@ public class UserServiceTest {
     IUserRepository userRepository;
 
     @Mock
-    IConfirmationTokenRepository tokenRepository;
+    IConfirmationTokenRepository confirmationTokenRepository;
 
     @Mock
     IRecoveryPasswordToken recoveryPasswordTokenRepository;
@@ -69,7 +69,7 @@ public class UserServiceTest {
         assertEquals(captorValue.getEmail(), user.getEmail());
 
         verify(userRepository, times(1)).findById(anyString());
-        verify(tokenRepository, times(1)).save(any());
+        verify(confirmationTokenRepository, times(1)).save(any());
         verify(encoder, times(1)).encode(anyString());
 
     }
@@ -82,7 +82,7 @@ public class UserServiceTest {
         String tokenString = "12333";
         ConfirmationToken token = new ConfirmationToken(user, tokenString);
 
-        when(tokenRepository.findById(tokenString)).thenReturn(Optional.of(token));
+        when(confirmationTokenRepository.findById(tokenString)).thenReturn(Optional.of(token));
 
         userService.activateUser(tokenString);
         verify(userRepository, times(1)).save(userArgumentCaptor.capture());
@@ -90,8 +90,8 @@ public class UserServiceTest {
         User userValue = userArgumentCaptor.getValue();
         assertEquals(userValue.getEmail(), user.getEmail());
 
-        verify(tokenRepository, times(1)).findById(any());
-        verify(tokenRepository, times(1)).delete(any());
+        verify(confirmationTokenRepository, times(1)).findById(any());
+        verify(confirmationTokenRepository, times(1)).delete(any());
 
     }
 
@@ -115,7 +115,7 @@ public class UserServiceTest {
 
         ConfirmationToken token = new ConfirmationToken(user, tokenString);
 
-        when(tokenRepository.findById(token.getConfirmationToken())).thenThrow(new TokenNotFoundException("please register"));
+        when(confirmationTokenRepository.findById(token.getConfirmationToken())).thenThrow(new TokenNotFoundException("please register"));
         Exception exception = assertThrows(TokenNotFoundException.class, () -> userService.activateUser(tokenString));
         assertEquals("please register", exception.getMessage());
     }
@@ -125,33 +125,26 @@ public class UserServiceTest {
     public void testRequestRecoveryPassword_EmptyList_UserDoesntExistsException() {
         String email = "test@gmail.com";
 
-        when(userRepository.findById(email)).thenThrow(new UserDoesntExistException("Person not found"));
+        Exception exception = assertThrows(UserDoesntExistException.class, () -> userService.requestRecoveryPassword(email));
 
         verify(userRepository, times(1)).findById(anyString());
-
-        Exception exception = assertThrows(UserDoesntExistException.class, () -> userService.requestRecoveryPassword(email));
         assertEquals("Person not found", exception.getMessage());
-
     }
 
     @Test
     public void testRequestRecoveryPassword_UserExist_TokenGenerated() {
         User user = new User("test@gmail.com", "test");
         String generatedToken = "12345";
-        RecoveryPasswordToken recoveryPasswordToken = new RecoveryPasswordToken(user, generatedToken);
 
-        when(recoveryPasswordTokenRepository.findById(generatedToken)).thenReturn(Optional.of(recoveryPasswordToken));
+        when(userRepository.findById(user.getEmail())).thenReturn(Optional.of(user));
 
         userService.requestRecoveryPassword(user.getEmail());
 
-        emailSenderService.sendMail(user.getEmail(), mailFrom, "conf", "link");
+        verify(userRepository, times(1)).findById(user.getEmail());
 
-        User userValue = userArgumentCaptor.getValue();
-        assertEquals(userValue.getEmail(), user.getEmail());
-
-        verify(userRepository, times(1)).findById(any());
-        verify(tokenRepository, times(1)).save(any());
-        verify(encoder, times(1)).encode(anyString());
+        verify(recoveryPasswordTokenRepository, times(1)).save(argThat(
+                argument -> argument.getUser() == user && argument.getRecoveryPasswordToken().length() > 0
+        ));
     }
 
     @Test
@@ -159,13 +152,10 @@ public class UserServiceTest {
         String token = "testToken";
         String email = "test@gmail.com";
 
-        when(recoveryPasswordTokenRepository.findById(token)).thenThrow(new TokenNotFoundException("Please, request your link once again"));
+        Exception exception = assertThrows(TokenNotFoundException.class, () -> userService.changePassword(token, email));
 
         verify(recoveryPasswordTokenRepository, times(1)).findById(any());
-
-        Exception exception = assertThrows(TokenNotFoundException.class, () -> userService.changePassword(token, email));
         assertEquals("Please, request your link once again", exception.getMessage());
-
     }
 
     @Test
@@ -178,14 +168,17 @@ public class UserServiceTest {
 
         RecoveryPasswordToken recoveryPasswordToken = new RecoveryPasswordToken(user, generatedToken);
         when(recoveryPasswordTokenRepository.findById(generatedToken)).thenReturn(Optional.of(recoveryPasswordToken));
+        when(encoder.encode("newTest")).thenReturn("newTestEncoded");
+
+
         userService.changePassword(generatedToken, newPassword);
 
+        verify(userRepository, times(1)).save(userArgumentCaptor.capture());
         verify(recoveryPasswordTokenRepository, times(1)).findById(any());
         verify(recoveryPasswordTokenRepository, times(1)).delete(any());
 
-        User userValue = userArgumentCaptor.getValue();
-        assertEquals(userValue.getPassword(), user.getPassword());
-
+        User capturedUser = userArgumentCaptor.getValue();
+        assertEquals("newTestEncoded", capturedUser.getPassword());
     }
 }
 
