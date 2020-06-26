@@ -1,5 +1,6 @@
 package com.telran.phonebookapi.errorHandler;
 
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -12,9 +13,10 @@ import java.util.Map;
 @ControllerAdvice
 public class ControllerAdvisor {
 
-    @ExceptionHandler(UserDoesntExistException.class)
-    public ResponseEntity<Object> handleDtoValidationException(UserDoesntExistException exception) {
-        Map<String, Object> body = new HashMap<>();
+    @ExceptionHandler(UserExistsException.class)
+    public ResponseEntity<Object> handleUserExistsException(UserExistsException exception){
+        Map<String, Object> body=new HashMap<>();
+
         body.put("timestamp", LocalDateTime.now());
         body.put("message", exception.getMessage());
 
@@ -22,12 +24,21 @@ public class ControllerAdvisor {
     }
 
     @ExceptionHandler(TokenNotFoundException.class)
-    public ResponseEntity<Object> handleTokenNotFoundException(TokenNotFoundException exception) {
-        Map<String, Object> body = new HashMap<>();
+    public ResponseEntity<Object> handleTokenNotFoundException(TokenNotFoundException exception){
+        Map<String, Object> body=new HashMap<>();
         body.put("timestamp", LocalDateTime.now());
         body.put("message", exception.getMessage());
 
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(UserDoesntExistException.class)
+    public ResponseEntity<Object> handleUserDoesntExistException(UserDoesntExistException exception){
+        Map<String, Object> body=new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("message", exception.getMessage());
+
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
 }

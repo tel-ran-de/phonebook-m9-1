@@ -12,3 +12,7 @@ Tutorial "Connection to Postgres Database"
     spring.datasource.password=your_password
     spring.jpa.hibernate.ddl-auto=create_OR_none
 3. Run phonebook-m9-1 project
+
+#fields validation
+User registration flow is validated. All fields must not be empty.
+Field email is validated with pattern.

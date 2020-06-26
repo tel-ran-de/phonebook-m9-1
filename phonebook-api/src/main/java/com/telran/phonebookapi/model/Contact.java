@@ -3,8 +3,6 @@ package com.telran.phonebookapi.model;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -29,8 +27,8 @@ public class Contact {
     private List<String> emails;
 
     @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    User user;
+//    @OnDelete(action = OnDeleteAction.CASCADE)
+            User user;
 
     @OneToMany(mappedBy = "contact", cascade = {CascadeType.ALL}, orphanRemoval = true)
     private List<PhoneNumber> numbers = new ArrayList<>();
