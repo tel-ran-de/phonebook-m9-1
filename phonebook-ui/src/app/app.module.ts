@@ -6,15 +6,15 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RegistrationComponent } from './registration/registration.component';
 
 import { LayoutModule } from '@angular/cdk/layout';
+
 import {  MatButtonModule } from  '@angular/material/button';
+
 
 import {MatCardModule} from '@angular/material/card';
 import { MaterialModule } from './material.module';
 import { PendingPageComponent } from './pending-page/pending-page.component';
 import { LoginComponent } from './login/login.component';
 import { NewPasswordPageComponent } from './new-password-page/new-password-page.component';
-
-
 
 @NgModule({
   declarations: [
@@ -23,9 +23,6 @@ import { NewPasswordPageComponent } from './new-password-page/new-password-page.
     PendingPageComponent,
     LoginComponent,
     NewPasswordPageComponent,
-
-
-
   ],
   imports: [
     BrowserModule,
@@ -36,8 +33,6 @@ import { NewPasswordPageComponent } from './new-password-page/new-password-page.
     MaterialModule,
     MatCardModule
   ],
-
-
   providers: [],
   bootstrap: [AppComponent]
 })
