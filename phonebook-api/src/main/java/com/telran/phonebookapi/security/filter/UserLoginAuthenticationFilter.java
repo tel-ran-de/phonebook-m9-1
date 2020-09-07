@@ -53,11 +53,6 @@ public class UserLoginAuthenticationFilter extends AbstractAuthenticationProcess
                                             Authentication auth) {
 
         String accessToken = jwtService.generateAccessToken(((UserDetails) auth.getPrincipal()));
-
-//        Cookie cookie = new Cookie("at", accessToken);
-//        cookie.setHttpOnly(true);
-//        res.addCookie(cookie);
-
         res.addHeader("Access-Token", accessToken);
     }
 }

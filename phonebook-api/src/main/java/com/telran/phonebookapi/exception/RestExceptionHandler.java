@@ -27,6 +27,13 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ErrorDto(ex.getMessage());
     }
 
+    @ExceptionHandler(UserNotActivatedException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ErrorDto handleUserNotActivatedException(UserAlreadyExistsException ex) {
+        return new ErrorDto(ex.getMessage());
+    }
+
     @ExceptionHandler(EntityNotFoundException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody

@@ -8,6 +8,8 @@ import com.telran.phonebookapi.mapper.PhoneMapper;
 import com.telran.phonebookapi.model.Contact;
 import com.telran.phonebookapi.model.User;
 import com.telran.phonebookapi.persistance.*;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -42,7 +44,7 @@ public class ContactService {
     }
 
     public void add(ContactDto contactDto) {
-        User user = userRepository.findById(contactDto.userId).orElseThrow(() -> new EntityNotFoundException(UserService.USER_DOES_NOT_EXIST));
+        User user = userRepository.findById(getUsername()).orElseThrow(() -> new EntityNotFoundException(UserService.USER_DOES_NOT_EXIST));
         Contact contact = new Contact(contactDto.firstName, user);
         contact.setLastName(contactDto.lastName);
         contact.setDescription(contactDto.description);
@@ -86,8 +88,8 @@ public class ContactService {
         contactRepository.deleteById(id);
     }
 
-    public List<ContactDto> getAllContactsByUserId(UserEmailDto userEmailDto) {
-        return contactRepository.findAllByUserEmail(userEmailDto.email).stream()
+    public List<ContactDto> getAllContactsByUserId() {
+        return contactRepository.findAllByUserEmail(getUsername()).stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
@@ -141,4 +143,12 @@ public class ContactService {
         return contactMapper.mapContactToDtoFull(contact, getAllPhonesByContact(contact), getAllAddressesByContact(contact), getAllEmailsByContact(contact));
     }
 
+    public String getUsername() {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
+
+        return userDetails.getUsername();
+    }
 }

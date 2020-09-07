@@ -44,9 +44,9 @@ public class ContactController {
         contactService.removeById(id);
     }
 
-    @PostMapping("/all")
-    public List<ContactDto> requestAllContactsByUserEmail(@Valid @RequestBody UserEmailDto userEmailDto) {
-        return contactService.getAllContactsByUserId(userEmailDto);
+    @GetMapping("/all")
+    public List<ContactDto> requestAllContactsByUserEmail() {
+        return contactService.getAllContactsByUserId();
     }
 
     @PostMapping("/profile")

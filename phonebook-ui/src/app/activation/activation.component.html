@@ -1,17 +1,34 @@
-<app-header></app-header>
 <main role="main">
-  <section class="jumbotron text-center">
+  <section class="jumbotron text-center" style="margin-top: 10%">
     <div class="container">
-      <div *ngIf="RegistrationSuccess; else error">
-        <h4>Thank you! Your registration is complete!</h4>
-        <a routerLink="/user/login">
-          <button class="btn btn-info my-4 btn-block" type="submit">Login</button>
-        </a>
+      <div class="text-warning" *ngIf="!sendRequest">
+        <h1>Checking request ...</h1>
       </div>
-      <ng-template #error>
-        <h4 style="color: red">Registration failed</h4>
-      </ng-template>
+      <div *ngIf="sendRequest">
+        <div *ngIf="!registrationFail">
+          <h4>Thank you! Your registration is complete!</h4>
+          <h5>You will be automatically redirected to the
+            <span>
+              <a class="btn-link" routerLink="/user/login"> login page </a>
+            </span>
+            after <b>{{timeLeft}}</b> seconds, if this does not happen, follow the link
+          </h5>
+          <a routerLink="/user/login"> Login now </a>
+        </div>
+        <div *ngIf="registrationFail">
+          <h1 class="text-warning">Registration failed</h1>
+          <h4 class="text-danger">{{errorMessage}}</h4>
+          <h5>You will be automatically redirected to the
+            <span>
+              <a class="btn-link" routerLink="/user/registration">registration page</a>
+            </span>
+            after <b>{{timeLeft}}</b> seconds, if this does not happen, follow the link
+          </h5>
+          <a class="btn-link" routerLink="/user/registration">Register new Account</a> or
+          <a class="btn-link" routerLink="/user/login">Login</a>
+
+        </div>
+      </div>
     </div>
   </section>
 </main>
-<app-footer></app-footer>

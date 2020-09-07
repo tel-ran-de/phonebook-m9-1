@@ -1,10 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {FormGroup, FormBuilder, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from "@angular/router";
-import {ConfirmedValidator} from "./confirmed.validator";
-import {UserService} from "../service/user.service";
-import {HttpErrorResponse} from "@angular/common/http";
-import {throwError} from "rxjs";
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {UserService} from '../service/user.service';
+import {Subscription} from 'rxjs';
+import {Utils} from '../service/utils/utils';
 
 @Component({
   selector: 'app-registration',
@@ -12,60 +11,58 @@ import {throwError} from "rxjs";
   styleUrls: ['./registration.component.css']
 })
 
-export class RegistrationComponent implements OnInit {
+export class RegistrationComponent implements OnInit, OnDestroy {
 
-  title = 'Sign up';
-  angForm: FormGroup;
-  loading: boolean;
-  error: string;
+  form: FormGroup;
+
+  errorMessage: string;
+  userExistMessagae: boolean;
+  pageName = 'Password recovery';
+  projectName = 'Phone book';
+  pageDescription = 'Login or register from here to access.';
+  private utils: Utils;
+
+  private subscription: Subscription;
 
   constructor(private fb: FormBuilder,
               private router: Router,
-              private userService: UserService) {
-
-    this.createForm();
+              private route: ActivatedRoute,
+              private userService: UserService,) {
+    this.utils = new Utils;
   }
 
   createForm() {
-    this.angForm = this.fb.group({
-      email: ['', [Validators.required, Validators.pattern("^[a-z0-9._-]+@[a-z0-9.-]+\\.[a-z]{2,10}$")]],
-      password: ['', [Validators.required, Validators.minLength(8)],
-        [Validators.required, Validators.maxLength(20)]],
+    this.form = this.fb.group({
+      email: [null, [Validators.required, Validators.pattern("^[a-z0-9._-]+@[a-z0-9.-]+\\.[a-z]{2,10}$")]],
+      password: [null, [Validators.minLength(8),
+        Validators.required,
+        Validators.maxLength(20)]],
       confirm_password: ['', [Validators.required]]
     }, {
-      validators: ConfirmedValidator('password', 'confirm_password')
+      validators: this.utils.confirmedPassValidator('password', 'confirm_password')
     });
   }
 
   ngOnInit(): void {
+    this.createForm();
   }
 
   onSubmit() {
-    // @ts-ignore
-    this.loading = true;
-    this.userService.newUserRegistration(this.angForm.value)
+    this.userService.newUserRegistration(this.form.value)
       .subscribe(
-        data => {
-          this.router.navigate(['user/activate-email']);
+        () => {
+          this.router.navigate(['../activate-email'], {relativeTo: this.route}).then();
         },
         error => {
-          // @ts-ignore
-          this.error = handleError(error);
-          this.loading = false;
+          this.errorMessage = this.utils.subscribtionErrorHandle(error);
+          if (this.errorMessage === 'Error! User already exists')
+            this.userExistMessagae = true;
         }
-      )
-
-    function handleError(error: HttpErrorResponse) {
-      if (error.error instanceof ErrorEvent) {
-        // network error
-        console.error(`No internet connection`);
-      } else {
-        // the response may contain hints of what went wrong
-        console.error(`Error code: ${error.status}`);
-      }
-      // user facing error message
-      return throwError(`Something bad happened; please try again later.`);
-    }
+      );
   }
 
+  ngOnDestroy(): void {
+    if (this.subscription)
+      this.subscription.unsubscribe();
+  }
 }

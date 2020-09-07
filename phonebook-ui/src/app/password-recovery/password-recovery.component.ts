@@ -1,53 +1,78 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {UserService} from "../service/user.service";
-import {ConfirmedValidator} from "./confirmed.validator";
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UserService} from '../service/user.service';
+import {UserRecoveryPass} from '../model/userRecoveryPass';
+import {Subscription} from 'rxjs';
+import {Utils} from '../service/utils/utils';
 
 @Component({
   selector: 'app-password-recovery',
   templateUrl: './password-recovery.component.html',
   styleUrls: ['./password-recovery.component.css']
 })
-export class PasswordRecoveryComponent implements OnInit {
-  title = 'Password Recovery';
-  PasswordRecoveryForm: FormGroup;
-  loading: boolean;
-  submitted: boolean = true;
+export class PasswordRecoveryComponent implements OnInit, OnDestroy {
+  form: FormGroup;
 
-  constructor(private fb: FormBuilder, private router: Router, private userService: UserService, private route: ActivatedRoute) {
-    this.createForm();
+  pageName = 'Password recovery';
+  title = 'Password Recovery';
+  projectName = 'Phone book';
+  pageDescription = 'Forgotten password recovery';
+
+  errorMessage: string;
+  token: string;
+  tokenInvalid: boolean;
+
+  private subscription: Subscription;
+  private utils: Utils;
+  success: boolean;
+
+  constructor(private fb: FormBuilder,
+              private router: Router,
+              private userService: UserService,
+              private route: ActivatedRoute) {
+    this.utils = new Utils;
   }
 
   createForm() {
-    this.PasswordRecoveryForm = this.fb.group({
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      confirm_password: ['', [Validators.required]]
+    this.form = this.fb.group({
+      password: [null, [Validators.minLength(8),
+        Validators.required, Validators.maxLength(20)]],
+      confirm_password: [null, [Validators.required]]
     }, {
-      validators: ConfirmedValidator('password', 'confirm_password')
+      validators: this.utils.confirmedPassValidator('password', 'confirm_password')
     });
   }
 
   ngOnInit(): void {
+    this.token = this.route.snapshot.paramMap.get('token');
+    this.createForm();
   }
 
   onSubmit() {
-    const token = this.route.snapshot.paramMap.get('token');
+    if (this.token.length < 10) {
+      this.errorMessage = 'Your link is not active anymore'
+      this.tokenInvalid = true;
+      return;
+    }
 
-    this.loading = true;
+    let userRecoveryPass = new UserRecoveryPass;
+    userRecoveryPass.password = this.form.value.password;
+    userRecoveryPass.token = this.token;
 
-    this.userService.resetPassword(this.PasswordRecoveryForm.value, token)
+    this.subscription = this.userService.resetPassword(userRecoveryPass)
       .subscribe(
-        data => {
-          this.loading = false;
-          this.submitted = false;
-          //this.router.navigate(['user/login']);
+        () => {
+          this.success = true;
         },
         error => {
-          console.log("error connection");
-          this.loading = false;
-        }
-      )
+          this.success = false;
+          this.errorMessage = this.utils.subscribtionErrorHandle(error);
+        });
+  }
 
+  ngOnDestroy(): void {
+    if (this.subscription)
+      this.subscription.unsubscribe();
   }
 }

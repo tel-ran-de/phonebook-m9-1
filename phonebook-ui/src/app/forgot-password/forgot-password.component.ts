@@ -1,42 +1,58 @@
-import {Component, OnInit} from '@angular/core';
-import {Router} from "@angular/router";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {UserService} from "../service/user.service";
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UserService} from '../service/user.service';
+import {Subscription} from "rxjs";
+import {Utils} from '../service/utils/utils';
 
 @Component({
   selector: 'app-forgot-password',
   templateUrl: './forgot-password.component.html',
   styleUrls: ['./forgot-password.component.css']
 })
-export class ForgotPasswordComponent implements OnInit {
+export class ForgotPasswordComponent implements OnInit, OnDestroy {
 
-  forgotPasswordForm: FormGroup;
+  form: FormGroup;
+  pageName = 'Password recovery';
+
+  projectName = 'Phone book';
+  pageDescription = 'Login or register from here to access.';
+
   loading: boolean;
+  errorMessage: string;
 
-  constructor(private fb: FormBuilder, private router: Router, private userService: UserService) {
-    this.createForm();
+  private subscription: Subscription;
+  private utils: Utils;
+
+  constructor(private fb: FormBuilder,
+              private userService: UserService) {
+    this.utils = new Utils;
   }
 
   createForm() {
-    this.forgotPasswordForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]]
+    this.form = this.fb.group({
+      email: [null, [Validators.required,
+        Validators.pattern("^[a-z0-9._-]+@[a-z0-9.-]+\\.[a-z]{2,10}$")]]
     });
-
   }
 
   ngOnInit(): void {
+    this.createForm();
   }
 
   onSubmit() {
 
-    this.userService.forgotPassword(this.forgotPasswordForm.value)
+    this.subscription = this.userService.forgotPassword(this.form.value)
       .subscribe(
-        data => {
+        () => {
           this.loading = true;
         },
         error => {
-          console.log("error connection");
-        }
-      )
+          this.errorMessage = this.utils.subscribtionErrorHandle(error);
+        });
+  }
+
+  ngOnDestroy(): void {
+    if(this.subscription)
+    this.subscription.unsubscribe();
   }
 }
