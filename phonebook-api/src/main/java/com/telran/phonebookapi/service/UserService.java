@@ -5,10 +5,7 @@ import com.telran.phonebookapi.exception.TokenNotFoundException;
 import com.telran.phonebookapi.exception.UserAlreadyExistsException;
 import com.telran.phonebookapi.mapper.UserMapper;
 import com.telran.phonebookapi.model.*;
-import com.telran.phonebookapi.persistance.IActivationTokenRepository;
-import com.telran.phonebookapi.persistance.IContactRepository;
-import com.telran.phonebookapi.persistance.IRecoveryTokenRepository;
-import com.telran.phonebookapi.persistance.IUserRepository;
+import com.telran.phonebookapi.persistance.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -34,21 +31,24 @@ public class UserService {
     private final IUserRepository userRepository;
     private final IContactRepository contactRepository;
     private final IActivationTokenRepository activationTokenRepository;
+    private final IEmailRepository emailRepository;
+
     private final IRecoveryTokenRepository recoveryTokenRepository;
     private final EmailSender emailSender;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    UserMapper userMapper;
+    private final UserMapper userMapper;
 
     public UserService(IUserRepository userRepository,
                        IContactRepository contactRepository,
                        IActivationTokenRepository activationTokenRepository,
-                       EmailSender emailSender,
+                       IEmailRepository emailRepository, EmailSender emailSender,
                        IRecoveryTokenRepository recoveryTokenRepository,
                        BCryptPasswordEncoder bCryptPasswordEncoder,
                        UserMapper userMapper) {
         this.userRepository = userRepository;
         this.contactRepository = contactRepository;
         this.activationTokenRepository = activationTokenRepository;
+        this.emailRepository = emailRepository;
         this.emailSender = emailSender;
         this.recoveryTokenRepository = recoveryTokenRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
@@ -59,20 +59,22 @@ public class UserService {
         if (userRepository.findById(userDto.email).isPresent()) {
             throw new UserAlreadyExistsException(USER_ALREADY_EXISTS);
         } else {
-            String token = UUID.randomUUID().toString();
             String encodedPassword = bCryptPasswordEncoder.encode(userDto.password);
             User user = new User(userDto.email, encodedPassword);
-            user.setActive(false);
             user.addRole(UserRole.USER);
+
             Contact profile = new Contact();
             user.setMyProfile(profile);
+            profile.setDescription("My profile");
             contactRepository.save(profile);
+
             userRepository.save(user);
+            profile.setUser(user);
 
-            userDto.contactDtos.stream()
-                    .map(contactIn -> new Contact(contactIn.firstName, user))
-                    .forEach(contactRepository::save);
+            Email email = new Email(user.getEmail(), profile);
+            emailRepository.save(email);
 
+            String token = UUID.randomUUID().toString();
             activationTokenRepository.save(new ActivationToken(token, user));
             emailSender.sendMail(user.getEmail(), ACTIVATION_SUBJECT, ACTIVATION_MESSAGE
                     + uiHost + UI_ACTIVATION_LINK + token);
@@ -109,7 +111,4 @@ public class UserService {
         recoveryTokenRepository.delete(token);
     }
 
-    public User getUserByEmail(String email) {
-        return userRepository.findById(email).orElseThrow(() -> new EntityNotFoundException(USER_DOES_NOT_EXIST));
-    }
 }

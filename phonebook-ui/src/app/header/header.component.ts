@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {TokenStorageService} from "../service/token-storage.service";
 import {Router} from "@angular/router";
+import {Contact} from "../model/contact";
+import {ContactService} from "../service/contact-service.service";
 
 @Component({
   selector: 'app-header',
@@ -9,11 +11,16 @@ import {Router} from "@angular/router";
 })
 export class HeaderComponent implements OnInit {
 
-  constructor(private tokenStorage: TokenStorageService,
+  profile: Contact;
+
+  constructor(private contactService: ContactService,
+              private tokenStorage: TokenStorageService,
               private router: Router) {
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.profile = new Contact();
+    this.contactService.getProfile().subscribe(value => this.profile = value);
   }
 
   logout() {

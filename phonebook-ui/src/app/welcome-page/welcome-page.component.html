@@ -1,35 +1,16 @@
 <app-header></app-header>
 <main role="main">
-  <section class="jumbotron text-center">
-    <div class="alert alert-danger text-center">
-      Token expired in {{timeLeft}}
+  <div class="row" style="margin-top: 2%">
+    <div class="col-md-4">
+      <ul class="list-group">
+        <li class="list-group-item" *ngFor="let contact of contactService.contacts | async">
+          <a class="btn btn-link" (click)="setContactToDisplay(contact.id)">
+            <b>{{contact.firstName}}</b> {{contact.lastName}}</a>
+        </li>
+      </ul>
     </div>
-  </section>
-  <div class="container">
-    <div class="card" *ngFor="let contact of contactService.getAllContacts() | async">
-      <div class="card-body">
-        <div class="row">
-          <div class="col-10 border-right">
-            <a class="page-link shadow-sm" routerLink="/detail/{{contact.id}}">
-          <span>
-            <div class="row">
-              <div class="col-4"><p class="text text-xl-center">{{contact.lastName}}</p></div>
-              <div class="col-4"><p class="text">{{contact.firstName}}</p></div>
-              <div class="col-4"><p class="text">{{contact.description}}</p></div>
-            </div>
-
-          </span>
-            </a>
-          </div>
-          <div class="col-2">
-            <div class="btn-group btn-block">
-              <!--            <button class="btn btn-primary" routerLink="/detail/{{contact.id}}">Show or edit</button>-->
-              <button class="btn btn-danger" (click)="onClickRemove(contact.id)">Remove</button>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div class="col-md-8" *ngIf="showContact">
+      <app-contact-deatails [contactId]="contactIdToDisplay"></app-contact-deatails>
     </div>
   </div>
 </main>
-<app-footer></app-footer>

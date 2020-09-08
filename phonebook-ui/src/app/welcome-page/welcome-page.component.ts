@@ -1,6 +1,5 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
 import {Subscription} from "rxjs";
-import {User} from "../model/user";
 import {UserService} from "../service/user.service";
 import {ContactService} from "../service/contact-service.service";
 
@@ -10,37 +9,30 @@ import {ContactService} from "../service/contact-service.service";
   styleUrls: ['./welcome-page.component.css']
 })
 export class WelcomePageComponent implements OnInit, OnDestroy {
-  private subscriptionGetUser: Subscription;
   private subscriptionRemove: Subscription;
-  public user: User;
-
+  contactIdToDisplay: number;
+  showContact: boolean;
 
   constructor(public contactService: ContactService, public userService: UserService) {
   }
 
   ngOnInit(): void {
-    this.startTimer();
+    this.contactService.getAllContacts();
   }
 
   onClickRemove(id: number) {
     this.subscriptionRemove = this.contactService.removeContact(id);
   }
 
+
   ngOnDestroy(): void {
-    if (this.subscriptionGetUser)
-      this.subscriptionGetUser.unsubscribe();
     if (this.subscriptionRemove)
       this.subscriptionRemove.unsubscribe();
   }
 
 
-  timeLeft: number = 60;
-
-  private startTimer() {
-    setInterval(() => {
-      if (this.timeLeft > 0)
-        this.timeLeft--;
-    }, 1000)
+  setContactToDisplay(id: number) {
+    this.showContact = true;
+    this.contactIdToDisplay = id;
   }
-
 }

@@ -20,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
 class ContactServiceTest {
@@ -45,13 +44,11 @@ class ContactServiceTest {
 
         ContactDto contactDto = new ContactDto();
         contactDto.firstName = "ContactName";
-        contactDto.userId = user.getEmail();
-        contactService.add(contactDto);
+        contactService.add(contactDto, user.getEmail());
 
         verify(contactRepository, times(1)).save(any());
         verify(contactRepository, times(1)).save(argThat(contact ->
                 contact.getFirstName().equals(contactDto.firstName)
-                        && contact.getUser().getEmail().equals(contactDto.userId)
         ));
     }
 
@@ -60,9 +57,8 @@ class ContactServiceTest {
 
         ContactDto contactDto = new ContactDto();
         contactDto.firstName = "ContactName";
-        contactDto.userId = "wrong@gmail.com";
 
-        Exception exception = assertThrows(EntityNotFoundException.class, () -> contactService.add(contactDto));
+        Exception exception = assertThrows(EntityNotFoundException.class, () -> contactService.add(contactDto, "wrong@gmail.com"));
 
         verify(userRepository, times(1)).findById(anyString());
         assertEquals("Error! This user doesn't exist in our DB", exception.getMessage());
@@ -78,7 +74,6 @@ class ContactServiceTest {
         contactDto.firstName = "NewName";
         contactDto.lastName = "NewLastName";
         contactDto.description = "newDescription";
-        contactDto.userId = user.getEmail();
 
         when(contactRepository.findById(contactDto.id)).thenReturn(Optional.of(oldContact));
 
@@ -86,8 +81,10 @@ class ContactServiceTest {
 
         verify(contactRepository, times(1)).save(any());
         verify(contactRepository, times(1)).save(argThat(contact ->
-                contact.getFirstName().equals(contactDto.firstName) && contact.getLastName().equals(contactDto.lastName) && contact.getDescription().equals(contactDto.description)
-                        && contact.getUser().getEmail().equals(contactDto.userId)
+                contact.getFirstName().equals(contactDto.firstName) && contact.getLastName().equals(contactDto.lastName)
+                        && contact.getDescription().equals(contactDto.description)
+                        && contact.getUser().equals(oldContact.getUser())
+
         ));
     }
 
@@ -98,7 +95,6 @@ class ContactServiceTest {
         contactDto.firstName = "ContactName";
         contactDto.lastName = "LastName";
         contactDto.description = "Description";
-        contactDto.userId = "wrong@gmail.com";
 
         Exception exception = assertThrows(EntityNotFoundException.class, () -> contactService.editAllFields(contactDto));
 
@@ -117,7 +113,7 @@ class ContactServiceTest {
         contact.setLastName("Surname");
         contact.setDescription("person");
 
-        ContactDto contactDto = new ContactDto(1, "Name", "Surname", "person", "test@gmail.com");
+        ContactDto contactDto = new ContactDto(1, "Name", "Surname", "person");
 
         when(contactRepository.findById(contactDto.id)).thenReturn(Optional.of(contact));
         contactService.removeById(contactDto.id);
@@ -134,7 +130,7 @@ class ContactServiceTest {
         contact.setLastName("Surname");
         contact.setDescription("person");
 
-        ContactDto contactDto = new ContactDto(1, "Name", "Surname", "person", "test@gmail.com");
+        ContactDto contactDto = new ContactDto(1, "Name", "Surname", "person");
 
         when(contactRepository.findById(contactDto.id)).thenReturn(Optional.of(contact));
         ContactDto contactFounded = contactService.getById(contactDto.id);
