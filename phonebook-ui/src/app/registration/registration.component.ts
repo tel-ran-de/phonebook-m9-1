@@ -17,17 +17,20 @@ export class RegistrationComponent implements OnInit, OnDestroy {
 
   errorMessage: string;
   userExistMessagae: boolean;
-  pageName = 'Password recovery';
+
+  pageName = 'Registration page';
   projectName = 'Phone book';
-  pageDescription = 'Login or register from here to access.';
+  pageDescription = 'Register new user';
+
   private utils: Utils;
 
   private subscription: Subscription;
+  loading: boolean;
 
   constructor(private fb: FormBuilder,
               private router: Router,
               private route: ActivatedRoute,
-              private userService: UserService,) {
+              private userService: UserService) {
     this.utils = new Utils;
   }
 
@@ -48,15 +51,22 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
+    this.loading = true;
+    this.errorMessage = '';
+
     this.userService.newUserRegistration(this.form.value)
       .subscribe(
         () => {
+          this.loading = false;
           this.router.navigate(['../activate-email'], {relativeTo: this.route}).then();
         },
         error => {
-          this.errorMessage = this.utils.subscribtionErrorHandle(error);
+          this.errorMessage = this.utils.subscriptionErrorHandle(error);
           if (this.errorMessage === 'Error! User already exists')
             this.userExistMessagae = true;
+
+          if (this.errorMessage)
+            this.loading = false;
         }
       );
   }

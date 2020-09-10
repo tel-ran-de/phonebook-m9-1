@@ -1,16 +1,38 @@
 <app-header></app-header>
 <main role="main">
   <div class="row" style="margin-top: 2%">
-    <div class="col-md-4">
+    <div class="col-md-3">
       <ul class="list-group">
-        <li class="list-group-item" *ngFor="let contact of contactService.contacts | async">
-          <a class="btn btn-link" (click)="setContactToDisplay(contact.id)">
-            <b>{{contact.firstName}}</b> {{contact.lastName}}</a>
+        <li class="list-group-item list-group-item-dark">Search contact</li>
+        <li class="list-group-item">
+          <form class="my-6 my-lg-0">
+            <input class="form-control" formControl="searchInput" id="contact-search" placeholder="Search contact">
+          </form>
+        </li>
+        <li class="list-group-item list-group-item-dark">My profile</li>
+        <li>
+          <button class="d-flex justify-content-between align-items-center list-group-item list-group-item-action"
+                  (click)="setContactToDisplay(profile)">
+            <b>{{profile.firstName}}</b> {{profile.lastName}}
+
+            <span>
+              <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-person-fill" fill="currentColor"
+                   xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+          </svg>
+          </span>
+
+          </button>
+        </li>
+        <li class="list-group-item list-group-item-dark">Contacts</li>
+        <li (click)="setContactToDisplay(contact)" *ngFor="let contact of contactService.contacts | async">
+          <button class="list-group-item list-group-item-action"><b>{{contact.firstName}}</b> {{contact.lastName}}
+          </button>
         </li>
       </ul>
     </div>
-    <div class="col-md-8" *ngIf="showContact">
-      <app-contact-deatails [contactId]="contactIdToDisplay"></app-contact-deatails>
+    <div class="col-md-9" *ngIf="showContact">
+      <app-contact-details [contact]="contactIdToDisplay"></app-contact-details>
     </div>
   </div>
 </main>

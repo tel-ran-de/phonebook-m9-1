@@ -1,7 +1,8 @@
-import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from "rxjs";
 import {UserService} from "../service/user.service";
 import {ContactService} from "../service/contact-service.service";
+import {Contact} from "../model/contact";
 
 @Component({
   selector: 'app-welcome-page',
@@ -10,14 +11,30 @@ import {ContactService} from "../service/contact-service.service";
 })
 export class WelcomePageComponent implements OnInit, OnDestroy {
   private subscriptionRemove: Subscription;
-  contactIdToDisplay: number;
+  contactIdToDisplay: Contact;
   showContact: boolean;
+  profile: Contact;
+
 
   constructor(public contactService: ContactService, public userService: UserService) {
   }
 
   ngOnInit(): void {
+    this.getProfile()
     this.contactService.getAllContacts();
+  }
+
+  getProfile() {
+    this.profile = new Contact();
+    this.contactService.getProfile().subscribe(value => {
+        if (!value.firstName)
+          value.firstName = 'Profile name'
+        if (!value.lastName)
+          value.lastName = 'Profile last name'
+        this.profile = value;
+      }
+    );
+
   }
 
   onClickRemove(id: number) {
@@ -31,8 +48,12 @@ export class WelcomePageComponent implements OnInit, OnDestroy {
   }
 
 
-  setContactToDisplay(id: number) {
+  setContactToDisplay(id: Contact) {
     this.showContact = true;
     this.contactIdToDisplay = id;
+  }
+
+  onClickSearch() {
+
   }
 }

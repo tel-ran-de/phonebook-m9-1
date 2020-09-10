@@ -1,10 +1,7 @@
 import {Injectable} from '@angular/core'
 import {User} from "../model/user";
-import {HttpClient, HttpResponse} from '@angular/common/http'
+import {HttpClient} from '@angular/common/http'
 import {UserRecoveryPass} from "../model/userRecoveryPass";
-import {Router} from "@angular/router";
-import {first} from "rxjs/operators";
-import {TokenStorageService} from "./token-storage.service";
 
 @Injectable()
 export class UserService {
@@ -16,7 +13,7 @@ export class UserService {
   private readonly loginPath = '/api/user/login';
 
 
-  constructor(private http: HttpClient, private router: Router, private tokenStorage: TokenStorageService) {
+  constructor(private http: HttpClient) {
   }
 
   newUserRegistration(user: User) {
@@ -35,17 +32,10 @@ export class UserService {
     return this.http.put<User>(this.resetPasswordPath, userRecoveryPass);
   }
 
-  private headerName = 'Access-Token';
+
 
   login(user: User) {
-    return this.http.post<User>(this.loginPath, user, {observe: 'response'}).pipe(first())
-      .subscribe(
-        (data: HttpResponse<any>) => {
-          this.tokenStorage.signOut();
-          this.tokenStorage.saveToken(data.headers.get(this.headerName));
-          this.router.navigate(['../home']).then();
-        }
-      )
+    return this.http.post<User>(this.loginPath, user, {observe: 'response'});
   };
 
   getUserData() {

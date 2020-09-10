@@ -66,6 +66,7 @@ public class UserService {
             Contact profile = new Contact();
             user.setMyProfile(profile);
             profile.setDescription("My profile");
+            profile.setFirstName("No name to display");
             contactRepository.save(profile);
 
             userRepository.save(user);

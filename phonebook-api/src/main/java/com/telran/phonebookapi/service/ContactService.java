@@ -47,33 +47,19 @@ public class ContactService {
     public void add(ContactDto contactDto, String userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException(UserService.USER_DOES_NOT_EXIST));
         Contact contact = new Contact(contactDto.firstName, user);
+
+        if (contactDto.description == null)
+            contact.setDescription("About " + contactDto.firstName + " " + contactDto.lastName + ".");
+        else
+            contact.setDescription(contactDto.description);
+
         contact.setLastName(contactDto.lastName);
-        contact.setDescription(contactDto.description);
         contactRepository.save(contact);
     }
 
     public ContactDto getById(int id) {
         Contact contact = contactRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(CONTACT_DOES_NOT_EXIST));
         return contactMapper.mapContactToDto(contact);
-    }
-
-    public ContactDto getByIdFullDetails(int id) {
-        Contact contact = contactRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(CONTACT_DOES_NOT_EXIST));
-        ContactDto contactDto = contactMapper.mapContactToDtoFull(contact, getAllPhonesByContact(contact), getAllAddressesByContact(contact), getAllEmailsByContact(contact));
-
-        contactDto.addresses = contact.getAddresses().stream()
-                .map(addressMapper::mapAddressToDto)
-                .collect(Collectors.toList());
-
-        contactDto.phoneNumbers = contact.getPhoneNumbers().stream()
-                .map(phoneMapper::mapPhoneToDto)
-                .collect(Collectors.toList());
-
-        contactDto.emails = contact.getEmails().stream()
-                .map(emailMapper::mapEmailToDto)
-                .collect(Collectors.toList());
-
-        return contactDto;
     }
 
     public void editAllFields(ContactDto contactDto) {
@@ -140,10 +126,6 @@ public class ContactService {
                 .stream()
                 .map(email -> emailMapper.mapEmailToDto(email))
                 .collect(Collectors.toList());
-    }
-
-    private ContactDto convertToDto(Contact contact) {
-        return contactMapper.mapContactToDtoFull(contact, getAllPhonesByContact(contact), getAllAddressesByContact(contact), getAllEmailsByContact(contact));
     }
 
     public Contact getProfile(String userId) {

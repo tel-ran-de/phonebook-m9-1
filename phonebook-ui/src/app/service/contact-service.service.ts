@@ -13,10 +13,7 @@ export class ContactService {
 
   private readonly contactPath = '/api/contact';
   private readonly profilePath = '/get-profile';
-  private readonly contactByIdPath = 'extended';
-
-
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(private http: HttpClient) {
   }
 
   getAllContacts(): Observable<Contact[]> {
@@ -32,11 +29,6 @@ export class ContactService {
 
   getProfile() {
     return this.http.get<Contact>(`${this.contactPath}/${this.profilePath}`);
-  }
-
-  getContactById(contactId: number) {
-    // console.log(`${this.contactPath}/${contactId}/${this.contactByIdPath}`)
-    return this.http.get<Contact>(`${this.contactPath}/${contactId}/${this.contactByIdPath}`);
   }
 
   removeContact(id: number) {

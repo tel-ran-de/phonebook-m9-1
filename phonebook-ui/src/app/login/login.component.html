@@ -15,15 +15,21 @@
       <form [formGroup]="form" novalidate class="border border-light p-5" (ngSubmit)="onSubmit()">
         <div class="form-group">
           <input class="form-control mb-2" id="defaultRegisterFormEmail" formControlName="email" type="email"
-                 placeholder="Email">
+                 placeholder="Email" [readOnly]="loading">
         </div>
 
         <div class="form-group">
-          <input class="form-control" formControlName="password" type="password" placeholder="Password">
+          <input class="form-control" formControlName="password" type="password" placeholder="Password" [readOnly]="loading">
         </div>
 
-        <button type="submit" [disabled]="form.pristine || form.invalid" class="btn btn-info my-1 btn-block">
+        <button *ngIf="!loading" type="submit" [disabled]="form.pristine || form.invalid"
+                class="btn btn-info my-1 btn-block">
           Login
+        </button>
+
+        <button *ngIf="loading" class="btn btn-info my-1 btn-block" type="button" disabled>
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          Loading...
         </button>
 
       </form>
@@ -59,6 +65,10 @@
         <div *ngIf="form.controls['password'].errors.maxlength">
           Password must be at least 20 characters.
         </div>
+      </div>
+
+      <div *ngIf="errorMessage" class="alert alert-danger">
+        {{errorMessage}}<br>
       </div>
     </div>
   </div>

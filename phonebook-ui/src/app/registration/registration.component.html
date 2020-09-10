@@ -24,8 +24,13 @@
           <input class="form-control" formControlName="confirm_password" type="password"
                  placeholder="Confirm Password">
         </div>
-        <button type="submit" [disabled]="form.pristine || form.invalid" class="btn btn-info my-1 btn-block">
+        <button *ngIf="!loading" type="submit" [disabled]="form.pristine || form.invalid" class="btn btn-info my-1 btn-block">
           Sign up
+        </button>
+
+        <button *ngIf="loading" class="btn btn-info my-1 btn-block" type="button" disabled>
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          Loading...
         </button>
       </form>
     </div>

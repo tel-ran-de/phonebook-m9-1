@@ -33,13 +33,6 @@ public class ContactController {
         return contactService.getById(id);
     }
 
-    @GetMapping("/{id}/extended")
-    public ContactDto getByIdFullDetails(@PathVariable int id) {
-
-
-        return contactService.getByIdFullDetails(id);
-    }
-
     @PutMapping("")
     public void editContact(@Valid @RequestBody ContactDto contactDto) {
         contactService.editAllFields(contactDto);

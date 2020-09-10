@@ -15,7 +15,6 @@ export class PasswordRecoveryComponent implements OnInit, OnDestroy {
   form: FormGroup;
 
   pageName = 'Password recovery';
-  title = 'Password Recovery';
   projectName = 'Phone book';
   pageDescription = 'Forgotten password recovery';
 
@@ -25,7 +24,8 @@ export class PasswordRecoveryComponent implements OnInit, OnDestroy {
 
   private subscription: Subscription;
   private utils: Utils;
-  success: boolean;
+  isSuccess: boolean;
+  loading: boolean;
 
   constructor(private fb: FormBuilder,
               private router: Router,
@@ -56,6 +56,9 @@ export class PasswordRecoveryComponent implements OnInit, OnDestroy {
       return;
     }
 
+    this.loading = true;
+    this.errorMessage = '';
+
     let userRecoveryPass = new UserRecoveryPass;
     userRecoveryPass.password = this.form.value.password;
     userRecoveryPass.token = this.token;
@@ -63,11 +66,15 @@ export class PasswordRecoveryComponent implements OnInit, OnDestroy {
     this.subscription = this.userService.resetPassword(userRecoveryPass)
       .subscribe(
         () => {
-          this.success = true;
+          this.isSuccess = true;
+          this.loading = false;
         },
         error => {
-          this.success = false;
-          this.errorMessage = this.utils.subscribtionErrorHandle(error);
+          this.errorMessage = this.utils.subscriptionErrorHandle(error);
+            this.isSuccess = false;
+
+          if (this.errorMessage)
+            this.loading = false;
         });
   }
 

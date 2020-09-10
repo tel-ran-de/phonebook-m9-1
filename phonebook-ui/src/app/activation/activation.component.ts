@@ -39,6 +39,7 @@ export class ActivationComponent implements OnInit, OnDestroy {
       this.errorMessage = 'Your link is not active anymore. Check your confirmation link';
       return;
     }
+
     this.subscription = this.userService.sendRequestToConfirmRegistration(this.token).subscribe(() => {
         this.sendRequest = true;
         this.registrationFail = false;
@@ -48,7 +49,7 @@ export class ActivationComponent implements OnInit, OnDestroy {
       error => {
         this.sendRequest = true;
         this.registrationFail = true;
-        this.errorMessage = this.utils.subscribtionErrorHandle(error);
+        this.errorMessage = this.utils.subscriptionErrorHandle(error);
 
         this.startTimer(2, 'registration');
       });

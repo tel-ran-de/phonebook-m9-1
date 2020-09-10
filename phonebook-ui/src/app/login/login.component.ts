@@ -5,6 +5,8 @@ import {UserService} from '../service/user.service';
 import {Utils} from '../service/utils/utils';
 import {Subscription} from 'rxjs';
 import {TokenStorageService} from "../service/token-storage.service";
+import {first} from "rxjs/operators";
+import {HttpResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-login',
@@ -20,10 +22,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   pageDescription = 'login to to continue';
 
   isLoggedIn = false;
-  isLoginFailed = false;
-  errorMessage = '';
-  roles: string[] = [];
+  errorMessage: string;
+  private headerName = 'Access-Token';
 
+  loading: boolean;
   private subscription: Subscription;
   private utils: Utils;
 
@@ -55,6 +57,25 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    this.userService.login(this.form.value);
+    this.loading = true;
+    this.errorMessage = '';
+
+    this.userService.login(this.form.value).pipe(first())
+      .subscribe(
+        (data: HttpResponse<any>) => {
+          this.tokenStorage.signOut();
+          this.tokenStorage.saveToken(data.headers.get(this.headerName));
+          this.loading = false;
+          this.router.navigate(['../home']).then();
+        },
+        error => {
+          if (error.status === 401)
+            this.errorMessage = error.statusText + '\nPlease check your activation or Login + Password combination';
+          else this.errorMessage = this.utils.subscriptionErrorHandle(error);
+
+          if (this.errorMessage)
+            this.loading = false;
+        });
   }
+
 }

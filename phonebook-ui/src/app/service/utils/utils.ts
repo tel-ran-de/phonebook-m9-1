@@ -3,18 +3,17 @@ import {FormGroup} from "@angular/forms";
 
 export class Utils {
 
-  public subscribtionErrorHandle(error: HttpErrorResponse): string {
+  public subscriptionErrorHandle(error: HttpErrorResponse): string {
     let errorMessage: string;
-
     console.log(error)
-
     if (error.error instanceof ErrorEvent)
       return 'No internet connection';
     else errorMessage = error.error.message;
 
-    if (errorMessage === null)
+    if (errorMessage === null || !errorMessage)
       errorMessage = 'Error code: ' + error.status
-        + '. If you have this error again, please contact us under support@phone-book.com'
+        + '. If you have this error again, please contact us: support@phone-book.com'
+    console.log(errorMessage)
     return errorMessage;
 
   }

@@ -17,8 +17,8 @@ export class HttpErrorInterceptor implements HttpInterceptor {
       if (err.status === 401) {
         this.tokenStorage.signOut();
         this.router.navigate(['user/login']);
+        throwError('unauthorized');
       }
-      const error = 'unauthorized';
       return throwError(err);
     }))
   }

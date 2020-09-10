@@ -22,6 +22,8 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
 
   private subscription: Subscription;
   private utils: Utils;
+  load: boolean;
+  email: string;
 
   constructor(private fb: FormBuilder,
               private userService: UserService) {
@@ -40,19 +42,31 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
+    this.loading = true;
+    this.load = false;
+    this.errorMessage = '';
+    this.email = '';
+
 
     this.subscription = this.userService.forgotPassword(this.form.value)
       .subscribe(
         () => {
-          this.loading = true;
+          this.loading = false;
+          this.load = true;
+          this.email = this.form.value['email']
         },
         error => {
-          this.errorMessage = this.utils.subscribtionErrorHandle(error);
+          this.errorMessage = error.statusText;
+
+          if (this.errorMessage) {
+            this.loading = false;
+            this.load = true;
+          }
         });
   }
 
   ngOnDestroy(): void {
-    if(this.subscription)
-    this.subscription.unsubscribe();
+    if (this.subscription)
+      this.subscription.unsubscribe();
   }
 }

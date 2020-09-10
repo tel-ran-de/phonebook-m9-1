@@ -19,7 +19,7 @@ import {LoginComponent} from './login/login.component';
 import {HttpErrorInterceptor} from "./service/http-error.interceptor";
 import {TokenInterceptor} from "./service/token-interceptor.service";
 import { WelcomePageComponent } from './welcome-page/welcome-page.component';
-import { ContactDeatailsComponent } from './contact-deatails/contact-deatails.component';
+import {ContactDetailsComponent} from "./contact-deatails/contact-details.component";
 
 @NgModule({
   declarations: [
@@ -33,7 +33,7 @@ import { ContactDeatailsComponent } from './contact-deatails/contact-deatails.co
     ActivationComponent,
     LoginComponent,
     WelcomePageComponent,
-    ContactDeatailsComponent,
+    ContactDetailsComponent,
   ],
   imports: [
     BrowserModule,
