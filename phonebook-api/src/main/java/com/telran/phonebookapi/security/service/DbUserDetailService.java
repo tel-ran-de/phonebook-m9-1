@@ -24,7 +24,7 @@ public class DbUserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByEmailAndIsActiveIsTrue(username).orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND));
+        User user = userRepository.findByEmailIgnoreCaseAndIsActiveIsTrue(username).orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND));
 
         List<SimpleGrantedAuthority> authorities =
                 user.getRoles()

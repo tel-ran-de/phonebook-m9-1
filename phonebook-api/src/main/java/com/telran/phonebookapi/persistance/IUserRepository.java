@@ -7,9 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IUserRepository extends CrudRepository<User, String> {
-
     List<User> findAll();
-
-    Optional<User> findByEmailAndIsActiveIsTrue(String userName);
-
+    Optional<User> findByEmailIgnoreCaseAndIsActiveIsTrue(String userName);
+    Optional<User> findByEmailIgnoreCase(String email);
 }

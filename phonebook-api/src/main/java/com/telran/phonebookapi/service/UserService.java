@@ -56,7 +56,7 @@ public class UserService {
     }
 
     public void addUser(UserDto userDto) {
-        if (userRepository.findById(userDto.email).isPresent()) {
+        if (userRepository.findByEmailIgnoreCase(userDto.email).isPresent()){
             throw new UserAlreadyExistsException(USER_ALREADY_EXISTS);
         } else {
             String token = UUID.randomUUID().toString();
