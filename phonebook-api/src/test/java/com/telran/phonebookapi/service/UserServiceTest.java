@@ -3,10 +3,7 @@ package com.telran.phonebookapi.service;
 import com.telran.phonebookapi.dto.UserDto;
 import com.telran.phonebookapi.model.RecoveryToken;
 import com.telran.phonebookapi.model.User;
-import com.telran.phonebookapi.persistance.IActivationTokenRepository;
-import com.telran.phonebookapi.persistance.IContactRepository;
-import com.telran.phonebookapi.persistance.IRecoveryTokenRepository;
-import com.telran.phonebookapi.persistance.IUserRepository;
+import com.telran.phonebookapi.persistance.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,6 +24,9 @@ class UserServiceTest {
 
     @Mock
     IUserRepository userRepository;
+
+    @Mock
+    IEmailRepository emailRepository;
 
     @Mock
     IRecoveryTokenRepository recoveryTokenRepository;
@@ -91,12 +91,14 @@ class UserServiceTest {
 
         UserDto userDto = UserDto.builder()
                 .email("ivanov@gmail.com")
-                .password("pass")
+                .password("password_001")
                 .build();
 
         userService.addUser(userDto);
 
         verify(userRepository, times(1)).save(any());
+        verify(emailRepository, times(1)).save(any());
+
         verify(userRepository, times(1)).save(argThat(user ->
                 user.getEmail().equals(userDto.email)
                         && user.getPassword().equals(userDto.password)
