@@ -2,10 +2,10 @@ version: '3.8'
 
 services:
   db:
-    image: postgres
+    image: postgres:11-alpine
     restart: always
     environment:
-      - POSTGRES_PASSWORD=111111222
+      - POSTGRES_PASSWORD=Letstrytolearn03
       - POSTGRES_DB=phonebook
     volumes:
       - ./database:/var/lib/postgresql/data

@@ -7,6 +7,7 @@ import com.telran.phonebookapi.persistance.IActivationTokenRepository;
 import com.telran.phonebookapi.persistance.IContactRepository;
 import com.telran.phonebookapi.persistance.IRecoveryTokenRepository;
 import com.telran.phonebookapi.persistance.IUserRepository;
+import com.telran.phonebookapi.security.service.DbUserDetailService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,6 +16,11 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Optional;
@@ -42,6 +48,7 @@ class UserServiceTest {
 
     @Mock
     IContactRepository contactRepository;
+
 
     @InjectMocks
     UserService userService;
@@ -108,6 +115,22 @@ class UserServiceTest {
         verify(emailSender, times(1)).sendMail(eq(userDto.email),
                 eq(UserService.ACTIVATION_SUBJECT),
                 anyString());
+    }
+
+    @Test
+    public void testChangePasswordAuth_newPasswordIsSaved() {
+
+        User ourUser = new User("johndoe@mail.com", "12345678");
+        ourUser.setActive(true);
+
+        when(userRepository.findById("johndoe@mail.com")).thenReturn(Optional.of(ourUser));
+        userService.changePasswordAuth("johndoe@mail.com", "123456790");
+
+        verify(userRepository, times(1)).save(any());
+
+        verify(userRepository, times(1)).save(argThat(user ->
+                user.getPassword().equals("123456790")));
+
     }
 
 //    @Test
