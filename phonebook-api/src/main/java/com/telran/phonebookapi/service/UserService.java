@@ -1,6 +1,5 @@
 package com.telran.phonebookapi.service;
 
-import com.telran.phonebookapi.dto.UserDto;
 import com.telran.phonebookapi.exception.TokenNotFoundException;
 import com.telran.phonebookapi.exception.UserAlreadyExistsException;
 import com.telran.phonebookapi.mapper.UserMapper;
@@ -55,23 +54,21 @@ public class UserService {
         this.userMapper = userMapper;
     }
 
-    public void addUser(UserDto userDto) {
-        if (userRepository.findById(userDto.email).isPresent()) {
+    public void addUser(String useEmail, String userPassword) {
+        String userId = useEmail.toLowerCase().trim();
+
+        if (userRepository.findById(userId).isPresent()) {
             throw new UserAlreadyExistsException(USER_ALREADY_EXISTS);
         } else {
             String token = UUID.randomUUID().toString();
-            String encodedPassword = bCryptPasswordEncoder.encode(userDto.password);
-            User user = new User(userDto.email, encodedPassword);
+            String encodedPassword = bCryptPasswordEncoder.encode(userPassword);
+            User user = new User(userId, encodedPassword);
             user.setActive(false);
             user.addRole(UserRole.USER);
             Contact profile = new Contact();
             user.setMyProfile(profile);
             contactRepository.save(profile);
             userRepository.save(user);
-
-            userDto.contactDtos.stream()
-                    .map(contactIn -> new Contact(contactIn.firstName, user))
-                    .forEach(contactRepository::save);
 
             activationTokenRepository.save(new ActivationToken(token, user));
             emailSender.sendMail(user.getEmail(), ACTIVATION_SUBJECT, ACTIVATION_MESSAGE

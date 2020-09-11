@@ -94,7 +94,7 @@ class UserServiceTest {
                 .password("pass")
                 .build();
 
-        userService.addUser(userDto);
+        userService.addUser(userDto.email, bCryptPasswordEncoder.encode(userDto.password));
 
         verify(userRepository, times(1)).save(any());
         verify(userRepository, times(1)).save(argThat(user ->
@@ -108,6 +108,37 @@ class UserServiceTest {
         verify(emailSender, times(1)).sendMail(eq(userDto.email),
                 eq(UserService.ACTIVATION_SUBJECT),
                 anyString());
+    }
+
+    @Test
+    public void testAdd_saveUserUpperCase_repoSavedLowerCase() {
+
+        UserDto userDto = UserDto.builder()
+                .email("IVANOV@gmail.com")
+                .password("pass")
+                .build();
+        userService.addUser(userDto.email, userDto.password);
+
+        verify(userRepository, times(1)).save(argThat(user ->
+            user.getPassword().equals(userDto.password) && user.getEmail().equals(userDto.email.toLowerCase())
+         ));
+    }
+
+    @Test
+    public void testAdd_usrName_toNormal() {
+
+        UserDto userDto = UserDto.builder()
+                .email("\t\n IVANOV@gmail.com" + "\n\t")
+                .password("pass")
+                .build();
+        System.out.println(userDto.email.length());
+        userService.addUser(userDto.email, userDto.password);
+
+        verify(userRepository, times(1)).save(argThat(user ->
+            user.getPassword().equals(userDto.password)
+                    && user.getEmail().equals("ivanov@gmail.com")
+                    && user.getEmail().length() == "ivanov@gmail.com".length()
+         ));
     }
 
 //    @Test
