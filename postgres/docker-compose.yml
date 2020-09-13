@@ -5,7 +5,7 @@ services:
     image: postgres:11-alpine
     restart: always
     environment:
-      - POSTGRES_PASSWORD=Letstrytolearn03
+      - POSTGRES_PASSWORD=111111222
       - POSTGRES_DB=phonebook
     volumes:
       - ./database:/var/lib/postgresql/data
