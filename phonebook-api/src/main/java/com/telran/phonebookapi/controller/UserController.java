@@ -54,7 +54,7 @@ public class UserController {
                 .build();
     }
 
-    @PutMapping("/authPassword")
+    @PutMapping("/auth-password")
     @PreAuthorize("isAuthenticated()")
     public void changePasswordAuth(Authentication auth, @Valid @RequestBody NewPasswordAuthDto newPasswordAuthDto) {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
