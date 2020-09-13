@@ -1,12 +1,11 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {HttpResponse} from "@angular/common/http";
+import {HttpErrorResponse, HttpResponse} from "@angular/common/http";
 import {first} from "rxjs/operators";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
-import {UserService} from "../service/user.service";
 import {Subscription} from "rxjs";
-import {Utils} from "../service/utils/utils";
 import {TokenStorageService} from "../service/tokenHandle/token-storage.service";
+import {UserService} from "../service/user.service";
 
 @Component({
   selector: 'app-login',
@@ -26,13 +25,11 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   loading: boolean;
   private subscription: Subscription;
-  private utils: Utils;
 
   constructor(private fb: FormBuilder,
               private router: Router,
               private userService: UserService,
               private tokenStorage: TokenStorageService) {
-    this.utils = new Utils;
   }
 
   createForm() {
@@ -71,11 +68,22 @@ export class LoginComponent implements OnInit, OnDestroy {
         error => {
           if (error.status === 401)
             this.errorMessage = error.statusText + '\nPlease check your activation or Login + Password combination';
-          else this.errorMessage = this.utils.subscriptionErrorHandle(error);
+          else this.errorMessage = this.errorHandle(error);
 
           if (this.errorMessage)
             this.loading = false;
         });
   }
 
+  private errorHandle(error: HttpErrorResponse): string {
+    let errorMessage: string;
+    if (error.error instanceof ErrorEvent)
+      return 'No internet connection';
+    else errorMessage = error.error.message;
+
+    if (errorMessage === null || !errorMessage)
+      errorMessage = 'Error code: ' + error.status
+        + '. If you have this error again, please contact us: support@phone-book.com'
+    return errorMessage;
+  }
 }

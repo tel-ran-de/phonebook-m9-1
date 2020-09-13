@@ -15,16 +15,10 @@ export class TokenStorageService {
   }
 
   public saveToken(token: string): void {
-    window.localStorage.removeItem(TOKEN_KEY);
     window.localStorage.setItem(TOKEN_KEY, token);
   }
 
   public getToken(): string {
     return localStorage.getItem(TOKEN_KEY);
-  }
-
-  public saveUser(user): void {
-    window.localStorage.removeItem(USER_KEY);
-    window.localStorage.setItem(USER_KEY, JSON.stringify(user));
   }
 }

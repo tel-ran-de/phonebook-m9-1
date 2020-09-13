@@ -7,6 +7,7 @@ import {ForgotPasswordComponent} from "./forgot-password/forgot-password.compone
 import {PasswordRecoveryComponent} from "./password-recovery/password-recovery.component";
 import {LoginComponent} from "./login/login.component";
 import {HomePageComponent} from "./home-page/home-page.component";
+import {AuthGuard} from "./service/auth.guard";
 
 const routes: Routes = [
   {path: '', redirectTo: 'home', pathMatch: 'full'},
@@ -17,7 +18,7 @@ const routes: Routes = [
   {path: 'user/forgot-password', component: ForgotPasswordComponent},
   {path: 'user/password-recovery/:token', component: PasswordRecoveryComponent},
 
-  {path: 'home', component: HomePageComponent},
+  {path: 'home', component: HomePageComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({
