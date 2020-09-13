@@ -16,8 +16,4 @@ export class HomePageComponent implements OnInit {
   ngOnInit(): void {
     this.service.getUserData().subscribe(value => this.value = value);
   }
-
-  logOut() {
-    this.token.signOut();
-  }
 }
