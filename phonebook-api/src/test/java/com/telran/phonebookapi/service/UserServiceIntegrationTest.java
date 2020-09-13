@@ -76,7 +76,7 @@ class UserServiceIntegrationTest {
 
         userRepository.save(user);
 
-        Exception exception = assertThrows(UserAlreadyExistsException.class, () -> userService.addUser(userDto));
+        Exception exception = assertThrows(UserAlreadyExistsException.class, () -> userService.addUser(userDto.email, userDto.password));
         assertTrue(exception.getMessage().contains(UserService.USER_ALREADY_EXISTS));
     }
 }
