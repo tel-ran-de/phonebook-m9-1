@@ -17,8 +17,8 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {UserService} from "./service/user.service";
 import { LoginComponent } from './login/login.component';
 import { HomePageComponent } from './home-page/home-page.component';
-import {HttpErrorInterceptor} from "./service/errorHandle/http-error.interceptor";
 import {TokenInterceptor} from "./service/tokenHandle/token.interceptor";
+import {HttpError401Interceptor} from "./service/errorHandle/http-error401-interceptor.service";
 
 @NgModule({
   declarations: [
@@ -42,7 +42,7 @@ import {TokenInterceptor} from "./service/tokenHandle/token.interceptor";
     HttpClientModule,
   ],
   providers: [UserService,
-    {provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: HttpError401Interceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
   ],
   bootstrap: [AppComponent]

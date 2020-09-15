@@ -20,4 +20,8 @@ export class TokenStorageService {
   public getToken(): string {
     return localStorage.getItem(TOKEN_KEY);
   }
+
+  public isTokenExist(): boolean {
+    return localStorage.getItem(TOKEN_KEY) !== null;
+  }
 }

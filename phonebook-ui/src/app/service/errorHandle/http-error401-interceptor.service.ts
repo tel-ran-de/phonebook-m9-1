@@ -6,13 +6,16 @@ import {catchError} from "rxjs/operators";
 import {TokenStorageService} from "../tokenHandle/token-storage.service";
 
 @Injectable()
-export class HttpErrorInterceptor implements HttpInterceptor {
+export class HttpError401Interceptor implements HttpInterceptor {
 
   constructor(private router: Router,
               private tokenStorage: TokenStorageService) {
   }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    if (request.url === '/api/user/login' && request.method === "POST")
+      return next.handle(request);
+
     return next.handle(request).pipe(catchError(err => {
       if (err.status === 401) {
         this.tokenStorage.signOut();
