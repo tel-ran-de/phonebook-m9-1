@@ -1,18 +1,23 @@
 package com.telran.phonebookapi.service;
 
 import com.telran.phonebookapi.dto.*;
+import com.telran.phonebookapi.exception.UserAlreadyExistsException;
 import com.telran.phonebookapi.mapper.AddressMapper;
 import com.telran.phonebookapi.mapper.ContactMapper;
 import com.telran.phonebookapi.mapper.EmailMapper;
 import com.telran.phonebookapi.mapper.PhoneMapper;
 import com.telran.phonebookapi.model.Contact;
 import com.telran.phonebookapi.model.User;
+import com.telran.phonebookapi.model.UserRole;
 import com.telran.phonebookapi.persistance.*;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static com.telran.phonebookapi.service.UserService.USER_DOES_NOT_EXIST;
 
 @Service
 public class ContactService {
@@ -41,43 +46,23 @@ public class ContactService {
         this.emailMapper = emailMapper;
     }
 
-    public void add(ContactDto contactDto) {
-        User user = userRepository.findById(contactDto.userId).orElseThrow(() -> new EntityNotFoundException(UserService.USER_DOES_NOT_EXIST));
-        Contact contact = new Contact(contactDto.firstName, user);
-        contact.setLastName(contactDto.lastName);
-        contact.setDescription(contactDto.description);
+    public void add(String firstName, String email) {
+
+        User user = userRepository.findById(email).orElseThrow(() -> new EntityNotFoundException(USER_DOES_NOT_EXIST));
+        Contact contact = new Contact(firstName, user);
         contactRepository.save(contact);
     }
 
-    public ContactDto getById(int id) {
+    public Contact getById(int id) {
         Contact contact = contactRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(CONTACT_DOES_NOT_EXIST));
-        return contactMapper.mapContactToDto(contact);
+        return contact;
     }
 
-    public ContactDto getByIdFullDetails(int id) {
+    public void edit(int id, String firstName, String lastName, String description) {
         Contact contact = contactRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(CONTACT_DOES_NOT_EXIST));
-        ContactDto contactDto = contactMapper.mapContactToDtoFull(contact, getAllPhonesByContact(contact), getAllAddressesByContact(contact), getAllEmailsByContact(contact));
-
-        contactDto.addresses = contact.getAddresses().stream()
-                .map(addressMapper::mapAddressToDto)
-                .collect(Collectors.toList());
-
-        contactDto.phoneNumbers = contact.getPhoneNumbers().stream()
-                .map(phoneMapper::mapPhoneToDto)
-                .collect(Collectors.toList());
-
-        contactDto.emails = contact.getEmails().stream()
-                .map(emailMapper::mapEmailToDto)
-                .collect(Collectors.toList());
-
-        return contactDto;
-    }
-
-    public void editAllFields(ContactDto contactDto) {
-        Contact contact = contactRepository.findById(contactDto.id).orElseThrow(() -> new EntityNotFoundException(CONTACT_DOES_NOT_EXIST));
-        contact.setFirstName(contactDto.firstName);
-        contact.setLastName(contactDto.lastName);
-        contact.setDescription(contactDto.description);
+        contact.setFirstName(firstName);
+        contact.setLastName(lastName);
+        contact.setDescription(description);
         contactRepository.save(contact);
     }
 
@@ -86,14 +71,13 @@ public class ContactService {
         contactRepository.deleteById(id);
     }
 
-    public List<ContactDto> getAllContactsByUserId(UserEmailDto userEmailDto) {
-        return contactRepository.findAllByUserEmail(userEmailDto.email).stream()
-                .map(this::convertToDto)
+    public List<Contact> getAllContactsByUserId(String email) {
+        return contactRepository.findAllByUserEmail(email).stream()
                 .collect(Collectors.toList());
     }
 
-    public void addProfile(ContactDto contactDto) {
-        User user = userRepository.findById(contactDto.userId).orElseThrow(() -> new EntityNotFoundException(UserService.USER_DOES_NOT_EXIST));
+   /* public void addProfile(ContactDto contactDto) {
+        User user = userRepository.findById(contactDto.userId).orElseThrow(() -> new EntityNotFoundException(USER_DOES_NOT_EXIST));
         Contact profile = user.getMyProfile();
         profile.setFirstName(contactDto.firstName);
         profile.setLastName(contactDto.lastName);
@@ -136,9 +120,9 @@ public class ContactService {
     }
 
     public ContactDto getProfile(UserEmailDto userEmailDto) {
-        User user = userRepository.findById(userEmailDto.email).orElseThrow(() -> new EntityNotFoundException(UserService.USER_DOES_NOT_EXIST));
+        User user = userRepository.findById(userEmailDto.email).orElseThrow(() -> new EntityNotFoundException(USER_DOES_NOT_EXIST));
         Contact contact = user.getMyProfile();
         return contactMapper.mapContactToDtoFull(contact, getAllPhonesByContact(contact), getAllAddressesByContact(contact), getAllEmailsByContact(contact));
-    }
+    }*/
 
 }
