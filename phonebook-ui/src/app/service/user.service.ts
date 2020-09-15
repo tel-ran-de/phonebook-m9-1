@@ -9,6 +9,7 @@ export class UserService {
   private readonly resetPasswordPath = '/api/user/password/';
   private readonly userPath = '/api/user/';
   private readonly activationPath = '/api/user/activation/';
+  private readonly loginPath = '/api/user/login';
 
   constructor(private http: HttpClient) {
   }
@@ -31,4 +32,12 @@ export class UserService {
       token: token
     });
   }
+
+  login(user: User) {
+    return this.http.post<User>(this.loginPath, user, {observe: 'response'});
+  };
+
+  getUserData() {
+    return this.http.get<User>(this.userPath);
+  };
 }

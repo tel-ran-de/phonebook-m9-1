@@ -13,8 +13,12 @@ import {RegistrationComponent} from './registration/registration.component';
 import {ActivateEmailComponent} from './activate-email/activate-email.component';
 import {ActivationComponent} from './activation/activation.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {UserService} from "./service/user.service";
+import { LoginComponent } from './login/login.component';
+import { HomePageComponent } from './home-page/home-page.component';
+import {TokenInterceptor} from "./service/tokenHandle/token.interceptor";
+import {HttpError401Interceptor} from "./service/errorHandle/http-error401-interceptor.service";
 
 @NgModule({
   declarations: [
@@ -26,6 +30,8 @@ import {UserService} from "./service/user.service";
     RegistrationComponent,
     ActivateEmailComponent,
     ActivationComponent,
+    LoginComponent,
+    HomePageComponent,
   ],
   imports: [
     BrowserModule,
@@ -35,7 +41,10 @@ import {UserService} from "./service/user.service";
     NgbModule,
     HttpClientModule,
   ],
-  providers: [UserService],
+  providers: [UserService,
+    {provide: HTTP_INTERCEPTORS, useClass: HttpError401Interceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
