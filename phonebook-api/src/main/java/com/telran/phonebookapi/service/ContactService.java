@@ -86,8 +86,8 @@ public class ContactService {
         contactRepository.deleteById(id);
     }
 
-    public List<ContactDto> getAllContactsByUserId(UserEmailDto userEmailDto) {
-        return contactRepository.findAllByUserEmail(userEmailDto.email).stream()
+    public List<ContactDto> getAllContactsByUserId(String userEmail) {
+        return contactRepository.findAllByUserEmail(userEmail).stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
@@ -135,8 +135,8 @@ public class ContactService {
         return contactMapper.mapContactToDtoFull(contact, getAllPhonesByContact(contact), getAllAddressesByContact(contact), getAllEmailsByContact(contact));
     }
 
-    public ContactDto getProfile(UserEmailDto userEmailDto) {
-        User user = userRepository.findById(userEmailDto.email).orElseThrow(() -> new EntityNotFoundException(UserService.USER_DOES_NOT_EXIST));
+    public ContactDto getProfile(String userEmail) {
+        User user = userRepository.findById(userEmail).orElseThrow(() -> new EntityNotFoundException(UserService.USER_DOES_NOT_EXIST));
         Contact contact = user.getMyProfile();
         return contactMapper.mapContactToDtoFull(contact, getAllPhonesByContact(contact), getAllAddressesByContact(contact), getAllEmailsByContact(contact));
     }

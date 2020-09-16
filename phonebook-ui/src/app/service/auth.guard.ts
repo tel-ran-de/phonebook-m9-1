@@ -3,8 +3,6 @@ import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTre
 import {Observable} from 'rxjs';
 import {TokenStorageService} from "./tokenHandle/token-storage.service";
 
-const TOKEN_KEY = 'auth-token';
-
 @Injectable({
   providedIn: 'root'
 })
@@ -17,7 +15,7 @@ export class AuthGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
-    if (this.tokenStorageService.isTokenExist()) {
+    if (!this.tokenStorageService.isTokenExist()) {
       this.router.navigate(['user/login']);
       return false;
     } else
