@@ -46,19 +46,22 @@ public class ContactService {
         this.emailMapper = emailMapper;
     }
 
-    public void add(String firstName, String email) {
+    public void add(String firstName, String lastName, String description, String userId) {
 
-        User user = userRepository.findById(email).orElseThrow(() -> new EntityNotFoundException(USER_DOES_NOT_EXIST));
+        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException(USER_DOES_NOT_EXIST));
         Contact contact = new Contact(firstName, user);
+        contact.setLastName(lastName);
+        contact.setDescription(description);
         contactRepository.save(contact);
     }
 
     public Contact getById(int id) {
+
         Contact contact = contactRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(CONTACT_DOES_NOT_EXIST));
         return contact;
     }
 
-    public void edit(int id, String firstName, String lastName, String description) {
+   /* public void edit(int id, String firstName, String lastName, String description) {
         Contact contact = contactRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(CONTACT_DOES_NOT_EXIST));
         contact.setFirstName(firstName);
         contact.setLastName(lastName);
@@ -69,7 +72,7 @@ public class ContactService {
     public void removeById(int id) {
         contactRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(CONTACT_DOES_NOT_EXIST));
         contactRepository.deleteById(id);
-    }
+    }*/
 
     public List<Contact> getAllContactsByUserId(String email) {
         return contactRepository.findAllByUserEmail(email).stream()
