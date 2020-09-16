@@ -46,18 +46,13 @@ export class RegistrationComponent implements OnInit {
 
     this.userService.newUserRegistration(this.angForm.value)
       .subscribe(
-        data => {
-          this.loading = false;
+        () => {
           this.router.navigate(['user/activate-email']);
         },
         error => {
-          if (error.status === 401)
-            this.errorMessage = error.statusText + '\nPlease check your activation or Login + Password combination';
-          else this.errorMessage = this.errorHandle(error);
-
-          if (this.errorMessage)
-            this.loading = false;
-        });
+          this.errorMessage = this.errorHandle(error);
+        },
+        () => this.loading = false);
   }
 
   private errorHandle(error: HttpErrorResponse): string {
