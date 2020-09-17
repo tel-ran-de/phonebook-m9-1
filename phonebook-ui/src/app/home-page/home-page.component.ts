@@ -9,11 +9,11 @@ import {TokenStorageService} from "../service/tokenHandle/token-storage.service"
 })
 export class HomePageComponent implements OnInit {
   value: any
+  title = 'Welcome';
 
-  constructor(private service: UserService, private token: TokenStorageService) {
+  constructor() {
   }
 
   ngOnInit(): void {
-    this.service.getUserData().subscribe(value => this.value = value);
   }
 }

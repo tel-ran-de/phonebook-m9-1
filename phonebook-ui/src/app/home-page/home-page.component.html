@@ -1,1 +1,13 @@
-<p *ngIf="value">user e-mail: {{value.email}}<br> {{value.roles}}</p>
+<div class="container-sm" style="margin-top: 5%">
+  <div class="card-deck ">
+    <div class="card text-center">
+      <div class="card-header">
+        {{title}}
+      </div>
+      <div class="card-body bg-light">
+        <a class="list-group-item list-group-item-action" routerLink="/user-details">Profile</a>
+        <a class="list-group-item list-group-item-action" routerLink="/contact-list">Contact List</a>
+      </div>
+    </div>
+  </div>
+</div>
