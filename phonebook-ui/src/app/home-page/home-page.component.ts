@@ -12,7 +12,7 @@ import {ContactService} from "../service/contact.service";
 export class HomePageComponent implements OnInit, OnDestroy {
   private subscriptionRemove: Subscription;
   contactIdToDisplay: Contact;
-  showContact: boolean;
+  // showContact: boolean;
   profile: Contact;
   contactSelect: boolean;
 
@@ -50,7 +50,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
 
 
   setContactToDisplay(id: Contact) {
-    this.showContact = true;
+    // this.showContact = true;
     this.contactIdToDisplay = id;
   }
 

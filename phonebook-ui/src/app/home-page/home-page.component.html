@@ -25,13 +25,14 @@
           </button>
         </li>
         <li class="list-group-item list-group-item-dark">Contacts</li>
-        <li (click)="setContactToDisplay(contact)" *ngFor="let contact of contactService.contacts | async">
-          <button class="list-group-item list-group-item-action"><b>{{contact.firstName}}</b> {{contact.lastName}}
+        <li *ngFor="let contact of contactService.contacts | async">
+          <button class="list-group-item list-group-item-action" (click)="setContactToDisplay(contact)">
+            <b>{{contact.firstName}}</b> {{contact.lastName}}
           </button>
         </li>
       </ul>
     </div>
-    <div class="col-md-9" *ngIf="showContact && contactIdToDisplay">
+    <div class="col-md-9" *ngIf="contactIdToDisplay">
       First name:
       <input class="form-control" value="{{contactIdToDisplay.firstName}}" type="text" readonly>
       Last name:

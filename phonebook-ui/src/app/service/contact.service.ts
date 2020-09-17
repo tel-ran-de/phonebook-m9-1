@@ -23,7 +23,7 @@ export class ContactService {
 
   private reload(): void {
     this.getProfile();
-    this.contacts = this.http.get<Contact[]>(`${this.contactPath}/all`);
+    this.contacts = this.http.get<Contact[]>(`${this.contactPath}`);
   }
 
   getProfile() {

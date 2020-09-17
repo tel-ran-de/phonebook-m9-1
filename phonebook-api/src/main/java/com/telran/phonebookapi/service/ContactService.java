@@ -86,9 +86,8 @@ public class ContactService {
         contactRepository.deleteById(id);
     }
 
-    public List<ContactDto> getAllContactsByUserId(String userEmail) {
+    public List<Contact> getAllContactsByUserId(String userEmail) {
         return contactRepository.findAllByUserEmail(userEmail).stream()
-                .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
 

@@ -1,7 +1,7 @@
 package com.telran.phonebookapi.controller;
 
 import com.telran.phonebookapi.dto.ContactDto;
-import com.telran.phonebookapi.dto.UserEmailDto;
+import com.telran.phonebookapi.mapper.ContactMapper;
 import com.telran.phonebookapi.service.ContactService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin
@@ -16,9 +17,11 @@ import java.util.List;
 public class ContactController {
 
     ContactService contactService;
+    ContactMapper contactMapper;
 
-    public ContactController(ContactService contactService) {
+    public ContactController(ContactService contactService,  ContactMapper contactMapper) {
         this.contactService = contactService;
+        this.contactMapper = contactMapper;
     }
 
     @PostMapping("")
@@ -46,10 +49,12 @@ public class ContactController {
         contactService.removeById(id);
     }
 
-    @GetMapping("/all")
+    @GetMapping("")
     public List<ContactDto> requestAllContactsByUserEmail(Authentication auth) {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
-        return contactService.getAllContactsByUserId(userDetails.getUsername());
+        String email = userDetails.getUsername();
+        return contactService.getAllContactsByUserId(email).stream().map(contactMapper::mapContactToDto)
+                .collect(Collectors.toList());
     }
 
     @PostMapping("/profile")
