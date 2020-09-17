@@ -10,12 +10,10 @@ import {ContactService} from "../service/contact.service";
   styleUrls: ['./home-page.component.css']
 })
 export class HomePageComponent implements OnInit, OnDestroy {
+
   private subscriptionRemove: Subscription;
   contactIdToDisplay: Contact;
-  // showContact: boolean;
   profile: Contact;
-  contactSelect: boolean;
-
 
   constructor(public contactService: ContactService, public userService: UserService) {
   }
@@ -28,14 +26,10 @@ export class HomePageComponent implements OnInit, OnDestroy {
   getProfile() {
     this.profile = new Contact();
     this.contactService.getProfile().subscribe(value => {
-        if (!value.firstName)
-          value.firstName = 'Profile name'
-        if (!value.lastName)
-          value.lastName = 'Profile last name'
-        this.profile = value;
-      }
-    );
-
+      if (!value.firstName)
+        value.firstName = 'No first name added'
+      this.profile = value;
+    });
   }
 
   onClickRemove(id: number) {
@@ -43,22 +37,17 @@ export class HomePageComponent implements OnInit, OnDestroy {
   }
 
 
-  ngOnDestroy(): void {
-    if (this.subscriptionRemove)
-      this.subscriptionRemove.unsubscribe();
+  setContactToDisplay(contact: Contact) {
+    this.contactIdToDisplay = contact;
   }
 
-
-  setContactToDisplay(id: Contact) {
-    // this.showContact = true;
-    this.contactIdToDisplay = id;
-  }
 
   onClickSearch() {
 
   }
 
-  OnClickContact() {
-    this.contactSelect = true;
+  ngOnDestroy(): void {
+    if (this.subscriptionRemove)
+      this.subscriptionRemove.unsubscribe();
   }
 }
