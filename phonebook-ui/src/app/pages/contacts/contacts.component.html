@@ -1,0 +1,19 @@
+<div class="card-header bg-secondary text-white rounded">
+  <b>My profile</b>
+</div>
+
+<ul class="list-group">
+  <li>
+    <app-contact-item [contactItem]="profile"></app-contact-item>
+  </li>
+</ul>
+
+<div class="card-header bg-secondary text-white rounded">
+  <b>Contacts list</b>
+</div>
+
+<ul class="list-group">
+  <li *ngFor="let contact of contactService.contacts | async">
+    <app-contact-item [contactItem]="contact"></app-contact-item>
+  </li>
+</ul>
