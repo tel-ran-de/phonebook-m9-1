@@ -11,19 +11,18 @@ import {HomePageComponent} from "./pages/home-page/home-page.component";
 import {ContactsComponent} from "./pages/contacts/contacts.component";
 
 const routes: Routes = [
-  {path: '', redirectTo: 'home', pathMatch: 'full'},
+  {path: '', redirectTo: 'contacts', pathMatch: 'full'},
   {path: 'user/login', component: LoginComponent},
   {path: 'user/registration', component: RegistrationComponent},
   {path: 'user/activate-email', component: ActivateEmailComponent},
   {path: 'user/activation/:token', component: ActivationComponent},
   {path: 'user/forgot-password', component: ForgotPasswordComponent},
   {path: 'user/password-recovery/:token', component: PasswordRecoveryComponent},
-
   {
-    path: 'home', component: HomePageComponent,
+    path: '', component: HomePageComponent,
     children: [
       {
-        path: '', component: ContactsComponent
+        path: 'contacts', component: ContactsComponent
       }
     ], canActivate: [AuthGuard]
   },
