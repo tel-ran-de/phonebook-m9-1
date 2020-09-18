@@ -59,7 +59,7 @@ public class ContactController {
         contactService.editProfile(contactDto);
     }
 
-    @PostMapping("/get-profile")
+    @PostMapping("/profile")
     public ContactDto getProfile(@Valid @RequestBody UserEmailDto userEmailDto) {
         return contactService.getProfile(userEmailDto);
     }

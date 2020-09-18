@@ -63,7 +63,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.tokenStorage.signOut();
           this.tokenStorage.saveToken(data.headers.get(this.headerName));
           this.loading = false;
-          this.router.navigate(['../contacts']).then();
+          this.router.navigate(['./contacts']).then();
         },
         error => {
           if (error.status === 401)

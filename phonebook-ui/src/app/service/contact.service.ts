@@ -11,7 +11,7 @@ export class ContactService {
   profile: Observable<Contact>;
 
   private readonly contactPath = '/api/contact';
-  private readonly profilePath = '/get-profile';
+  private readonly profilePath = '/profile';
 
   constructor(private http: HttpClient) {
   }
