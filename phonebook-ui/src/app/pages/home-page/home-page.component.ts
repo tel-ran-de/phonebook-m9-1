@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {UserService} from "../service/user.service";
-import {TokenStorageService} from "../service/tokenHandle/token-storage.service";
 import {Router} from "@angular/router";
+import {TokenStorageService} from "../../service/tokenHandle/token-storage.service";
 
 @Component({
   selector: 'app-home-page',
