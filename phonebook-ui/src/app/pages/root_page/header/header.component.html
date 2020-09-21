@@ -7,6 +7,9 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
+        <a class="nav-link" routerLink="">Contacts</a>
+      </li>
+      <li class="nav-item active">
         <a class="nav-link" href="#">Add new Contact</a>
       </li>
       <li class="nav-item active">
@@ -15,7 +18,7 @@
     </ul>
 
     <div class="btn-group navbar-nav">
-      <button class="btn btn-outline-warning text-white" type="submit">Settings</button>
+      <button class="btn btn-outline-warning text-white" type="submit" routerLink="/account">Account</button>
       <button class="btn btn-outline-warning text-white" type="submit" (click)="logout()">Logout</button>
     </div>
   </div>
