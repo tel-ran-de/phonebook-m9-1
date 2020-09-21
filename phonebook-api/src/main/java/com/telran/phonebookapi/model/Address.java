@@ -31,7 +31,7 @@ public class Address {
         this.contact = contact;
     }
 
-    public Address(String zip, String country, String city, String street, Contact contact) {
+    public Address(String street, String zip, String city, String country, Contact contact) {
         this.street = street;
         this.zip = zip;
         this.city = city;

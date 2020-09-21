@@ -1,8 +1,9 @@
 package com.telran.phonebookapi.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.NoArgsConstructor;
+import lombok.Builder;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,4 +36,5 @@ public class ContactDto {
         this.description = description;
         this.userId = userId;
     }
+
 }
