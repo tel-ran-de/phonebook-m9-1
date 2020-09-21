@@ -22,13 +22,15 @@ export class UserService {
     return this.http.get(`${this.activationPath}${token}`)
   }
 
-  forgotPassword(user: User) {
-    return this.http.post<User>(this.forgotPasswordPath, user);
+  forgotPassword(userEmail: String) {
+    return this.http.post<User>(this.forgotPasswordPath, {
+      email: userEmail
+    });
   }
 
-  resetPassword(user: User, token: string) {
+  resetPassword(password: string, token: string) {
     return this.http.put<User>(this.resetPasswordPath, {
-      password: user.password,
+      password: password,
       token: token
     });
   }

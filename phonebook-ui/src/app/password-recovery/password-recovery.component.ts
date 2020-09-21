@@ -1,66 +1,79 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Subscription} from 'rxjs';
 import {UserService} from "../service/user.service";
-import {ConfirmedValidator} from "./confirmed.validator";
-import {HttpErrorResponse} from "@angular/common/http";
+import {ConfirmedValidator} from "../service/confirmed.validator";
+import {SubscriptionErrorHandle} from "../service/subscriptionErrorHandle";
 
 @Component({
   selector: 'app-password-recovery',
   templateUrl: './password-recovery.component.html',
   styleUrls: ['./password-recovery.component.css']
 })
-export class PasswordRecoveryComponent implements OnInit {
-  title = 'Password Recovery';
-  form: FormGroup;
-  loading: boolean;
-  submitted: boolean = true;
-  errorMessage: string;
+export class PasswordRecoveryComponent implements OnInit, OnDestroy {
 
-  constructor(private fb: FormBuilder, private router: Router, private userService: UserService, private route: ActivatedRoute) {
-    this.createForm();
+  form: FormGroup;
+  pageName = 'Password recovery';
+  projectName = 'Phone book';
+
+  errorMessage: string;
+  token: string;
+  tokenInvalid: boolean;
+  isSuccess: boolean;
+  loading: boolean;
+
+  private subscription: Subscription;
+
+  constructor(private fb: FormBuilder,
+              private router: Router,
+              private userService: UserService,
+              private route: ActivatedRoute) {
   }
 
   createForm() {
     this.form = this.fb.group({
-      password: [null, [Validators.required, Validators.minLength(8),
+      password: [null, [Validators.minLength(8),
         Validators.required, Validators.maxLength(20)]],
-      confirm_password: [null, [Validators.required]]
+      confirm_password: [null, [Validators.minLength(8),
+        Validators.required, Validators.maxLength(20)]]
     }, {
-      validators: ConfirmedValidator('password', 'confirm_password')
+      validators: ConfirmedValidator('password', "confirm_password")
     });
   }
 
   ngOnInit(): void {
+    this.token = this.route.snapshot.paramMap.get('token');
+    this.createForm();
   }
 
   onSubmit() {
-    const token = this.route.snapshot.paramMap.get('token');
+    if (this.token.length < 10) {
+      this.errorMessage = 'Your link is not active anymore'
+      this.tokenInvalid = true;
+      return;
+    }
 
     this.loading = true;
     this.errorMessage = '';
 
-    this.userService.resetPassword(this.form.value, token)
+    this.subscription = this.userService.resetPassword(this.form.value.password, this.token)
       .subscribe(
-        data => {
+        () => {
+          this.isSuccess = true;
           this.loading = false;
         },
         error => {
-          this.errorMessage = this.errorHandle(error);
+          this.errorMessage = SubscriptionErrorHandle(error);
+          this.isSuccess = false;
+
           if (this.errorMessage)
             this.loading = false;
         });
   }
 
-  private errorHandle(error: HttpErrorResponse): string {
-    let errorMessage: string;
-    if (error.error instanceof ErrorEvent)
-      return 'No internet connection';
-    else errorMessage = error.error.message;
-
-    if (errorMessage === null || !errorMessage)
-      errorMessage = 'Error code: ' + error.status
-        + '. If you have this error again, please contact us: support@phone-book.com'
-    return errorMessage;
+  ngOnDestroy(): void {
+    if (this.subscription)
+      this.subscription.unsubscribe();
   }
 }

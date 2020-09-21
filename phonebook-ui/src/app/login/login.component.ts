@@ -1,11 +1,12 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {HttpErrorResponse, HttpResponse} from "@angular/common/http";
+import {HttpResponse} from "@angular/common/http";
 import {first} from "rxjs/operators";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {Subscription} from "rxjs";
 import {TokenStorageService} from "../service/tokenHandle/token-storage.service";
 import {UserService} from "../service/user.service";
+import {SubscriptionErrorHandle} from "../service/subscriptionErrorHandle";
 
 @Component({
   selector: 'app-login',
@@ -68,22 +69,10 @@ export class LoginComponent implements OnInit, OnDestroy {
         error => {
           if (error.status === 401)
             this.errorMessage = error.statusText + '\nPlease check your activation or Login + Password combination';
-          else this.errorMessage = this.errorHandle(error);
+          else this.errorMessage = SubscriptionErrorHandle(error);
 
           if (this.errorMessage)
             this.loading = false;
         });
-  }
-
-  private errorHandle(error: HttpErrorResponse): string {
-    let errorMessage: string;
-    if (error.error instanceof ErrorEvent)
-      return 'No internet connection';
-    else errorMessage = error.error.message;
-
-    if (errorMessage === null || !errorMessage)
-      errorMessage = 'Error code: ' + error.status
-        + '. If you have this error again, please contact us: support@phone-book.com'
-    return errorMessage;
   }
 }
