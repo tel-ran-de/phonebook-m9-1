@@ -36,6 +36,7 @@ export class UserService {
   }
 
   login(user: User) {
+    user.email = user.email.toLowerCase();
     return this.http.post<User>(this.loginPath, user, {observe: 'response'});
   };
 
