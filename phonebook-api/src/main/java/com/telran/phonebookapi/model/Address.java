@@ -31,11 +31,11 @@ public class Address {
         this.contact = contact;
     }
 
-    public Address(String zip, String country, String city, String street, Contact contact) {
-        this.street = street;
-        this.zip = zip;
+    public Address(String city, String country, String street, String zip, Contact contact) {
         this.city = city;
         this.country = country;
+        this.street = street;
+        this.zip = zip;
         this.contact =contact;
     }
 }

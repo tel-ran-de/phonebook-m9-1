@@ -9,13 +9,10 @@ import com.telran.phonebookapi.persistance.IContactRepository;
 import com.telran.phonebookapi.persistance.IRecoveryTokenRepository;
 import com.telran.phonebookapi.persistance.IUserRepository;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -72,6 +69,7 @@ public class UserService {
             user.setMyProfile(profile);
             contactRepository.save(profile);
             userRepository.save(user);
+            profile.setUser(user);
 
             activationTokenRepository.save(new ActivationToken(token, user));
             emailSender.sendMail(user.getEmail(), ACTIVATION_SUBJECT, ACTIVATION_MESSAGE
