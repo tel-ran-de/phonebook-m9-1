@@ -9,8 +9,9 @@ import {LoginComponent} from "./login/login.component";
 import {AuthGuard} from "./service/auth.guard";
 import {HomePageComponent} from "./pages/root_page/home-page/home-page.component";
 import {ContactsComponent} from "./pages/root_page/contacts_page/contacts/contacts.component";
-import {AccountPasswordComponent} from "./pages/root_page/account_page/account-password/account-password.component";
 import {AccountComponent} from "./pages/root_page/account_page/account/account.component";
+import {ContactDetailsComponent} from "./pages/root_page/contacts_page/contact-details/contact-details.component";
+import {AccountPasswordComponent} from "./pages/root_page/account_page/account-password/account-password.component";
 
 const routes: Routes = [
   {path: '', redirectTo: 'contacts', pathMatch: 'full'},
@@ -27,6 +28,9 @@ const routes: Routes = [
     children: [
       {
         path: 'contacts', component: ContactsComponent
+      },
+      {
+        path: 'contacts/:contactId', component: ContactDetailsComponent
       },
       {path: 'account', redirectTo: 'account/password'},
       {

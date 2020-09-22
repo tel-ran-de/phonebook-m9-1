@@ -21,8 +21,12 @@ import {HomePageComponent} from "./pages/root_page/home-page/home-page.component
 import {HeaderComponent} from "./pages/root_page/header/header.component";
 import {ContactItemComponent} from './pages/root_page/contacts_page/contact-item/contact-item.component';
 import {FooterComponent} from "./pages/root_page/footer/footer.component";
-import { AccountPasswordComponent } from './pages/root_page/account_page/account-password/account-password.component';
-import { AccountComponent } from './pages/root_page/account_page/account/account.component';
+import {AccountPasswordComponent} from './pages/root_page/account_page/account-password/account-password.component';
+import {AccountComponent} from './pages/root_page/account_page/account/account.component';
+import {ContactDetailsComponent} from './pages/root_page/contacts_page/contact-details/contact-details.component';
+import {PhoneComponent} from './pages/root_page/contacts_page/phone/phone.component';
+import {AddressComponent} from './pages/root_page/contacts_page/address/address.component';
+import {EmailComponent} from './pages/root_page/contacts_page/email/email.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +44,10 @@ import { AccountComponent } from './pages/root_page/account_page/account/account
     ContactItemComponent,
     AccountPasswordComponent,
     AccountComponent,
+    ContactDetailsComponent,
+    PhoneComponent,
+    AddressComponent,
+    EmailComponent,
   ],
   imports: [
     BrowserModule,
