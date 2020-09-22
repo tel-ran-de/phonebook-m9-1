@@ -8,6 +8,6 @@ export function SubscriptionErrorHandle(error: HttpErrorResponse): string {
 
   if (errorMessage === null || !errorMessage)
     errorMessage = 'Error code: ' + error.status
-      + '. If you have this error again, please contact us: \n support@phone-book.com'
+      + '. If you have this error again, please contact us: \n support@phone-book.com';
   return errorMessage;
 }
