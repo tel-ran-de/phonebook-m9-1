@@ -21,8 +21,9 @@ import {HomePageComponent} from "./pages/root_page/home-page/home-page.component
 import {HeaderComponent} from "./pages/root_page/header/header.component";
 import {ContactItemComponent} from './pages/root_page/contacts_page/contact-item/contact-item.component';
 import {FooterComponent} from "./pages/root_page/footer/footer.component";
-import { AccountPasswordComponent } from './pages/root_page/account_page/account-password/account-password.component';
-import { AccountComponent } from './pages/root_page/account_page/account/account.component';
+import {AccountPasswordComponent} from './pages/root_page/account_page/account-password/account-password.component';
+import {AccountComponent} from './pages/root_page/account_page/account/account.component';
+import {AddContactModalComponent} from "./pages/root_page/add-contact-modal/add-contact-modal.component";
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { AccountComponent } from './pages/root_page/account_page/account/account
     ContactItemComponent,
     AccountPasswordComponent,
     AccountComponent,
+    AddContactModalComponent,
   ],
   imports: [
     BrowserModule,
@@ -53,7 +55,8 @@ import { AccountComponent } from './pages/root_page/account_page/account/account
     {provide: HTTP_INTERCEPTORS, useClass: HttpError401Interceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [AddContactModalComponent]
 })
 export class AppModule {
 }
