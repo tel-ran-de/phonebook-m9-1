@@ -70,7 +70,9 @@ public class ContactService {
     }
 
     public List<Contact> getAllContactsByUserId(String email) {
-        return new ArrayList<>(contactRepository.findAllByUserEmail(email));
+        List<Contact> allContacts = new ArrayList<>(contactRepository.findAllByUserEmail(email));
+        allContacts.remove(getProfile(email));
+        return allContacts;
     }
 
     public Contact getProfile(String email) {

@@ -69,6 +69,7 @@ public class UserService {
             user.setMyProfile(profile);
             contactRepository.save(profile);
             userRepository.save(user);
+            profile.setUser(user);
 
             activationTokenRepository.save(new ActivationToken(token, user));
             emailSender.sendMail(user.getEmail(), ACTIVATION_SUBJECT, ACTIVATION_MESSAGE
