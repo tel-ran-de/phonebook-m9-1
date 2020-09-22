@@ -19,9 +19,6 @@ class EmailSenderTest {
     EmailSender emailSender;
 
     @Mock
-    SimpleMailMessage mailMessage;
-
-    @Mock
     JavaMailSender javaMailSender;
 
     @Captor

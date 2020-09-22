@@ -1,0 +1,56 @@
+<div class="modal-header" id="add-contact-modal">
+  <h4 class="modal-title">Add new contact</h4>
+  <a type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </a>
+</div>
+<div class="modal-body">
+  <form [formGroup]="form" novalidate (ngSubmit)="onClickSave()" id="add-contact-form">
+    <div class="form-group">
+      <label for="form-name">Contact Name</label>
+      <input class="form-control" id="form-name" placeholder="First name" type="text" formControlName="firstName"
+             [readOnly]="loading">
+    </div>
+
+    <div class="form-group">
+      <label for="form-lastName">Contact last name</label>
+      <input class="form-control" id="form-lastName" placeholder="Last name" type="text" formControlName="lastName"
+             [readOnly]="form.invalid || loading">
+    </div>
+
+    <div class="form-group">
+      <label for="form-about">About contact</label>
+      <input class="form-control" id="form-about" placeholder="About ..." type="text" formControlName="description"
+             [readOnly]="form.invalid || loading">
+    </div>
+
+    <div class="alert alert-danger" id="form-error-firstName"
+         *ngIf="form.invalid && (form.controls['firstName'].dirty || form.controls['firstName'].touched)">
+      To add a contact, you must specify a name
+    </div>
+
+    <div class="alert alert-danger" id="error-message"
+         *ngIf="errorMessage && !isSaved">
+      {{errorMessage}}
+    </div>
+
+    <div class="alert alert-success text-center" id="saved-message"
+         *ngIf="isSaved">
+      Contact saved successfully
+    </div>
+
+    <div class="modal-footer">
+      <button (click)="onClickCancel()" class="btn btn-secondary" type="reset">Cancel</button>
+
+      <button *ngIf="!loading" [disabled]="form.invalid" class="btn btn-primary" type="submit">Save contact</button>
+
+      <button *ngIf="loading" class="btn btn-primary" disabled type="button">
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        Loading...
+      </button>
+    </div>
+
+  </form>
+</div>
+
+

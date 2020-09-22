@@ -30,13 +30,13 @@ public class Contact {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
-    @OneToMany(mappedBy = "contact", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "contact", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private final List<Email> emails = new ArrayList<>();
 
-    @OneToMany(mappedBy = "contact", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "contact", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private final List<Phone> phones = new ArrayList<>();
 
-    @OneToMany(mappedBy = "contact", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "contact", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private final List<Address> addresses = new ArrayList<>();
 
     public Contact(String firstName, User user) {

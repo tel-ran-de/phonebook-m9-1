@@ -22,7 +22,7 @@ export class ContactService {
     return this.contacts;
   }
 
-  private reload(): void {
+  reload(): void {
     this.getProfile();
     this.contacts = this.http.get<Contact[]>(`${this.contactPath}`);
   }
@@ -33,5 +33,9 @@ export class ContactService {
 
   removeContact(id: number) {
     return this.http.delete(`${this.contactPath}/${id}`).subscribe(() => this.reload());
+  }
+
+  addContact(contact: Contact) {
+    return this.http.post<Contact>(`${this.contactPath}`, contact);
   }
 }

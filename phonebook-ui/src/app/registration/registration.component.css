@@ -1,4 +1,28 @@
-form{
-  max-width:420px;
-  margin:auto;
+.sidenav {
+  padding-top: 5%;
+}
+
+.alert {
+  height: 30px;
+  line-height: 30px;
+  padding: 0px 10px;
+  margin-bottom: 23px;
+}
+
+.error-message {
+  margin-top: 2px;
+  height: auto;
+}
+
+@media screen and (max-width: 575px) {
+  .alert {
+    margin-bottom: 13px;
+  }
+
+}
+
+@media screen and (max-width: 1196px) {
+  .sidenav {
+    padding-top: 0;
+  }
 }
