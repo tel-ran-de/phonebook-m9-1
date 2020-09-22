@@ -1,9 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Router} from "@angular/router";
-import {ConfirmedValidator} from "./confirmed.validator";
+import {Router} from '@angular/router';
+import {Subscription} from 'rxjs';
 import {UserService} from "../service/user.service";
-import {HttpErrorResponse} from "@angular/common/http";
+import {ConfirmedValidator} from "../service/confirmed.validator";
+import {SubscriptionErrorHandle} from "../service/subscriptionErrorHandle";
 
 @Component({
   selector: 'app-registration',
@@ -11,59 +12,62 @@ import {HttpErrorResponse} from "@angular/common/http";
   styleUrls: ['./registration.component.css']
 })
 
-export class RegistrationComponent implements OnInit {
+export class RegistrationComponent implements OnInit, OnDestroy {
 
-  title = 'Sign up';
-  angForm: FormGroup;
-  loading: boolean;
-  error: string;
+  form: FormGroup;
+  pageName = 'Registration page';
+  projectName = 'Phone book';
+
   errorMessage: string;
+  userExistMessage: boolean;
+  loading: boolean;
+
+  private subscription: Subscription;
 
   constructor(private fb: FormBuilder,
               private router: Router,
               private userService: UserService) {
-
-    this.createForm();
   }
 
   createForm() {
-    this.angForm = this.fb.group({
-      email: ['', [Validators.required, Validators.pattern("^[a-z0-9._-]+@[a-z0-9.-]+\\.[a-z]{2,10}$")]],
-      password: ['', [Validators.required, Validators.minLength(8)],
-        [Validators.required, Validators.maxLength(20)]],
+    this.form = this.fb.group({
+      email: [null, [Validators.required, Validators.pattern("^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,10}$")]],
+      password: [null, [Validators.minLength(8),
+        Validators.required,
+        Validators.maxLength(20)]],
       confirm_password: ['', [Validators.required]]
     }, {
-      validators: ConfirmedValidator('password', 'confirm_password')
+      validators: ConfirmedValidator('password', "confirm_password")
     });
   }
 
   ngOnInit(): void {
+    this.createForm();
   }
 
   onSubmit() {
     this.loading = true;
     this.errorMessage = '';
 
-    this.userService.newUserRegistration(this.angForm.value)
+    this.userService.newUserRegistration(this.form.value)
       .subscribe(
         () => {
-          this.router.navigate(['user/activate-email']);
+          this.loading = false;
+          this.router.navigate(['user/activate-email']).then();
         },
         error => {
-          this.errorMessage = this.errorHandle(error);
-        },
-        () => this.loading = false);
+          this.errorMessage = SubscriptionErrorHandle(error);
+          if (this.errorMessage === 'Error! User already exists')
+            this.userExistMessage = true;
+
+          if (this.errorMessage)
+            this.loading = false;
+        }
+      );
   }
 
-  private errorHandle(error: HttpErrorResponse): string {
-    let errorMessage: string;
-    if (error.error instanceof ErrorEvent)
-      return 'No internet connection';
-    else errorMessage = error.error.message;
-
-    if (errorMessage === null || !errorMessage)
-      errorMessage = 'Error code: ' + error.status
-        + '. If you have this error again, please contact us: support@phone-book.com'
-    return errorMessage;
+  ngOnDestroy(): void {
+    if (this.subscription)
+      this.subscription.unsubscribe();
   }
 }
