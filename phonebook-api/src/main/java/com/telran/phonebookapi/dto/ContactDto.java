@@ -23,10 +23,13 @@ public class ContactDto {
 
     public String userId;
 
+    @Builder.Default
     public List<PhoneDto> phoneNumbers = new ArrayList<>();
 
+    @Builder.Default
     public List<AddressDto> addresses = new ArrayList<>();
 
+    @Builder.Default
     public List<EmailDto> emails = new ArrayList<>();
 
     public ContactDto(int id, String firstName, String lastName, String description, String userId) {

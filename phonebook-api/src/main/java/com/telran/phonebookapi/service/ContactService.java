@@ -72,7 +72,8 @@ public class ContactService {
     public List<Contact> getAllContactsByUserId(String email) {
         User user = userRepository.findById(email).orElseThrow(() -> new EntityNotFoundException(USER_DOES_NOT_EXIST));
         Contact profile = user.getMyProfile();
-        return user.getContacts()
+        List<Contact> contacts = user.getContacts();
+        return contacts
                 .stream()
                 .filter(contact -> contact.getId() != profile.getId())
                 .collect(Collectors.toList());

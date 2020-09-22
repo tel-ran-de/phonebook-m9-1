@@ -61,7 +61,7 @@ class ContactServiceTest {
         String description = "person";
 
         Exception exception = assertThrows(EntityNotFoundException.class, () ->
-                contactService.add(firstName, lastName, description, user.getEmail()+"s"));
+                contactService.add(firstName, lastName, description, user.getEmail() + "s"));
 
         verify(userRepository, times(1)).findById(anyString());
         assertEquals("Error! This user doesn't exist in our DB", exception.getMessage());
@@ -96,7 +96,7 @@ class ContactServiceTest {
         String lastName = "Nachname";
         String description = "person";
 
-        Exception exception = assertThrows(EntityNotFoundException.class, () -> contactService.edit(oldContact.getId()+1, firstName, lastName, description));
+        Exception exception = assertThrows(EntityNotFoundException.class, () -> contactService.edit(oldContact.getId() + 1, firstName, lastName, description));
 
         verify(contactRepository, times(1)).findById(any());
         assertEquals("Error! This contact doesn't exist in our DB", exception.getMessage());
@@ -127,7 +127,7 @@ class ContactServiceTest {
 
         Contact contact = new Contact();
 
-        Exception exception = assertThrows(EntityNotFoundException.class, () -> contactService.removeById(contact.getId()+1));
+        Exception exception = assertThrows(EntityNotFoundException.class, () -> contactService.removeById(contact.getId() + 1));
 
         verify(contactRepository, times(1)).findById(any());
         assertEquals("Error! This contact doesn't exist in our DB", exception.getMessage());
@@ -157,7 +157,7 @@ class ContactServiceTest {
 
         Contact contact = new Contact();
 
-        Exception exception = assertThrows(EntityNotFoundException.class, () -> contactService.getById(contact.getId()+1));
+        Exception exception = assertThrows(EntityNotFoundException.class, () -> contactService.getById(contact.getId() + 1));
 
         verify(contactRepository, times(1)).findById(any());
         assertEquals("Error! This contact doesn't exist in our DB", exception.getMessage());
@@ -165,10 +165,10 @@ class ContactServiceTest {
 
     @Test
     public void testGetAllByUserId_userWithContacts_3Contacts() {
-        User user = new User("test@gmail.com", "test");
-        Contact contact1 = new Contact("Name1", user);
-        Contact contact2 = new Contact("Name2", user);
-        Contact contact3 = new Contact("Name3", user);
+        User user = spy(new User("test@gmail.com", "test"));
+        Contact contact1 = spy(new Contact("Name1", user));
+        Contact contact2 = spy(new Contact("Name2", user));
+        Contact contact3 = spy(new Contact("Name3", user));
 
         contact1.setLastName("Surname1");
         contact1.setDescription("person");
@@ -176,13 +176,18 @@ class ContactServiceTest {
         contact2.setDescription("person");
         contact3.setLastName("Surname3");
         contact3.setDescription("person");
+        when(contact1.getId()).thenReturn(1);
+        when(contact2.getId()).thenReturn(2);
+        when(contact3.getId()).thenReturn(3);
 
         List<Contact> contacts = new ArrayList<>();
         contacts.add(contact1);
         contacts.add(contact2);
         contacts.add(contact3);
 
-        when(contactRepository.findAllByUserEmail(user.getEmail())).thenReturn(contacts);
+        when(userRepository.findById("test@gmail.com")).thenReturn(Optional.of(user));
+        when(user.getContacts()).thenReturn(contacts);
+        when(user.getMyProfile()).thenReturn(new Contact());
         List<Contact> contactsFound = contactService.getAllContactsByUserId(user.getEmail());
 
         assertEquals(contact1.getFirstName(), contactsFound.get(0).getFirstName());
@@ -197,8 +202,6 @@ class ContactServiceTest {
         assertEquals(contact3.getLastName(), contactsFound.get(2).getLastName());
         assertEquals(contact3.getDescription(), contactsFound.get(2).getDescription());
 
-        verify(contactRepository, times(1)).findAllByUserEmail(argThat(
-                email -> email.equals(user.getEmail())));
     }
 
     @Test
