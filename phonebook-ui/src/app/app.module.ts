@@ -16,11 +16,13 @@ import {UserService} from "./service/user.service";
 import {LoginComponent} from './login/login.component';
 import {TokenInterceptor} from "./service/tokenHandle/token.interceptor";
 import {HttpError401Interceptor} from "./service/errorHandle/http-error401-interceptor.service";
-import {ContactsComponent} from './pages/contacts/contacts.component';
-import {HomePageComponent} from "./pages/home-page/home-page.component";
-import {HeaderComponent} from "./pages/header/header.component";
-import {ContactItemComponent} from './pages/contact-item/contact-item.component';
-import {FooterComponent} from "./pages/footer/footer.component";
+import {ContactsComponent} from './pages/root_page/contacts_page/contacts/contacts.component';
+import {HomePageComponent} from "./pages/root_page/home-page/home-page.component";
+import {HeaderComponent} from "./pages/root_page/header/header.component";
+import {ContactItemComponent} from './pages/root_page/contacts_page/contact-item/contact-item.component';
+import {FooterComponent} from "./pages/root_page/footer/footer.component";
+import { AccountPasswordComponent } from './pages/root_page/account_page/account-password/account-password.component';
+import { AccountComponent } from './pages/root_page/account_page/account/account.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +38,8 @@ import {FooterComponent} from "./pages/footer/footer.component";
     HomePageComponent,
     ContactsComponent,
     ContactItemComponent,
+    AccountPasswordComponent,
+    AccountComponent,
   ],
   imports: [
     BrowserModule,
