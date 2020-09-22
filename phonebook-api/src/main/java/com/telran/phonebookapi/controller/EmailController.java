@@ -1,6 +1,5 @@
 package com.telran.phonebookapi.controller;
 
-import com.telran.phonebookapi.dto.AddressDto;
 import com.telran.phonebookapi.dto.EmailDto;
 import com.telran.phonebookapi.exception.UserAlreadyExistsException;
 import com.telran.phonebookapi.mapper.EmailMapper;
@@ -19,7 +18,6 @@ import java.util.stream.Collectors;
 import static com.telran.phonebookapi.controller.ContactController.CONTACT_DOES_NOT_BELONG;
 
 @RestController
-@CrossOrigin
 @RequestMapping("/api/email")
 public class EmailController {
 
@@ -49,18 +47,19 @@ public class EmailController {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
         String mail = userDetails.getUsername();
         Email email = emailService.getById(emailDto.id);
-        Contact contact = contactService.getById(email.getContact().getId());
+        Contact contact = email.getContact();
         if (!contact.getUser().getEmail().equals(mail)) {
             throw new UserAlreadyExistsException(CONTACT_DOES_NOT_BELONG);
         }
         emailService.edit(email, emailDto.email);
     }
+
     @GetMapping("/{id}")
     public EmailDto getById(Authentication auth, @PathVariable int id) {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
         String mail = userDetails.getUsername();
         Email email = emailService.getById(id);
-        Contact contact = contactService.getById(email.getContact().getId());
+        Contact contact = email.getContact();
         if (!contact.getUser().getEmail().equals(mail)) {
             throw new UserAlreadyExistsException(CONTACT_DOES_NOT_BELONG);
         }
@@ -74,8 +73,8 @@ public class EmailController {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
         String mail = userDetails.getUsername();
         Email email = emailService.getById(id);
-        Contact contact = contactService.getById(email.getContact().getId());
-        if (!contact.getUser().getEmail().equals(mail)){
+        Contact contact = email.getContact();
+        if (!contact.getUser().getEmail().equals(mail)) {
             throw new UserAlreadyExistsException(CONTACT_DOES_NOT_BELONG);
         }
         emailService.removeById(id);

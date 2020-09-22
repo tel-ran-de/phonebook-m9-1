@@ -10,8 +10,8 @@ import com.telran.phonebookapi.persistance.*;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.telran.phonebookapi.service.UserService.USER_DOES_NOT_EXIST;
 
@@ -56,7 +56,7 @@ public class ContactService {
         return contactRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(CONTACT_DOES_NOT_EXIST));
     }
 
-   public void edit(int id, String firstName, String lastName, String description) {
+    public void edit(int id, String firstName, String lastName, String description) {
         Contact contact = contactRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(CONTACT_DOES_NOT_EXIST));
         contact.setFirstName(firstName);
         contact.setLastName(lastName);
@@ -64,15 +64,18 @@ public class ContactService {
         contactRepository.save(contact);
     }
 
-   public void removeById(int id) {
+    public void removeById(int id) {
         contactRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(CONTACT_DOES_NOT_EXIST));
         contactRepository.deleteById(id);
     }
 
     public List<Contact> getAllContactsByUserId(String email) {
-        List<Contact> allContacts = new ArrayList<>(contactRepository.findAllByUserEmail(email));
-        allContacts.remove(getProfile(email));
-        return allContacts;
+        User user = userRepository.findById(email).orElseThrow(() -> new EntityNotFoundException(USER_DOES_NOT_EXIST));
+        Contact profile = user.getMyProfile();
+        return user.getContacts()
+                .stream()
+                .filter(contact -> contact.getId() != profile.getId())
+                .collect(Collectors.toList());
     }
 
     public Contact getProfile(String email) {

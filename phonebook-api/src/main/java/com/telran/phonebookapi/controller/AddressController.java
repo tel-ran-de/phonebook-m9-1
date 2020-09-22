@@ -47,7 +47,7 @@ public class AddressController {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
         String email = userDetails.getUsername();
         Address address = addressService.getById(addressDto.id);
-        Contact contact = contactService.getById(address.getContact().getId());
+        Contact contact = address.getContact();
         if (!contact.getUser().getEmail().equals(email)) {
             throw new UserAlreadyExistsException(CONTACT_DOES_NOT_BELONG);
         }
@@ -59,7 +59,7 @@ public class AddressController {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
         String email = userDetails.getUsername();
         Address address = addressService.getById(id);
-        Contact contact = contactService.getById(address.getContact().getId());
+        Contact contact = address.getContact();
         if (!contact.getUser().getEmail().equals(email)) {
             throw new UserAlreadyExistsException(CONTACT_DOES_NOT_BELONG);
         }
@@ -77,7 +77,7 @@ public class AddressController {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
         String email = userDetails.getUsername();
         Address address = addressService.getById(id);
-        Contact contact = contactService.getById(address.getContact().getId());
+        Contact contact = address.getContact();
         if (!contact.getUser().getEmail().equals(email)) {
             throw new UserAlreadyExistsException(CONTACT_DOES_NOT_BELONG);
         }

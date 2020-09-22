@@ -40,8 +40,8 @@ public class PhoneController {
         if (!contact.getUser().getEmail().equals(email)) {
             throw new UserAlreadyExistsException(CONTACT_DOES_NOT_BELONG);
         }
-            phoneService.add(phoneDto.countryCode, phoneDto.phoneNumber, contact.getId());
-        }
+        phoneService.add(phoneDto.countryCode, phoneDto.phoneNumber, contact.getId());
+    }
 
 
     @PutMapping("")
@@ -49,12 +49,12 @@ public class PhoneController {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
         String email = userDetails.getUsername();
         Phone phone = phoneService.getById(phoneDto.id);
-        Contact contact = contactService.getById(phone.getContact().getId());
+        Contact contact = phone.getContact();
         if (!contact.getUser().getEmail().equals(email)) {
             throw new UserAlreadyExistsException(CONTACT_DOES_NOT_BELONG);
         }
-            phoneService.edit(phone, phoneDto.countryCode, phoneDto.phoneNumber);
-        }
+        phoneService.edit(phone, phoneDto.countryCode, phoneDto.phoneNumber);
+    }
 
 
     @GetMapping("/{id}")
@@ -62,28 +62,28 @@ public class PhoneController {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
         String email = userDetails.getUsername();
         Phone phone = phoneService.getById(id);
-        Contact contact = contactService.getById(phone.getContact().getId());
+        Contact contact = phone.getContact();
         if (!contact.getUser().getEmail().equals(email)) {
             throw new UserAlreadyExistsException(CONTACT_DOES_NOT_BELONG);
         }
-            return PhoneDto.builder()
-                    .countryCode(phone.getCountryCode())
-                    .phoneNumber(phone.getPhoneNumber())
-                    .contactId(contact.getId())
-                    .build();
-        }
+        return PhoneDto.builder()
+                .countryCode(phone.getCountryCode())
+                .phoneNumber(phone.getPhoneNumber())
+                .contactId(contact.getId())
+                .build();
+    }
 
     @DeleteMapping("/{id}")
     public void removeById(Authentication auth, @PathVariable int id) {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
         String email = userDetails.getUsername();
         Phone phone = phoneService.getById(id);
-        Contact contact = contactService.getById(phone.getContact().getId());
+        Contact contact = phone.getContact();
         if (!contact.getUser().getEmail().equals(email)) {
             throw new UserAlreadyExistsException(CONTACT_DOES_NOT_BELONG);
         }
-            phoneService.removeById(id);
-        }
+        phoneService.removeById(id);
+    }
 
 
     @GetMapping("/{contactId}/all")
@@ -94,7 +94,7 @@ public class PhoneController {
         if (!contact.getUser().getEmail().equals(email)) {
             throw new UserAlreadyExistsException(CONTACT_DOES_NOT_BELONG);
         }
-            return phoneService.getAllPhoneNumbersByContactId(contactId).stream()
-                    .map(phoneMapper::mapPhoneToDto).collect(Collectors.toList());
-        }
+        return phoneService.getAllPhoneNumbersByContactId(contactId).stream()
+                .map(phoneMapper::mapPhoneToDto).collect(Collectors.toList());
     }
+}
