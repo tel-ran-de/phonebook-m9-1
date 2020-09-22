@@ -39,7 +39,7 @@ public class AddressController {
         if (!contact.getUser().getEmail().equals(email)) {
             throw new UserAlreadyExistsException(CONTACT_DOES_NOT_BELONG);
         }
-        addressService.add(addressDto.street, addressDto.zip, addressDto.city, addressDto.country, contact.getId());
+        addressService.add(addressDto.city, addressDto.country, addressDto.street, addressDto.zip, contact.getId());
     }
 
     @PutMapping("")
@@ -51,7 +51,7 @@ public class AddressController {
         if (!contact.getUser().getEmail().equals(email)) {
             throw new UserAlreadyExistsException(CONTACT_DOES_NOT_BELONG);
         }
-        addressService.edit(address, addressDto.street, addressDto.zip, addressDto.city, addressDto.country);
+        addressService.edit(address, addressDto.city, addressDto.country, addressDto.street, addressDto.zip);
     }
 
     @GetMapping("/{id}")
@@ -64,10 +64,10 @@ public class AddressController {
             throw new UserAlreadyExistsException(CONTACT_DOES_NOT_BELONG);
         }
         return AddressDto.builder()
-                .street(address.getStreet())
-                .zip(address.getZip())
                 .city(address.getCity())
                 .country(address.getCountry())
+                .street(address.getStreet())
+                .zip(address.getZip())
                 .contactId(contact.getId())
                 .build();
     }

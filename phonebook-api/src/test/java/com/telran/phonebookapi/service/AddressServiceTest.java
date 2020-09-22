@@ -41,8 +41,8 @@ class AddressServiceTest {
 
         when(contactRepository.findById(contact.getId())).thenReturn(Optional.of(contact));
 
-        Address address = new Address("Street", "Zip", "City", "Country", contact);
-        addressService.add(address.getStreet(), address.getZip(), address.getCity(), address.getCountry(),
+        Address address = new Address("Berlin", "Germany", "Strasse", "10000", contact);
+        addressService.add(address.getCity(), address.getCountry(), address.getStreet(), address.getZip(),
                 address.getContact().getId());
 
         verify(addressRepository, times(1)).save(any());
@@ -58,7 +58,7 @@ class AddressServiceTest {
         Address address = new Address("Street", "Zip", "City", "Country", contact);
 
         Exception exception = assertThrows(EntityNotFoundException.class, () ->
-                addressService.add(address.getStreet(), address.getZip(), address.getCity(), address.getCountry(),
+                addressService.add(address.getCity(), address.getCountry(), address.getStreet(), address.getZip(),
                         address.getContact().getId()+1));
 
         verify(contactRepository, times(1)).findById(any());
@@ -73,19 +73,19 @@ class AddressServiceTest {
         Contact oldContact = new Contact("TestName", user);
         Address oldAddress = new Address(oldContact);
 
-        String street = "street";
-        String zip = "zip";
         String city = "city";
         String country = "country";
+        String street = "street";
+        String zip = "zip";
 
-        addressService.edit(oldAddress, street, zip, city, country);
+        addressService.edit(oldAddress, city, country, street, zip);
 
         verify(addressRepository, times(1)).save(any());
         verify(addressRepository, times(1)).save(argThat(address ->
                 address.getCity().equals(city)
+                        && address.getCountry().equals(country)
                         && address.getStreet().equals(street)
                         && address.getZip().equals(zip)
-                        && address.getCountry().equals(country)
                         && address.getContact().getId() == oldContact.getId())
         );
     }
@@ -114,7 +114,7 @@ class AddressServiceTest {
 
         User user = new User("test@gmail.com", "test");
         Contact contact = new Contact("TestName", user);
-        Address address = new Address("Strasse", "10000", "Berlin", "Germany", contact);
+        Address address = new Address("Berlin", "Germany", "Strasse", "10000", contact);
 
         when(addressRepository.findById(address.getId())).thenReturn(Optional.of(address));
         Address address1 = addressService.getById(address.getId());
@@ -144,9 +144,9 @@ class AddressServiceTest {
         User user = new User("test@gmail.com", "test");
         Contact contact = new Contact("Name1", user);
 
-        Address address1 = new Address("Strasse1", "10000", "Berlin", "Germany", contact);
-        Address address2 = new Address("Strasse2", "20000", "Berlin", "Germany", contact);
-        Address address3 = new Address("Strasse3", "30000", "Berlin", "Germany", contact);
+        Address address1 = new Address("Berlin", "Germany", "Strasse1", "10000", contact);
+        Address address2 = new Address("Berlin", "Germany", "Strasse2", "10000", contact);
+        Address address3 = new Address("Berlin", "Germany", "Strasse3", "10000", contact);
 
         List<Address> adresses = new ArrayList<>();
         adresses.add(address1);

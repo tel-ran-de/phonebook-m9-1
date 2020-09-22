@@ -10,6 +10,7 @@ export class UserService {
   private readonly userPath = '/api/user/';
   private readonly activationPath = '/api/user/activation/';
   private readonly loginPath = '/api/user/login';
+  private readonly resetPasswordAuthUserPath = '/api/user/auth-password/';
 
   constructor(private http: HttpClient) {
   }
@@ -40,4 +41,8 @@ export class UserService {
   getUserData() {
     return this.http.get<User>(this.userPath);
   };
+
+  changePassAuthUser(newPassword: string) {
+    return this.http.put(this.resetPasswordAuthUserPath, {password: newPassword});
+  }
 }

@@ -26,17 +26,17 @@ public class AddressService {
         this.addressMapper = addressMapper;
     }
 
-    public void add(String street, String zip, String city, String country, int contactId) {
+    public void add(String city, String country, String street, String zip, int contactId) {
         Contact contact = contactRepository.findById(contactId).orElseThrow(() -> new EntityNotFoundException(ContactService.CONTACT_DOES_NOT_EXIST));
-        Address address = new Address(country, street, city, zip, contact);
+        Address address = new Address(city, country, street, zip, contact);
         addressRepository.save(address);
     }
 
-    public void edit(Address address, String street, String zip, String city, String country) {
-        address.setStreet(street);
-        address.setZip(zip);
+    public void edit(Address address, String city, String country, String street, String zip) {
         address.setCity(city);
         address.setCountry(country);
+        address.setStreet(street);
+        address.setZip(zip);
         addressRepository.save(address);
     }
 
