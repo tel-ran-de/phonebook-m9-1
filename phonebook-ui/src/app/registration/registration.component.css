@@ -11,7 +11,7 @@
 
 .error-message {
   margin-top: 2px;
-  height: 38px;
+  height: auto;
 }
 
 @media screen and (max-width: 575px) {
