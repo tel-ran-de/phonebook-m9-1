@@ -1,7 +1,5 @@
 package com.telran.phonebookapi.service;
 
-import com.telran.phonebookapi.dto.PhoneDto;
-import com.telran.phonebookapi.mapper.PhoneMapper;
 import com.telran.phonebookapi.model.Contact;
 import com.telran.phonebookapi.model.Phone;
 import com.telran.phonebookapi.model.User;
@@ -13,6 +11,7 @@ import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,9 +33,6 @@ class PhoneServiceTest {
     @InjectMocks
     PhoneService phoneService;
 
-    @Spy
-    PhoneMapper phoneMapper;
-
     @Test
     public void testAdd_contactExists_contactWithPhoneNumber() {
         User user = new User("test@gmail.com", "test");
@@ -44,25 +40,26 @@ class PhoneServiceTest {
 
         when(contactRepository.findById(contact.getId())).thenReturn(Optional.of(contact));
 
-        PhoneDto phoneDto = new PhoneDto();
-        phoneDto.contactId = 0;
-        phoneDto.phoneNumber = "12345678";
-        phoneService.add(phoneDto);
+        Phone phone = new Phone("49", "12345", contact);
+
+        phoneService.add(phone.getCountryCode(), phone.getPhoneNumber(), phone.getContact().getId());
 
         verify(phoneRepository, times(1)).save(any());
-        verify(phoneRepository, times(1)).save(argThat(phone -> phone.getPhoneNumber().equals(phoneDto.phoneNumber) &&
-                phone.getContact().getId() == phoneDto.contactId)
+        verify(phoneRepository, times(1)).save(argThat(phone1 -> phone1.getPhoneNumber().equals(phone.getPhoneNumber())
+                && phone1.getContact().getId() == phone.getContact().getId())
         );
     }
 
     @Test
     public void testAdd_contactDoesNotExist_EntityNotFoundException() {
 
-        PhoneDto phoneDto = new PhoneDto();
-        phoneDto.contactId = 0;
-        phoneDto.phoneNumber = "12345678";
+        User user = new User("test@gmail.com", "test");
+        Contact contact = new Contact("Name", user);
 
-        Exception exception = assertThrows(EntityNotFoundException.class, () -> phoneService.add(phoneDto));
+        Phone phone = new Phone("49", "12345", contact);
+
+        Exception exception = assertThrows(EntityNotFoundException.class, () ->
+                phoneService.add(phone.getCountryCode(), phone.getPhoneNumber(), phone.getContact().getId()+1));
 
         verify(contactRepository, times(1)).findById(any());
         assertEquals("Error! This contact doesn't exist in our DB", exception.getMessage());
@@ -76,31 +73,16 @@ class PhoneServiceTest {
         Contact oldContact = new Contact("TestName", user);
         Phone oldPhone = new Phone(oldContact);
 
-        PhoneDto phoneDto = new PhoneDto();
-        phoneDto.id = 0;
-        phoneDto.phoneNumber = "12345678";
-        phoneDto.countryCode = "+49";
+        String phoneNumber = "12345678";
+        String countryCode = "49";
 
-        when(phoneRepository.findById(phoneDto.id)).thenReturn(Optional.of(oldPhone));
-
-        phoneService.editAllFields(phoneDto);
+        phoneService.edit(oldPhone, countryCode, phoneNumber);
 
         verify(phoneRepository, times(1)).save(any());
         verify(phoneRepository, times(1)).save(argThat(phone ->
-                phone.getPhoneNumber().equals(phoneDto.phoneNumber) && phone.getCountryCode().equals(phoneDto.countryCode)
-                        && phone.getContact().getId() == phoneDto.contactId)
+                phone.getPhoneNumber().equals(phoneNumber) && phone.getCountryCode().equals(countryCode)
+                        && phone.getContact().getId() == oldPhone.getId())
         );
-    }
-
-    @Test
-    public void testEditAny_phoneDoesNotExist_EntityNotFoundException() {
-
-        PhoneDto phoneDto = new PhoneDto();
-
-        Exception exception = assertThrows(EntityNotFoundException.class, () -> phoneService.editAllFields(phoneDto));
-
-        verify(phoneRepository, times(1)).findById(any());
-        assertEquals("Error! This phone number doesn't exist in our DB", exception.getMessage());
     }
 
     @Captor
@@ -114,15 +96,10 @@ class PhoneServiceTest {
         Contact contact = new Contact("TestName", user);
         Phone phone = new Phone("+49", "12345678", contact);
 
-        PhoneDto phoneDto = new PhoneDto();
-        phoneDto.id = 0;
-
-        when(phoneRepository.findById(phoneDto.id)).thenReturn(Optional.of(phone));
-
-        phoneService.removeById(phoneDto.id);
+        phoneService.removeById(phone.getId());
 
         List<Phone> capturedAddresses = phoneArgumentCaptor.getAllValues();
-        verify(phoneRepository, times(1)).deleteById(phoneDto.id);
+        verify(phoneRepository, times(1)).deleteById(phone.getId());
         assertEquals(0, capturedAddresses.size());
     }
 
@@ -133,16 +110,51 @@ class PhoneServiceTest {
         Contact contact = new Contact("TestName", user);
         Phone phone = new Phone("+49", "12345678", contact);
 
-        PhoneDto phoneDto = new PhoneDto(0, "+49", "12345678", 0);
+        when(phoneRepository.findById(phone.getId())).thenReturn(Optional.of(phone));
+        Phone phoneFounded = phoneService.getById(phone.getId());
 
-        when(phoneRepository.findById(phoneDto.id)).thenReturn(Optional.of(phone));
-        PhoneDto phoneFounded = phoneService.getById(phoneDto.id);
+        assertEquals(phone.getCountryCode(), phoneFounded.getCountryCode());
+        assertEquals(phone.getPhoneNumber(), phoneFounded.getPhoneNumber());
 
-        assertEquals(phoneDto.countryCode, phoneFounded.countryCode);
-        assertEquals(phoneDto.phoneNumber, phoneFounded.phoneNumber);
-
-        verify(phoneMapper, times(1)).mapPhoneToDto(phone);
         verify(phoneRepository, times(1)).findById(argThat(
-                id -> id.intValue() == phoneDto.id));
+                id -> id == phone.getId()));
+    }
+
+    @Test
+    public void testGetById_wrongPhoneId_PhoneNotExist() {
+
+       Phone phone = new Phone();
+
+        Exception exception = assertThrows(EntityNotFoundException.class, () -> phoneService.getById(phone.getId()));
+
+        verify(phoneRepository, times(1)).findById(any());
+        assertEquals("Error! This phone number doesn't exist in our DB", exception.getMessage());
+    }
+
+    @Test
+    public void testGetAllByContactId_ContactWithPhones_3Phones() {
+        User user = new User("test@gmail.com", "test");
+        Contact contact = new Contact("Name1", user);
+
+        Phone phone1 = new Phone("+49", "12345678", contact);
+        Phone phone2 = new Phone("+49", "12345688", contact);
+        Phone phone3 = new Phone("+49", "12345677", contact);
+
+        List<Phone> phones = new ArrayList<>();
+        phones.add(phone1);
+        phones.add(phone2);
+        phones.add(phone3);
+
+        when(phoneRepository.findAllByContactId(contact.getId())).thenReturn(phones);
+        List<Phone> phonesFound = phoneService.getAllPhoneNumbersByContactId(contact.getId());
+
+        assertEquals(phone1.getCountryCode(), phonesFound.get(0).getCountryCode());
+        assertEquals(phone1.getPhoneNumber(), phonesFound.get(0).getPhoneNumber());
+
+        assertEquals(phone2.getCountryCode(), phonesFound.get(1).getCountryCode());
+        assertEquals(phone2.getPhoneNumber(), phonesFound.get(1).getPhoneNumber());
+
+        assertEquals(phone3.getCountryCode(), phonesFound.get(2).getCountryCode());
+        assertEquals(phone3.getPhoneNumber(), phonesFound.get(2).getPhoneNumber());
     }
 }
