@@ -1,47 +1,48 @@
 <div class="card">
-  <div class="card-header">
-    <h5>Contact info</h5>
-  </div>
-  <div class="card-body">
-    <div class="row">
-      <div class="col-sm-6">
 
-        <div class="form-group">
-          <input class="form-control">
-        </div>
-
-      </div>
-      <div class="col-sm-6">
-
-        <div class="form-group">
-          <input class="form-control">
-        </div>
-
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-sm-12">
-
-        <div class="form-group">
-          <input class="form-control">
-        </div>
-
-      </div>
-    </div>
-  </div>
-
+  <app-contact [contactId]="contactId"></app-contact>
 
   <div class="row">
     <div class="col-sm-6">
-      <app-phone></app-phone>
 
+      <div class="card-header">
+        <h5>Phones</h5>
+      </div>
+
+      <div class="card-body">
+        <ul class="scrollable list-group">
+          <li *ngFor="let phone of phoneService.phones | async">
+            <app-phone [phoneToDisplay]="phone"></app-phone>
+          </li>
+        </ul>
+      </div>
     </div>
     <div class="col-sm-6">
-      <app-email></app-email>
 
+      <div class="card-header">
+        <h5>Emails</h5>
+      </div>
+
+      <div class="card-body">
+        <ul class="scrollable list-group">
+          <li *ngFor="let email of emailService.emails | async">
+            <app-email [emailToDisplay]="email"></app-email>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
-  <app-address></app-address>
 
+  <div class="card-header">
+    <h5>Addresses</h5>
+  </div>
+
+  <div class="card-body">
+    <ul class="scrollable-address list-group">
+      <li *ngFor="let address of addressService.addresses | async">
+        <app-address [addressToDisplay]="address"></app-address>
+      </li>
+    </ul>
+  </div>
 </div>

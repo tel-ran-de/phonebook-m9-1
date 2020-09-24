@@ -1,0 +1,13 @@
+.scrollable {
+  min-height: 180px;
+  max-height: 180px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.scrollable-address {
+  min-height: 240px;
+  max-height: 240px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
