@@ -16,7 +16,7 @@ class AddressMapperTest {
     void AddressDto() {
         User user = new User("test@gmail.com", "112233");
         Contact contact = new Contact("Name", user);
-        Address address = new Address("10000", "Germany", "Berlin", "Strasse 100", contact);
+        Address address = new Address("Strasse 100", "10000", "Berlin", "Germany", contact);
 
         AddressDto addressDto = new AddressDto(1, "10000", "Germany", "Berlin", "Strasse 100", 1);
 
