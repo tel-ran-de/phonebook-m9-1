@@ -27,6 +27,8 @@ import {ContactDetailsComponent} from './pages/root_page/contacts_page/contact-d
 import {PhoneComponent} from './pages/root_page/contacts_page/phone/phone.component';
 import {AddressComponent} from './pages/root_page/contacts_page/address/address.component';
 import {EmailComponent} from './pages/root_page/contacts_page/email/email.component';
+import {AddContactModalComponent} from "./pages/root_page/add-contact-modal/add-contact-modal.component";
+import { ContactComponent } from './pages/root_page/contacts_page/contact/contact.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +50,8 @@ import {EmailComponent} from './pages/root_page/contacts_page/email/email.compon
     PhoneComponent,
     AddressComponent,
     EmailComponent,
+    AddContactModalComponent,
+    ContactComponent,
   ],
   imports: [
     BrowserModule,

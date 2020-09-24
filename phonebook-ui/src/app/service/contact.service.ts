@@ -38,4 +38,8 @@ export class ContactService {
   addContact(contact: Contact) {
     return this.http.post<Contact>(`${this.contactPath}`, contact);
   }
+
+  getContactById(contactId: number) {
+    return this.http.get<Contact>(`${this.contactPath}/${contactId}`);
+  }
 }
