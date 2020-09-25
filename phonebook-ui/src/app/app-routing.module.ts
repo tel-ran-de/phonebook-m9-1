@@ -10,8 +10,8 @@ import {AuthGuard} from "./service/auth.guard";
 import {HomePageComponent} from "./pages/root_page/home-page/home-page.component";
 import {ContactsComponent} from "./pages/root_page/contacts_page/contacts/contacts.component";
 import {AccountComponent} from "./pages/root_page/account_page/account/account.component";
-import {ContactDetailsComponent} from "./pages/root_page/contacts_page/contact-details/contact-details.component";
 import {AccountPasswordComponent} from "./pages/root_page/account_page/account-password/account-password.component";
+import {ContactDetailsComponent} from "./pages/root_page/contact-datails-page/contact-details/contact-details.component";
 
 const routes: Routes = [
   {path: '', redirectTo: 'contacts', pathMatch: 'full'},

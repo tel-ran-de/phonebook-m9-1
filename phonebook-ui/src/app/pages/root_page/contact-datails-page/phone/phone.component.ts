@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Phone} from "../../../../model/phone";
+import {PhoneService} from "../../../../service/phone.service";
 
 @Component({
   selector: 'app-phone',
@@ -9,12 +9,13 @@ import {Phone} from "../../../../model/phone";
 export class PhoneComponent implements OnInit {
 
   @Input()
-  phoneToDisplay: Phone;
+  contactId: number;
 
-  constructor() {
+  constructor(public phoneService: PhoneService) {
   }
 
   ngOnInit(): void {
+    this.phoneService.getAllPhonesByContactId(this.contactId);
   }
 
 }

@@ -23,12 +23,12 @@ import {ContactItemComponent} from './pages/root_page/contacts_page/contact-item
 import {FooterComponent} from "./pages/root_page/footer/footer.component";
 import {AccountPasswordComponent} from './pages/root_page/account_page/account-password/account-password.component';
 import {AccountComponent} from './pages/root_page/account_page/account/account.component';
-import {ContactDetailsComponent} from './pages/root_page/contacts_page/contact-details/contact-details.component';
-import {PhoneComponent} from './pages/root_page/contacts_page/phone/phone.component';
-import {AddressComponent} from './pages/root_page/contacts_page/address/address.component';
-import {EmailComponent} from './pages/root_page/contacts_page/email/email.component';
+import {ContactDetailsComponent} from "./pages/root_page/contact-datails-page/contact-details/contact-details.component";
+import {PhoneComponent} from "./pages/root_page/contact-datails-page/phone/phone.component";
+import {AddressComponent} from "./pages/root_page/contact-datails-page/address/address.component";
+import {EmailComponent} from "./pages/root_page/contact-datails-page/email/email.component";
 import {AddContactModalComponent} from "./pages/root_page/add-contact-modal/add-contact-modal.component";
-import { ContactComponent } from './pages/root_page/contacts_page/contact/contact.component';
+import {ContactComponent} from "./pages/root_page/contact-datails-page/contact/contact.component";
 
 @NgModule({
   declarations: [

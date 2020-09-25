@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Email} from "../../../../model/email";
+import {EmailService} from "../../../../service/email.service";
 
 @Component({
   selector: 'app-email',
@@ -8,10 +8,11 @@ import {Email} from "../../../../model/email";
 })
 export class EmailComponent implements OnInit {
   @Input()
-  emailToDisplay: Email;
-  constructor() { }
+  contactId: number;
+  constructor(public emailService: EmailService) { }
 
   ngOnInit(): void {
+    this.emailService.getAllEmailsByContactId(this.contactId);
   }
 
 }
