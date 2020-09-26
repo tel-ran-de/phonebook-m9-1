@@ -51,6 +51,24 @@ class ContactServiceTest {
         ));
     }
 
+    @Test
+    public void testAdd_userExistsEmailUpperCase_userWithContact() {
+
+        User user = new User("test@gmail.com", "test");
+        when(userRepository.findById(user.getEmail())).thenReturn(Optional.of(user));
+
+        String email = "TEST@gmail.com";
+        String firstName = "ContactName";
+        String lastName = "Nachname";
+        String description = "person";
+        contactService.add(firstName, lastName, description, email);
+
+        verify(contactRepository, times(1)).save(any());
+        verify(contactRepository, times(1)).save(argThat(contact ->
+                contact.getFirstName().equals(firstName) && contact.getLastName().equals(lastName)
+                        && contact.getDescription().equals(description) && contact.getUser().getEmail().equals(user.getEmail())
+        ));
+    }
 
     @Test
     public void testAdd_userDoesNotExist_EntityNotFoundException() {
@@ -205,6 +223,48 @@ class ContactServiceTest {
     }
 
     @Test
+    public void testGetAllByUserId_userWithContactsUpperCase_3Contacts() {
+        User user = spy(new User("test@gmail.com", "test"));
+        Contact contact1 = spy(new Contact("Name1", user));
+        Contact contact2 = spy(new Contact("Name2", user));
+        Contact contact3 = spy(new Contact("Name3", user));
+
+        contact1.setLastName("Surname1");
+        contact1.setDescription("person");
+        contact2.setLastName("Surname2");
+        contact2.setDescription("person");
+        contact3.setLastName("Surname3");
+        contact3.setDescription("person");
+        when(contact1.getId()).thenReturn(1);
+        when(contact2.getId()).thenReturn(2);
+        when(contact3.getId()).thenReturn(3);
+
+        List<Contact> contacts = new ArrayList<>();
+        contacts.add(contact1);
+        contacts.add(contact2);
+        contacts.add(contact3);
+
+        when(userRepository.findById("test@gmail.com")).thenReturn(Optional.of(user));
+        when(user.getContacts()).thenReturn(contacts);
+        when(user.getMyProfile()).thenReturn(new Contact());
+        String email = "TEST@gmail.com";
+        List<Contact> contactsFound = contactService.getAllContactsByUserId(email);
+
+        assertEquals(contact1.getFirstName(), contactsFound.get(0).getFirstName());
+        assertEquals(contact1.getLastName(), contactsFound.get(0).getLastName());
+        assertEquals(contact1.getDescription(), contactsFound.get(0).getDescription());
+
+        assertEquals(contact2.getFirstName(), contactsFound.get(1).getFirstName());
+        assertEquals(contact2.getLastName(), contactsFound.get(1).getLastName());
+        assertEquals(contact2.getDescription(), contactsFound.get(1).getDescription());
+
+        assertEquals(contact3.getFirstName(), contactsFound.get(2).getFirstName());
+        assertEquals(contact3.getLastName(), contactsFound.get(2).getLastName());
+        assertEquals(contact3.getDescription(), contactsFound.get(2).getDescription());
+
+    }
+
+    @Test
     public void testGetProfile_Profile() {
         User user = new User("test@gmail.com", "test");
         Contact myProfile = new Contact("Name", user);
@@ -212,15 +272,35 @@ class ContactServiceTest {
         myProfile.setDescription("person");
         user.setMyProfile(myProfile);
 
-        when(contactRepository.findById(user.getMyProfile().getId())).thenReturn(Optional.of(myProfile));
-        Contact contactFounded = contactService.getById(myProfile.getId());
+        when(userRepository.findById(user.getEmail())).thenReturn(Optional.of(user));
+        Contact contactFounded = contactService.getProfile(user.getEmail());
 
         assertEquals(myProfile.getFirstName(), contactFounded.getFirstName());
         assertEquals(myProfile.getLastName(), contactFounded.getLastName());
         assertEquals(myProfile.getDescription(), contactFounded.getDescription());
 
-        verify(contactRepository, times(1)).findById(argThat(
-                id -> id == myProfile.getId()));
+        verify(userRepository, times(1)).findById(argThat(
+                id -> id.equals(user.getEmail())));
+    }
+
+    @Test
+    public void testGetProfile_upperCase_Profile() {
+        User user = new User("test@gmail.com", "test");
+        Contact myProfile = new Contact("Name", user);
+        myProfile.setLastName("Surname");
+        myProfile.setDescription("person");
+        user.setMyProfile(myProfile);
+        String email = "TEST@gmail.com";
+
+        when(userRepository.findById(user.getEmail())).thenReturn(Optional.of(user));
+        Contact contactFounded = contactService.getProfile(email);
+
+        assertEquals(myProfile.getFirstName(), contactFounded.getFirstName());
+        assertEquals(myProfile.getLastName(), contactFounded.getLastName());
+        assertEquals(myProfile.getDescription(), contactFounded.getDescription());
+
+        verify(userRepository, times(1)).findById(argThat(
+                id -> id.equals(user.getEmail())));
     }
 
     @Test
@@ -237,6 +317,29 @@ class ContactServiceTest {
 
         when(userRepository.findById(email)).thenReturn(Optional.of(user));
         contactService.editProfile(user.getEmail(), firstName, lastName, description);
+
+        verify(contactRepository, times(1)).save(any());
+        verify(contactRepository, times(1)).save(argThat(contact ->
+                contact.getFirstName().equals(myProfile.getFirstName()) && contact.getLastName().equals(myProfile.getLastName())
+                        && contact.getDescription().equals(myProfile.getDescription())
+        ));
+    }
+
+    @Test
+    public void testEditProfile_upperCase_AllFieldsChanged() {
+
+        User user = new User("test@gmail.com", "test");
+        String email = "TEST@gmail.com";
+        Contact myProfile = new Contact();
+        user.setMyProfile(myProfile);
+
+        String firstName = "ContactName";
+        String lastName = "Nachname";
+        String description = "person";
+
+
+        when(userRepository.findById(user.getEmail())).thenReturn(Optional.of(user));
+        contactService.editProfile(email, firstName, lastName, description);
 
         verify(contactRepository, times(1)).save(any());
         verify(contactRepository, times(1)).save(argThat(contact ->

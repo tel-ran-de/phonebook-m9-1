@@ -22,9 +22,10 @@ public class EmailSender {
 
     @Async
     public void sendMail(String toEmail, String subject, String message) {
+        String email = toEmail.toLowerCase().trim();
 
         SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(toEmail);
+        mailMessage.setTo(email);
         mailMessage.setSubject(subject);
         mailMessage.setText(message);
 
