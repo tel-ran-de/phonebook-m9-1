@@ -16,9 +16,9 @@ class AddressMapperTest {
     void AddressDto() {
         User user = new User("test@gmail.com", "112233");
         Contact contact = new Contact("Name", user);
-        Address address = new Address("10000", "Germany", "Berlin", "Strasse 100", contact);
+        Address address = new Address("Berlin", "DE", "Strasse", "1000", contact);
 
-        AddressDto addressDto = new AddressDto(1, "10000", "Germany", "Berlin", "Strasse 100", 1);
+        AddressDto addressDto = new AddressDto(1, "Berlin", "DE", "Strasse", "1000", 1);
 
         AddressDto addressDtoMapped = addressMapper.mapAddressToDto(address);
         assertEquals(addressDto.zip, addressDtoMapped.zip);

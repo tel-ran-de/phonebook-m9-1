@@ -148,6 +148,22 @@ class UserServiceTest {
     }
 
     @Test
+    public void testSendRecoveryToken_userUpperCase_tokenIsSavedToRepo() {
+        String email = "IVANOV@gmail.com";
+        User ourUser = new User(email.toLowerCase(), "1234");
+        when(userRepository.findById(email.toLowerCase())).thenReturn(Optional.of(ourUser));
+
+        userService.sendRecoveryToken(email);
+
+        verify(recoveryTokenRepository, times(1)).save(any());
+
+        verify(recoveryTokenRepository, times(1)).save(argThat(token ->
+                token.getUser().getEmail().equals(email.toLowerCase())));
+
+        verify(emailSender, times(1)).sendMail(eq(email.toLowerCase()), anyString(), anyString());
+    }
+
+    @Test
     public void testCreateNewPassword_newPasswordIsSaved() {
         User ourUser = new User("johndoe@mail.com", "1234");
         String token = UUID.randomUUID().toString();

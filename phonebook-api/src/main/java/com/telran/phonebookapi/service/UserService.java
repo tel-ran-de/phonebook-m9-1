@@ -87,14 +87,15 @@ public class UserService {
     }
 
     public void sendRecoveryToken(String email) {
-        User ourUser = userRepository.findById(email).orElseThrow(() -> new EntityNotFoundException(USER_DOES_NOT_EXIST));
+        String userId = email.toLowerCase().trim();
+        User ourUser = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException(USER_DOES_NOT_EXIST));
         String token = UUID.randomUUID().toString();
         RecoveryToken recoveryToken = new RecoveryToken(token, ourUser);
         recoveryTokenRepository.save(recoveryToken);
 
         String message = RECOVER_YOUR_PASSWORD_MESSAGE + uiHost + UI_RECOVERY_LINK + token;
 
-        emailSender.sendMail(email, "Password recovery", message);
+        emailSender.sendMail(userId, "Password recovery", message);
     }
 
     public void createNewPassword(String recoveryToken, String password) {
