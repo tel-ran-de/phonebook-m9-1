@@ -1,4 +1,4 @@
-<div class="d-flex justify-content-center table-h">
+<div class="d-flex justify-content-center" *ngIf="emails">
   <table class="w-75 table table-striped">
     <thead>
     <tr>
@@ -7,7 +7,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let email of emailService.emails | async">
+    <tr *ngFor="let email of emails">
       <td>
         <ngb-highlight [result]="email.email"></ngb-highlight>
       </td>

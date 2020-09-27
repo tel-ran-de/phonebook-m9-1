@@ -12,18 +12,20 @@ export class ContactComponent implements OnInit, OnDestroy {
 
   @Input()
   contactId: number;
+
   contactToDisplay: Contact;
-  private contactToDisplaySubscription: Subscription;
+  private getContactToDisplaySubscription: Subscription;
 
   constructor(private contactServes: ContactService) {
   }
 
   ngOnInit(): void {
-    this.contactToDisplaySubscription = this.contactServes.getContactById(this.contactId).subscribe(value => this.contactToDisplay = value);
+    this.getContactToDisplaySubscription = this.contactServes.getContactById(this.contactId)
+      .subscribe(value => this.contactToDisplay = value);
   }
 
   ngOnDestroy(): void {
-    if (this.contactToDisplaySubscription)
-      this.contactToDisplaySubscription.unsubscribe();
+    if (this.getContactToDisplaySubscription)
+      this.getContactToDisplaySubscription.unsubscribe();
   }
 }

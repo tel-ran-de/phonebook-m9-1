@@ -1,7 +1,7 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {AddressService} from "../../../../service/address.service";
 import {Subscription} from "rxjs";
-import {ActivatedRoute} from "@angular/router";
+import {Address} from "../../../../model/address";
 
 @Component({
   selector: 'app-address',
@@ -12,20 +12,20 @@ export class AddressComponent implements OnInit, OnDestroy {
 
   @Input()
   contactId: number;
-  private addressGetAllContactSubscription: Subscription;
 
-  constructor(public addressService: AddressService, private route: ActivatedRoute) {
+  private addressGetAllContactSubscription: Subscription;
+  addresses: Address[];
+
+  constructor(private addressService: AddressService) {
   }
 
   ngOnInit(): void {
-    // this.addressGetAllContactSubscription = this.addressService.getAllAddressesByContactId(this.contactId).subscribe();
-    console.log(this.contactId);
-    this.addressService.getAllAddressesByContactId(this.contactId)
+    this.addressGetAllContactSubscription = this.addressService.getAllAddressesByContactId(this.contactId)
+      .subscribe(value => this.addresses = value);
   }
 
   ngOnDestroy(): void {
-    // this.contactId = null;
-    // this.addressGetAllContactSubscription.unsubscribe();
+    if (this.addressGetAllContactSubscription)
+      this.addressGetAllContactSubscription.unsubscribe();
   }
-
 }

@@ -8,10 +8,9 @@ import {ActivatedRoute} from "@angular/router";
 })
 export class ContactDetailsComponent implements OnInit, OnDestroy {
 
-  public contactId: number;
+  contactId: number;
 
   constructor(private route: ActivatedRoute) {
-
   }
 
   ngOnInit(): void {

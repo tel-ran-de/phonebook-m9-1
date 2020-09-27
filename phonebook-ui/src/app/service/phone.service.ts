@@ -10,21 +10,10 @@ export class PhoneService {
 
   private readonly basePath = '/api/phone';
 
-  phones: Observable<Phone[]>;
-  private contactId: number;
-
-
   constructor(private http: HttpClient) {
   }
 
   getAllPhonesByContactId(contactId: number) {
-    this.contactId = contactId;
-    if (!this.phones)
-      this.reload();
-    return this.phones;
-  }
-
-  reload(): void {
-    this.phones = this.http.get<Phone[]>(`${this.basePath}/${(this.contactId)}/all`);
+    return this.http.get<Phone[]>(`${this.basePath}/${(contactId)}/all`);
   }
 }

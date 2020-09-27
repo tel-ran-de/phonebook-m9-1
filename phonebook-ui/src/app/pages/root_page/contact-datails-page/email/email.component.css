@@ -5,13 +5,3 @@
 .w-5{
   width: 5%;
 }
-
-.table-h{
-  max-height: 82vh;
-  overflow:auto;
-  -webkit-overflow-scrolling: auto;
-
-}
-.table-h::-webkit-scrollbar {
-  display: none;
-}

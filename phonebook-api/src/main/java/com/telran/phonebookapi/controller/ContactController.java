@@ -89,7 +89,8 @@ public class ContactController {
         String email = userDetails.getUsername();
         Contact myProfile = contactService.getProfile(email);
         return ContactDto.builder()
-               .firstName(myProfile.getFirstName())
+                .id(myProfile.getId())
+                .firstName(myProfile.getFirstName())
                 .lastName(myProfile.getLastName())
                 .description(myProfile.getDescription())
                 .build();
