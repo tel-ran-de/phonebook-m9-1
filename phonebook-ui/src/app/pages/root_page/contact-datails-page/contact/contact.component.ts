@@ -1,6 +1,6 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {ContactService} from "../../../../service/contact.service";
-import {Contact} from "../../../../model/contact";
+import {ContactService} from "src/app/service/contact.service";
+import {Contact} from "src/app/model/contact";
 import {Subscription} from "rxjs";
 
 @Component({

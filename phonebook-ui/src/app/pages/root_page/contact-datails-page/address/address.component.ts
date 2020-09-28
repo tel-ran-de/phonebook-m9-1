@@ -1,7 +1,7 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {AddressService} from "../../../../service/address.service";
+import {AddressService} from "src/app/service/address.service";
 import {Subscription} from "rxjs";
-import {Address} from "../../../../model/address";
+import {Address} from "src/app/model/address";
 import {FormBuilder, FormGroup} from "@angular/forms";
 
 @Component({

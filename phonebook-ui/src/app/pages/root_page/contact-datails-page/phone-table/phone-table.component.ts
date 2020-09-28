@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Phone} from "../../../../model/phone";
+import {Phone} from "src/app/model/phone";
 
 @Component({
   selector: 'app-phone-table',

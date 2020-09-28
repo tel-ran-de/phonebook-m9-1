@@ -1,6 +1,6 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {PhoneService} from "../../../../service/phone.service";
-import {Phone} from "../../../../model/phone";
+import {PhoneService} from "src/app/service/phone.service";
+import {Phone} from "src/app/model/phone";
 import {Subscription} from "rxjs";
 import {FormBuilder, FormGroup} from "@angular/forms";
 

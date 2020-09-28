@@ -1,6 +1,6 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {EmailService} from "../../../../service/email.service";
-import {Email} from "../../../../model/email";
+import {EmailService} from "src/app/service/email.service";
+import {Email} from "src/app/model/email";
 import {Subscription} from "rxjs";
 import {FormBuilder, FormGroup} from "@angular/forms";
 
