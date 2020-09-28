@@ -26,4 +26,5 @@ spring.flyway.password=
 com.telran.auth.jwt.secret=MpzjCrQGNgG9sVxv
 //minutes
 com.telran.auth.jwt.access-token.expiration=1440
-
+com.telran.testUser.testEmail=
+spring.profiles.active=dev
