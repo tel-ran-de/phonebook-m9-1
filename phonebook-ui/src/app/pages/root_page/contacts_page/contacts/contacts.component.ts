@@ -1,8 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from "rxjs";
-import {ContactService} from "../../../../service/contact.service";
-import {UserService} from "../../../../service/user.service";
-import {Contact} from "../../../../model/contact";
+import {ContactService} from 'src/app/service/contact.service';
+import {UserService} from 'src/app/service/user.service';
+import {Contact} from 'src/app/model/contact';
 
 @Component({
   selector: 'app-contacts',
@@ -11,29 +11,36 @@ import {Contact} from "../../../../model/contact";
 })
 export class ContactsComponent implements OnInit, OnDestroy {
 
-  private subscriptionRemove: Subscription;
+  private getProfileSubscription: Subscription;
+  private getContactsSubscription: Subscription;
   profile: Contact;
+  contacts: Contact[];
 
   constructor(public contactService: ContactService, public userService: UserService) {
   }
 
   ngOnInit(): void {
     this.getProfile()
-    this.contactService.getAllContacts();
+    this.getProfileSubscription = this.contactService.getAllContacts()
+      .subscribe(value => this.contacts = value);
   }
 
   getProfile() {
     this.profile = new Contact();
-    this.contactService.getProfile().subscribe(value => {
-      if (!value.firstName)
-        value.firstName = 'No first name added'
-      this.profile = value;
-    });
+    this.getProfileSubscription = this.contactService.getProfile()
+      .subscribe(value => {
+        if (!value.firstName)
+          value.firstName = 'No first name'
+        this.profile = value;
+      });
   }
 
   ngOnDestroy(): void {
-    if (this.subscriptionRemove)
-      this.subscriptionRemove.unsubscribe();
+    if (this.getProfileSubscription)
+      this.getProfileSubscription.unsubscribe();
+
+    if (this.getContactsSubscription)
+      this.getContactsSubscription.unsubscribe();
   }
 
 }
