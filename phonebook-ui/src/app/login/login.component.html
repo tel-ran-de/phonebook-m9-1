@@ -1,73 +1,97 @@
 <div class="row sidenav ">
-  <div class="col-xl-6 text-right bg-dark text-white">
+  <div class="col-xl-6 text-right text-white bg-dark">
     <div class="card-body">
       <div class="card-body ">
         <h2>{{projectName}}<br></h2>
         <h3>{{pageName}}</h3>
         <a class="btn-link" routerLink="/user/registration">Register new Account</a><br>
         <a class="btn-link" routerLink="/user/forgot-password">Forgot password?</a>
-
-
-
-
       </div>
     </div>
   </div>
-  <div class="col-xl-3 bg-transparent rounded-right">
-    <div class="card-body shadow">
-      <form [formGroup]="form" novalidate class="p-5" (ngSubmit)="onSubmit()">
-        <div class="form-group">
-          <input class="form-control mb-2 rounded-pill" id="defaultRegisterFormEmail" formControlName="email" type="email"
-                 placeholder="Email" [readOnly]="loading">
+  <div class="col-xl-6 rounded-right">
+    <div class="card-body">
+      <form [formGroup]="form" novalidate (ngSubmit)="onSubmit()" id="login-form">
+
+        <div class="row">
+          <div class="col-sm-5">
+
+            <div class="form-group">
+              <input class="form-control mb-2 rounded-pill" id="defaultRegisterFormEmail" formControlName="email"
+                     type="email"
+                     placeholder="Email" [readOnly]="loading" name="email">
+            </div>
+
+          </div>
+          <div class="col-sm-7">
+
+            <div
+              *ngIf="form.controls['email'].invalid && (form.controls['email'].dirty || form.controls['email'].touched)"
+              class="alert alert-danger">
+              <div *ngIf="form.controls['email'].errors.required" id="email-error-required">
+                Email is required.
+              </div>
+              <div *ngIf="form.controls['email'].errors.pattern" id="email-error-invalid">
+                Email must be a valid email address.
+              </div>
+            </div>
+
+          </div>
         </div>
 
-        <div class="form-group">
-          <input class="form-control rounded-pill" formControlName="password" type="password" placeholder="Password"
-                 [readOnly]="loading">
+        <div class="row">
+          <div class="col-sm-5">
+
+            <div class="form-group">
+              <input class="form-control rounded-pill" formControlName="password" type="password" placeholder="Password"
+                     [readOnly]="loading" name="password">
+            </div>
+
+          </div>
+          <div class="col-sm-7">
+
+
+            <div
+              *ngIf="form.controls['password'].invalid && (form.controls['password'].dirty || form.controls['password'].touched)"
+              class="alert alert-danger">
+              <div *ngIf="form.controls['password'].errors.required" id="password-error-required">
+                Password is required.
+              </div>
+              <div *ngIf="form.controls['password'].errors.minlength" id="password-error-minlength">
+                Password must be at least 8 characters.
+              </div>
+              <div *ngIf="form.controls['password'].errors.maxlength" id="password-error-maxlength">
+                Password must be at least 20 characters.
+              </div>
+            </div>
+
+          </div>
         </div>
 
-        <button *ngIf="!loading" type="submit" [disabled]="form.pristine || form.invalid"
-                class="btn btn-info my-1 btn-block">
-          Login
-        </button>
+        <div class="row">
+          <div class="col-sm-5">
 
-        <button *ngIf="loading" class="btn btn-info my-1 btn-block" type="button" disabled>
-          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-          Loading...
-        </button>
+            <button *ngIf="!loading" type="submit" [disabled]="form.pristine || form.invalid"
+                    class="btn btn-info my-1 btn-block">
+              Login
+            </button>
+
+            <button *ngIf="loading" class="btn btn-info my-1 btn-block" type="button" disabled>
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              Loading...
+            </button>
+
+          </div>
+          <div class="col-sm-7">
+
+            <div *ngIf="errorMessage" class="alert alert-danger error-message" id="error-message">
+              {{errorMessage}}<br>
+            </div>
+
+          </div>
+        </div>
 
       </form>
-    </div>
-  </div>
-  <div class="col-xl-3 bg-transparent">
-    <div class="card-body">
-      <div
-        *ngIf="form.controls['email'].invalid && (form.controls['email'].dirty || form.controls['email'].touched)"
-        class="alert alert-danger">
-        <div *ngIf="form.controls['email'].errors.required">
-          Email is required.
-        </div>
-        <div *ngIf="form.controls['email'].errors.pattern">
-          Email must be a valid email address.
-        </div>
-      </div>
-      <div
-        *ngIf="form.controls['password'].invalid && (form.controls['password'].dirty || form.controls['password'].touched)"
-        class="alert alert-danger">
-        <div *ngIf="form.controls['password'].errors.required">
-          Password is required.
-        </div>
-        <div *ngIf="form.controls['password'].errors.minlength">
-          Password must be at least 8 characters.
-        </div>
-        <div *ngIf="form.controls['password'].errors.maxlength">
-          Password must be at least 20 characters.
-        </div>
-      </div>
-
-      <div *ngIf="errorMessage" class="alert alert-danger">
-        {{errorMessage}}<br>
-      </div>
     </div>
   </div>
 </div>

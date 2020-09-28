@@ -9,13 +9,10 @@ import com.telran.phonebookapi.persistance.IContactRepository;
 import com.telran.phonebookapi.persistance.IRecoveryTokenRepository;
 import com.telran.phonebookapi.persistance.IUserRepository;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -72,6 +69,7 @@ public class UserService {
             user.setMyProfile(profile);
             contactRepository.save(profile);
             userRepository.save(user);
+            profile.setUser(user);
 
             activationTokenRepository.save(new ActivationToken(token, user));
             emailSender.sendMail(user.getEmail(), ACTIVATION_SUBJECT, ACTIVATION_MESSAGE
@@ -89,14 +87,15 @@ public class UserService {
     }
 
     public void sendRecoveryToken(String email) {
-        User ourUser = userRepository.findById(email).orElseThrow(() -> new EntityNotFoundException(USER_DOES_NOT_EXIST));
+        String userId = email.toLowerCase().trim();
+        User ourUser = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException(USER_DOES_NOT_EXIST));
         String token = UUID.randomUUID().toString();
         RecoveryToken recoveryToken = new RecoveryToken(token, ourUser);
         recoveryTokenRepository.save(recoveryToken);
 
         String message = RECOVER_YOUR_PASSWORD_MESSAGE + uiHost + UI_RECOVERY_LINK + token;
 
-        emailSender.sendMail(email, "Password recovery", message);
+        emailSender.sendMail(userId, "Password recovery", message);
     }
 
     public void createNewPassword(String recoveryToken, String password) {
