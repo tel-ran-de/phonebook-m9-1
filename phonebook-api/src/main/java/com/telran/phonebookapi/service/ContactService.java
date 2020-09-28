@@ -42,7 +42,8 @@ public class ContactService {
         this.emailMapper = emailMapper;
     }
 
-    public void add(String firstName, String lastName, String description, String userId) {
+    public void add(String firstName, String lastName, String description, String email) {
+        String userId = email.toLowerCase().trim();
 
         User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException(USER_DOES_NOT_EXIST));
         Contact contact = new Contact(firstName, user);
@@ -70,7 +71,9 @@ public class ContactService {
     }
 
     public List<Contact> getAllContactsByUserId(String email) {
-        User user = userRepository.findById(email).orElseThrow(() -> new EntityNotFoundException(USER_DOES_NOT_EXIST));
+        String userId = email.toLowerCase().trim();
+
+        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException(USER_DOES_NOT_EXIST));
         Contact profile = user.getMyProfile();
         List<Contact> contacts = user.getContacts();
         return contacts
@@ -80,12 +83,14 @@ public class ContactService {
     }
 
     public Contact getProfile(String email) {
+        String userId = email.toLowerCase().trim();
 
-        return userRepository.findById(email).get().getMyProfile();
+        return userRepository.findById(userId).get().getMyProfile();
     }
 
     public void editProfile(String email, String firstName, String lastName, String description) {
-        Contact myProfile = userRepository.findById(email).get().getMyProfile();
+        String userId = email.toLowerCase().trim();
+        Contact myProfile = userRepository.findById(userId).get().getMyProfile();
 
         myProfile.setFirstName(firstName);
         myProfile.setLastName(lastName);
