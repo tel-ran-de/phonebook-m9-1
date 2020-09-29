@@ -39,4 +39,20 @@ class EmailSenderTest {
         assertEquals("Test subject", capturedMessage.getSubject());
         assertEquals("Test text", capturedMessage.getText());
     }
+
+    @Test
+    public void testSendMailUpperCase_mailSender_sendsEmail() {
+        String toEmail = "jAneDoe@example.com";
+        String subject = "Test subject";
+        String message = "Test text";
+
+        emailSender.sendMail(toEmail, subject, message);
+
+        Mockito.verify(javaMailSender, times(1)).send(messageCaptor.capture());
+        SimpleMailMessage capturedMessage = messageCaptor.getValue();
+
+        assertEquals("janedoe@example.com", Objects.requireNonNull(capturedMessage.getTo())[0]);
+        assertEquals("Test subject", capturedMessage.getSubject());
+        assertEquals("Test text", capturedMessage.getText());
+    }
 }

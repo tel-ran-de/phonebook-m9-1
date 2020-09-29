@@ -52,6 +52,37 @@ test {
         events "passed", "skipped", "failed"
     }
 }
+
+// api build
+ext.versionPropsFilename = "src/main/resources/version.properties"
+
+ext.incrementAndGetBuildVersion = {
+    def versionPropsFile = file(versionPropsFilename)
+    if (versionPropsFile.canRead()) {
+        def versionProps = new Properties()
+        versionProps.load(new FileInputStream(versionPropsFile))
+        def versionBuild = versionProps['version.build'].toInteger() + 1
+        versionProps['version.build'] = versionBuild.toString()
+        versionProps.store(versionPropsFile.newWriter(), null)
+        return versionBuild
+    } else {
+        throw new GradleException("Could not read version.properties!")
+    }
+}
+
+task bootJarDev {
+    dependsOn('bootJar')
+    group('build')
+}
+
+gradle.taskGraph.whenReady { taskGraph ->
+    if (taskGraph.hasTask(bootJarDev)) {
+        def build = ext.incrementAndGetBuildVersion()
+        version = "${version}.${build}-DEV"
+    }
+}
+
+
 // ui tasks
 
 ext {
