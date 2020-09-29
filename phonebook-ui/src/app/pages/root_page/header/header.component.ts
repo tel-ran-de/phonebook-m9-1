@@ -10,6 +10,7 @@ import {AddContactModalComponent} from "../add-contact-modal/add-contact-modal.c
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
+  public isMenuCollapsed = true;
 
   constructor(private tokenStorage: TokenStorageService,
               private router: Router,
@@ -20,11 +21,13 @@ export class HeaderComponent implements OnInit {
   }
 
   logout() {
+    this.isMenuCollapsed = true;
     this.tokenStorage.signOut();
     this.router.navigate(['../user/login']).then();
   }
 
   openModal() {
+    this.isMenuCollapsed = true;
     this.modalService.open(AddContactModalComponent);
   }
 }
