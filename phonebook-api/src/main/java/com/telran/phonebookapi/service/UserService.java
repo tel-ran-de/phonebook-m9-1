@@ -18,7 +18,7 @@ import java.util.UUID;
 @Service
 public class UserService {
 
-    static final String USER_ALREADY_EXISTS = "Error! User already exists";
+    public static final String USER_ALREADY_EXISTS = "Error! User already exists";
     static final String ACTIVATION_SUBJECT = "User activation";
     static final String ACTIVATION_MESSAGE = "Please, follow the link to activate your account: ";
     static final String NOT_ACTIVE_LINK = "Your link is not active anymore";
