@@ -1,4 +1,4 @@
-package com.telran.phonebookapi;
+package com.telran.phonebookapi.service;
 
 import com.telran.phonebookapi.dto.UserDto;
 import com.telran.phonebookapi.exception.TokenNotFoundException;
@@ -7,7 +7,6 @@ import com.telran.phonebookapi.model.ActivationToken;
 import com.telran.phonebookapi.model.User;
 import com.telran.phonebookapi.persistance.IActivationTokenRepository;
 import com.telran.phonebookapi.persistance.IUserRepository;
-import com.telran.phonebookapi.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
