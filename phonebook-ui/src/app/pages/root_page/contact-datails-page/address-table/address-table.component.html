@@ -1,4 +1,4 @@
-<table class="table table-striped" id="address-items-table">
+<table class="table table-striped" id="items-table-address">
   <thead>
   <tr>
     <th scope="col">Country</th>
@@ -10,22 +10,23 @@
   </thead>
   <tbody>
 
-  <tr *ngFor="let address of addressesToDisplay">
-    <td>
+  <tr *ngFor="let address of addressesToDisplay; index as i" id="row-id-{{i}}">
+
+    <td id="row-id-{{i}}-cell-address">
       <ngb-highlight [result]="address.country"></ngb-highlight>
     </td>
-    <td>
+    <td id="row-id-{{i}}-cell}-city">
       <ngb-highlight [result]="address.city"></ngb-highlight>
     </td>
-    <td>
+    <td id="row-id-{{i}}-cell}-zip">
       <ngb-highlight [result]="address.zip"></ngb-highlight>
     </td>
-    <td>
+    <td id="row-id-{{i}}-cell-street">
       <ngb-highlight [result]="address.street"></ngb-highlight>
     </td>
     <td ngbDropdown class="nav-item ml-auto">
 
-      <button class="btn btn-outline-primary btn-block" ngbDropdownToggle id="action-drop-btn-address">
+      <button class="btn btn-outline-primary btn-block" ngbDropdownToggle id="row-id-{{i}}-btn-dropdown-action-address">
         <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-gear" fill="currentColor"
              xmlns="http://www.w3.org/2000/svg">
           <path fill-rule="evenodd"
@@ -36,8 +37,8 @@
       </button>
 
       <div ngbDropdownMenu>
-        <button ngbDropdownItem id="action-btn-address-edit">Edit</button>
-        <button ngbDropdownItem placement="bottom" ngbTooltip="permanently deleting" id="action-btn-address-remove">
+        <button ngbDropdownItem id="row-id-{{i}}-btn-edit-address">Edit</button>
+        <button ngbDropdownItem placement="bottom" ngbTooltip="permanently deleting" id="row-id-{{i}}-btn-remove-address">
           Remove
         </button>
       </div>
