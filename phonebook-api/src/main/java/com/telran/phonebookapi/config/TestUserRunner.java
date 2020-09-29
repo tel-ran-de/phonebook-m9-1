@@ -1,13 +1,14 @@
 package com.telran.phonebookapi.config;
 
 import com.telran.phonebookapi.model.User;
-import com.telran.phonebookapi.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.telran.phonebookapi.persistance.IUserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
+@Profile(value = "dev")
 @Component
 public class TestUserRunner implements ApplicationRunner {
     @Value("${com.telran.testUser.testEmail}")
@@ -15,15 +16,18 @@ public class TestUserRunner implements ApplicationRunner {
     @Value("${com.telran.testUser.testPassword}")
     String testPassword;
     final
-    UserService userService;
+    IUserRepository userRepository;
 
-    public TestUserRunner(UserService userService) {
-        this.userService = userService;
+    public TestUserRunner(IUserRepository userRepository) {
+        this.userRepository = userRepository;
     }
+
 
     @Override
     public void run(ApplicationArguments args) {
 
-      userService.addUser(testEmail, testPassword);
+       User user = new User(testEmail, testPassword);
+       user.setActive(true);
+       userRepository.save(user);
     }
 }
