@@ -1,0 +1,50 @@
+<div class="card mb-2 bg-light" *ngIf="searchResultAddresses">
+  <div class="card-header" *ngIf="searchResultAddresses.length > 0">
+    <h4 class="text-center text-primary" id="search-result-address-fond">Found: <b>{{searchResultAddresses.length}}</b>
+    </h4>
+  </div>
+
+  <div class="card-body">
+    <h4 class="text-center text-danger" *ngIf="searchResultAddresses.length === 0" id="search-result-address-not-found">
+      No search result</h4>
+    <div class="pre-scrollable mb-2 bg-light" *ngIf="searchResultAddresses.length >0" style="max-height: 160px">
+      <app-address-table [addressesToDisplay]="searchResultAddresses"
+                         id="address-search-table-component"></app-address-table>
+    </div>
+  </div>
+</div>
+
+<div class="nav navbar row bg-light">
+  <form [formGroup]="searchFormAddress" id="search-form-address">
+    <div class="form-group form-inline pt-2">
+      Search: <label>
+      <input class="form-control ml-2" type="text" formControlName="searchInput" placeholder="Search..."
+             name="input-search-address">
+    </label>
+    </div>
+  </form>
+  <div ngbDropdown class="ml-auto pt-2">
+    <button class="btn btn-outline-success btn-block " ngbDropdownToggle id="sort-by-drop-btn-address">
+      Sort by
+    </button>
+    <div ngbDropdownMenu>
+      <button ngbDropdownItem (click)="sortBy('country', true)" id="sort-by-country-abc">Country "abc"</button>
+      <button ngbDropdownItem (click)="sortBy('country', false)" id="sort-by-country-cba">Country "cba"</button>
+      <div class="dropdown-divider"></div>
+      <button ngbDropdownItem (click)="sortBy('city', true)" id="sort-by-city-abc">City "abc"</button>
+      <button ngbDropdownItem (click)="sortBy('city', false)" id="sort-by-city-cba">City "cba"</button>
+      <div class="dropdown-divider"></div>
+      <button ngbDropdownItem (click)="sortBy('zip', true)" id="sort-by-zip-abc">Zip "abc"</button>
+      <button ngbDropdownItem (click)="sortBy('zip', false)" id="sort-by-zip-cba">Zip "cba"</button>
+      <div class="dropdown-divider"></div>
+      <button ngbDropdownItem (click)="sortBy('street', true)" id="sort-by-address-abc">Address "abc"</button>
+      <button ngbDropdownItem (click)="sortBy('street', false)" id="sort-by-address-cba">Address "cba"</button>
+      <div class="dropdown-divider"></div>
+      <button ngbDropdownItem (click)="sortBy('id', true)" id="sort-by-address-id-abc" placement="right"
+              ngbTooltip="Reset to default order">Reset
+      </button>
+    </div>
+  </div>
+</div>
+
+<app-address-table *ngIf="addresses" [addressesToDisplay]="addresses" id="address-items-table"></app-address-table>

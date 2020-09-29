@@ -1,0 +1,42 @@
+<div class="card mb-2 bg-light" *ngIf="searchResultPhones">
+  <div class="card-header" *ngIf="searchResultPhones.length > 0">
+    <h4 class="text-center text-primary" id="search-result-phone-fond">Found: <b>{{searchResultPhones.length}}</b></h4>
+  </div>
+
+  <div class="card-body">
+    <h4 class="text-center text-danger" *ngIf="searchResultPhones.length === 0" id="search-result-not-found">
+      No search result</h4>
+    <div class="pre-scrollable mb-2 bg-light" *ngIf="searchResultPhones.length >0" style="max-height: 160px">
+      <app-phone-table [phonesToDisplay]="searchResultPhones" id="phone-search-table-component"></app-phone-table>
+    </div>
+  </div>
+</div>
+
+<div class="nav navbar row bg-light">
+  <form [formGroup]="searchFormPhone" id="search-form-phone">
+    <div class="form-group form-inline pt-2">
+      Search: <label>
+      <input class="form-control ml-2" type="text" formControlName="searchInput" placeholder="Search..."
+             name="input-search-phone">
+    </label>
+    </div>
+  </form>
+  <div ngbDropdown class="ml-auto pt-2">
+    <button class="btn btn-outline-success btn-block " ngbDropdownToggle id="sort-by-drop-btn-phone">
+      Sort by
+    </button>
+    <div ngbDropdownMenu>
+      <button ngbDropdownItem (click)="sortBy('countryCode', true)" id="sort-by-code-abc">Country code "abc"</button>
+      <button ngbDropdownItem (click)="sortBy('countryCode', false)" id="sort-by-code-cba">Country code "cba"</button>
+      <div class="dropdown-divider"></div>
+      <button ngbDropdownItem (click)="sortBy('phoneNumber', true)" id="sort-by-number-abc">Phone number "abc"</button>
+      <button ngbDropdownItem (click)="sortBy('phoneNumber', false)" id="sort-by-number-cba">Phone number "cba"</button>
+      <div class="dropdown-divider"></div>
+      <button ngbDropdownItem (click)="sortBy('id', true)" id="sort-by-phone-id-abc" placement="right"
+              ngbTooltip="Reset to default order">Reset
+      </button>
+    </div>
+  </div>
+</div>
+
+<app-phone-table *ngIf="phones" [phonesToDisplay]="phones"></app-phone-table>
