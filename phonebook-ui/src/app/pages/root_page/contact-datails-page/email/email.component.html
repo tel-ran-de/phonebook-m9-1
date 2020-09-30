@@ -7,7 +7,8 @@
     <h4 class="text-center text-danger" *ngIf="searchResultEmail.length === 0" id="search-result-email-not-found">
       No search result</h4>
     <div class="pre-scrollable mb-2 bg-light" *ngIf="searchResultEmail.length >0" style="max-height: 160px">
-      <app-email-table [emailsToDisplay]="searchResultEmail" id="email-search-table-component"></app-email-table>
+      <app-email-table [emailsToDisplay]="searchResultEmail" id="email-search-table-component"
+                       [isSearchTable]="searchResultEmail !== null"></app-email-table>
     </div>
   </div>
 </div>

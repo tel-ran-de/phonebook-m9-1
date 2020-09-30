@@ -10,6 +10,8 @@ export class PhoneTableComponent implements OnInit {
 
   @Input()
   phonesToDisplay: Phone[];
+  @Input()
+  isSearchTable: boolean;
 
   constructor() {
   }
@@ -17,4 +19,7 @@ export class PhoneTableComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  generateId(elementId: string): string {
+    return this.isSearchTable ? elementId + "-search" : elementId;
+  }
 }

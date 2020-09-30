@@ -10,11 +10,17 @@ export class EmailTableComponent implements OnInit {
 
   @Input()
   emailsToDisplay: Email[];
+  @Input()
+  isSearchTable: boolean;
 
   constructor() {
   }
 
   ngOnInit(): void {
+  }
+
+  generateId(elementId: string): string {
+    return this.isSearchTable ? elementId + "-search" : elementId;
   }
 
 }

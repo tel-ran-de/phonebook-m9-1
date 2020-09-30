@@ -10,10 +10,16 @@ export class AddressTableComponent implements OnInit {
 
   @Input()
   addressesToDisplay: Address[];
+  @Input()
+  isSearchTable: boolean;
 
   constructor() {
   }
 
   ngOnInit(): void {
+  }
+
+  generateId(elementId: string): string {
+    return this.isSearchTable ? elementId + "-search" : elementId;
   }
 }

@@ -1,5 +1,5 @@
 <div class="d-flex justify-content-center" *ngIf="phonesToDisplay">
-  <table class="w-75 table table-striped" id="items-table-phone">
+  <table class="w-75 table table-striped" id="{{generateId('items-table-phone')}}">
     <thead>
     <tr>
       <th scope="col">Country code</th>
@@ -8,16 +8,17 @@
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let phone of phonesToDisplay; index as i" id="row-id-{{i}}">
-      <td id="row-id-{{i}}-cell-country-code">
+    <tr *ngFor="let phone of phonesToDisplay; index as i" id="{{generateId('row-id-'+i)}}">
+      <td id="{{generateId('row-id-'+ i + '-cell-countryCode')}}">
         <ngb-highlight [result]="phone.countryCode"></ngb-highlight>
       </td>
-      <td id="row-id-{{i}}-cell-phone-number">
+      <td id="{{generateId('row-id-'+ i + '-cell-phoneNumber')}}">
         <ngb-highlight [result]="phone.phoneNumber"></ngb-highlight>
       </td>
       <td ngbDropdown class="nav-item ml-auto">
 
-        <button class="btn btn-outline-primary btn-block" ngbDropdownToggle id="row-id-{{i}}-btn-dropdown-action-phone">
+        <button class="btn btn-outline-primary btn-block" ngbDropdownToggle
+                id="{{generateId('row-id-' + i + '-btn-dropdown-action-phone')}}">
           <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-gear" fill="currentColor"
                xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd"
@@ -28,8 +29,10 @@
         </button>
 
         <div ngbDropdownMenu>
-          <button ngbDropdownItem id="row-id-{{i}}-btn-edit-phone">Edit</button>
-          <button ngbDropdownItem placement="bottom" ngbTooltip="permanently deleting" id="row-id-{{i}}-btn-remove-phone">Remove</button>
+          <button ngbDropdownItem id="{{generateId('row-id-' + i + '-btn-edit-phone')}}">Edit</button>
+          <button ngbDropdownItem placement="bottom" ngbTooltip="permanently deleting"
+                  id="{{generateId('row-id-' + i + '-btn-remove-phone')}}">Remove
+          </button>
         </div>
 
       </td>

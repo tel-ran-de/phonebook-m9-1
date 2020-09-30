@@ -7,7 +7,8 @@
     <h4 class="text-center text-danger" *ngIf="searchResultPhones.length === 0" id="search-result-not-found">
       No search result</h4>
     <div class="pre-scrollable mb-2 bg-light" *ngIf="searchResultPhones.length >0" style="max-height: 160px">
-      <app-phone-table [phonesToDisplay]="searchResultPhones" id="phone-search-table-component"></app-phone-table>
+      <app-phone-table [phonesToDisplay]="searchResultPhones" id="phone-search-table-component"
+                       [isSearchTable]="searchResultPhones !== null"></app-phone-table>
     </div>
   </div>
 </div>
