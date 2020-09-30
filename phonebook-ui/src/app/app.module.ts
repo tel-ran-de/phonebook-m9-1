@@ -23,7 +23,15 @@ import {ContactItemComponent} from './pages/root_page/contacts_page/contact-item
 import {FooterComponent} from "./pages/root_page/footer/footer.component";
 import {AccountPasswordComponent} from './pages/root_page/account_page/account-password/account-password.component';
 import {AccountComponent} from './pages/root_page/account_page/account/account.component';
+import {ContactDetailsComponent} from "./pages/root_page/contact-datails-page/contact-details/contact-details.component";
+import {PhoneComponent} from "./pages/root_page/contact-datails-page/phone/phone.component";
+import {AddressComponent} from "./pages/root_page/contact-datails-page/address/address.component";
+import {EmailComponent} from "./pages/root_page/contact-datails-page/email/email.component";
 import {AddContactModalComponent} from "./pages/root_page/add-contact-modal/add-contact-modal.component";
+import {ContactComponent} from "./pages/root_page/contact-datails-page/contact/contact.component";
+import {AddressTableComponent} from './pages/root_page/contact-datails-page/address-table/address-table.component';
+import {EmailTableComponent} from './pages/root_page/contact-datails-page/email-table/email-table.component';
+import {PhoneTableComponent} from './pages/root_page/contact-datails-page/phone-table/phone-table.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +49,15 @@ import {AddContactModalComponent} from "./pages/root_page/add-contact-modal/add-
     ContactItemComponent,
     AccountPasswordComponent,
     AccountComponent,
+    ContactDetailsComponent,
+    PhoneComponent,
+    AddressComponent,
+    EmailComponent,
     AddContactModalComponent,
+    ContactComponent,
+    AddressTableComponent,
+    EmailTableComponent,
+    PhoneTableComponent,
   ],
   imports: [
     BrowserModule,
@@ -55,8 +71,7 @@ import {AddContactModalComponent} from "./pages/root_page/add-contact-modal/add-
     {provide: HTTP_INTERCEPTORS, useClass: HttpError401Interceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
   ],
-  bootstrap: [AppComponent],
-  entryComponents: [AddContactModalComponent]
+  bootstrap: [AppComponent]
 })
 export class AppModule {
 }

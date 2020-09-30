@@ -1,0 +1,37 @@
+<ul ngbNav #nav="ngbNav" [activeId]="1" class="nav-tabs justify-content-center" keyboard="changeWithArrows" id="navbar-contact-details">
+  <li [ngbNavItem]="1">
+    <a ngbNavLink placement="top" ngbTooltip="Contact info" id="tab-link-info">Info</a>
+    <ng-template ngbNavContent id="tab-info-content">
+      <app-contact [contactId]="contactId"></app-contact>
+    </ng-template>
+  </li>
+  <li [ngbNavItem]="2">
+    <a ngbNavLink placement="top" ngbTooltip="Contact phones">Phones</a>
+    <ng-template ngbNavContent id="tab-phones-content">
+      <app-phone [contactId]="contactId"></app-phone>
+    </ng-template>
+  </li>
+  <li [ngbNavItem]="3">
+    <a ngbNavLink placement="top" ngbTooltip="Contact emails">Emails</a>
+    <ng-template ngbNavContent id="tab-emails-content">
+      <app-email [contactId]="contactId"></app-email>
+    </ng-template>
+  </li>
+  <li [ngbNavItem]="4">
+    <a ngbNavLink placement="top" ngbTooltip="Contact addresses">Addresses</a>
+    <ng-template ngbNavContent id="tab-addresses-content">
+      <app-address [contactId]="contactId"></app-address>
+    </ng-template>
+  </li>
+  <li ngbDropdown class="nav-item ml-auto">
+    <b href (click)="false" class="btn btn-secondary text-white" ngbDropdownToggle id="ngb-nav-action">Action</b>
+    <div ngbDropdownMenu>
+      <button ngbDropdownItem id="btn-add-phone">Add phone</button>
+      <button ngbDropdownItem id="btn-add-email">Add email</button>
+      <button ngbDropdownItem id="btn-add-address">Add address</button>
+      <div class="dropdown-divider"></div>
+      <button ngbDropdownItem placement="left" ngbTooltip="permanently deleting all content" id="btn-remove-contact">Remove Contact</button>
+    </div>
+  </li>
+</ul>
+<div [ngbNavOutlet]="nav" class="mt-2"></div>

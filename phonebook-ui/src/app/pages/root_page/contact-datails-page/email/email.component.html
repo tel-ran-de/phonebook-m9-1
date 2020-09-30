@@ -1,0 +1,40 @@
+<div class="card mb-2 bg-light" *ngIf="searchResultEmail">
+  <div class="card-header" *ngIf="searchResultEmail.length > 0">
+    <h4 class="text-center text-primary" id="search-result-email-fond">Found: <b>{{searchResultEmail.length}}</b></h4>
+  </div>
+
+  <div class="card-body">
+    <h4 class="text-center text-danger" *ngIf="searchResultEmail.length === 0" id="search-result-email-not-found">
+      No search result</h4>
+    <div class="pre-scrollable mb-2 bg-light" *ngIf="searchResultEmail.length >0" style="max-height: 160px">
+      <app-email-table [emailsToDisplay]="searchResultEmail" id="email-search-table-component"></app-email-table>
+    </div>
+  </div>
+</div>
+
+<div class="nav navbar row bg-light">
+  <form [formGroup]="searchFormEmail" id="search-form-email">
+    <div class="form-group form-inline pt-2">
+      Search: <label>
+      <input class="form-control ml-2" type="text" formControlName="searchInput" placeholder="Search..."
+             name="input-search-email">
+    </label>
+    </div>
+  </form>
+  <div ngbDropdown class="ml-auto pt-2">
+    <button class="btn btn-outline-success btn-block " ngbDropdownToggle id="sort-by-drop-btn-email">
+      Sort by
+    </button>
+    <div ngbDropdownMenu>
+      <div class="dropdown-divider"></div>
+      <button ngbDropdownItem (click)="sortBy('email', true)" id="sort-by-name-abc">Email "abc"</button>
+      <button ngbDropdownItem (click)="sortBy('email', false)" id="sort-by-name-cba">Email "cba"</button>
+      <div class="dropdown-divider"></div>
+      <button ngbDropdownItem (click)="sortBy('id', true)" id="sort-by-email-id-abc" placement="right"
+              ngbTooltip="Reset to default order">Reset
+      </button>
+    </div>
+  </div>
+</div>
+
+<app-email-table *ngIf="emails" [emailsToDisplay]="emails"></app-email-table>
