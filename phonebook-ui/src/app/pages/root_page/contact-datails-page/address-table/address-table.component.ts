@@ -19,7 +19,7 @@ export class AddressTableComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  generateId(elementId: string): string {
-    return this.isSearchTable ? elementId + "-search" : elementId;
+  tableId(): string {
+    return this.isSearchTable ? "addresses-table-search" : "addresses-table";
   }
 }
