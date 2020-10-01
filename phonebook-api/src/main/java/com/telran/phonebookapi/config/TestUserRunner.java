@@ -1,6 +1,9 @@
 package com.telran.phonebookapi.config;
 
+import com.telran.phonebookapi.model.Contact;
 import com.telran.phonebookapi.model.User;
+import com.telran.phonebookapi.model.UserRole;
+import com.telran.phonebookapi.persistance.IContactRepository;
 import com.telran.phonebookapi.persistance.IUserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
@@ -18,21 +21,28 @@ public class TestUserRunner implements ApplicationRunner {
     String testEmail;
     @Value("${com.telran.testUser.testPassword}")
     String testPassword;
-    final
+    private final
     IUserRepository userRepository;
+    IContactRepository contactRepository;
 
-    public TestUserRunner(IUserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public TestUserRunner(IUserRepository userRepository, IContactRepository contactRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
+        this.contactRepository = contactRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @Override
     public void run(ApplicationArguments args) {
         if (userRepository.findById(testEmail).isEmpty()) {
-            
+
             User user = new User(testEmail, bCryptPasswordEncoder.encode(testPassword));
             user.setActive(true);
+            user.addRole(UserRole.USER);
+            Contact profile = new Contact();
+            user.setMyProfile(profile);
+            contactRepository.save(profile);
             userRepository.save(user);
+            profile.setUser(user);
         }
     }
 }
