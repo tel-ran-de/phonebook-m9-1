@@ -26,7 +26,7 @@
   <li ngbDropdown class="nav-item ml-auto">
     <b href (click)="false" class="btn btn-secondary text-white" ngbDropdownToggle id="ngb-nav-action">Action</b>
     <div ngbDropdownMenu>
-      <button ngbDropdownItem id="btn-add-phone">Add phone</button>
+      <button ngbDropdownItem id="btn-add-phone" (click)="openModal()">Add phone</button>
       <button ngbDropdownItem id="btn-add-email">Add email</button>
       <button ngbDropdownItem id="btn-add-address">Add address</button>
       <div class="dropdown-divider"></div>

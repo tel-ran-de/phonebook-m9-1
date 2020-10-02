@@ -1,0 +1,50 @@
+<div class="modal-header" id="add-contact-modal">
+  <h4 class="modal-title">Add new {{itemName}}</h4>
+  <a type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </a>
+</div>
+<div class="modal-body">
+
+  <form #f="ngForm" [formGroup]="phoneForm" novalidate (ngSubmit)="onClickSave()" id="add-contact-form">
+
+    <div class="form-group form-inline">
+      <ngx-intl-tel-input [cssClass]="'form-control'"
+                          [preferredCountries]="preferredCountries"
+                          [enableAutoCountrySelect]="false"
+                          [enablePlaceholder]="true"
+                          [searchCountryFlag]="true"
+                          [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+                          [selectFirstCountry]="true"
+                          [selectedCountryISO]="CountryISO.Germany"
+                          [maxLength]="'15'"
+                          [tooltipField]="TooltipLabel.Name"
+                          [phoneValidation]="true"
+                          [separateDialCode]="true"
+                          [inputId]="'add-phone-form'"
+                          formControlName="phone">
+      </ngx-intl-tel-input>
+
+      <div class="ml-auto btn-group">
+        <button (click)="onClickCancel()" class="btn btn-secondary" type="reset" ngbTooltip="">Cancel</button>
+        <button [disabled]="!f.form.get('phone').value || loading" class="btn btn-primary" type="submit">Save
+        </button>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+<div class="card-header">
+  <div class="d-flex justify-content-center">
+    <div *ngIf="loading" class="spinner-border text-primary" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+
+    <p>
+      <ngb-alert *ngIf="alertMessage" type="{{alertType}}" (close)="onCloseAlert()">
+        {{alertMessage}}
+      </ngb-alert>
+    </p>
+  </div>
+</div>
