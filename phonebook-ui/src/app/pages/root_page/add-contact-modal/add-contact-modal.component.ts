@@ -3,7 +3,7 @@ import {NgbActiveModal, NgbModalConfig} from "@ng-bootstrap/ng-bootstrap";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Subscription} from "rxjs";
 import {ContactService} from "../../../service/contact.service";
-import {SubscriptionErrorHandle} from "src/app/service/subscriptionErrorHandle";
+import {SubscriptionErrorHandle} from "../../../service/subscriptionErrorHandler.ts";
 
 @Component({
   selector: 'app-modal-content',
@@ -47,7 +47,6 @@ export class AddContactModalComponent implements OnInit, OnDestroy {
         this.loading = false;
         this.isSaved = true;
         this.form.reset();
-        this.contactService.triggerOnReloadContactsList();
       },
       error => {
         this.errorMessage = SubscriptionErrorHandle(error);
