@@ -3,7 +3,7 @@ import {NgbActiveModal, NgbModalConfig} from "@ng-bootstrap/ng-bootstrap";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Subscription} from "rxjs";
 import {ContactService} from "../../../service/contact.service";
-import {SubscriptionErrorHandle} from "../../../service/subscriptionErrorHandler.ts";
+import {SubscriptionErrorHandle} from "src/app/service/subscriptionErrorHandle";
 
 @Component({
   selector: 'app-modal-content',

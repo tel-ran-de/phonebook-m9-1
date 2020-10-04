@@ -1,12 +1,14 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Phone} from "../model/phone";
+import {Subject} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
-export class PhoneService {
 
+export class PhoneService {
+  private _trigger = new Subject<void>();
   private readonly basePath = '/api/phone';
 
   constructor(private http: HttpClient) {
@@ -20,7 +22,11 @@ export class PhoneService {
     return this.http.post<Phone>(`${(this.basePath)}`, phone);
   }
 
-  reload(contactId: number): void {
-    this.getAllPhonesByContactId(contactId);
+  get trigger$() {
+    return this._trigger.asObservable();
+  }
+
+  triggerOnMyButton() {
+    this._trigger.next();
   }
 }

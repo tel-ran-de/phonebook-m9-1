@@ -32,8 +32,6 @@ import {ContactComponent} from "./pages/root_page/contact-datails-page/contact/c
 import {AddressTableComponent} from './pages/root_page/contact-datails-page/address-table/address-table.component';
 import {EmailTableComponent} from './pages/root_page/contact-datails-page/email-table/email-table.component';
 import {PhoneTableComponent} from './pages/root_page/contact-datails-page/phone-table/phone-table.component';
-import {NgxIntlTelInputModule} from "ngx-intl-tel-input";
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {PhoneAddModalComponent} from "./pages/root_page/contact-datails-page/phone-add-modal/add-phone-modal.component";
 
 @NgModule({
@@ -70,8 +68,6 @@ import {PhoneAddModalComponent} from "./pages/root_page/contact-datails-page/pho
     AppRoutingModule,
     NgbModule,
     HttpClientModule,
-    NgxIntlTelInputModule,
-    BrowserAnimationsModule,
   ],
   providers: [UserService,
     {provide: HTTP_INTERCEPTORS, useClass: HttpError401Interceptor, multi: true},
