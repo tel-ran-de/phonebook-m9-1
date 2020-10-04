@@ -47,6 +47,7 @@ export class AddContactModalComponent implements OnInit, OnDestroy {
         this.loading = false;
         this.isSaved = true;
         this.form.reset();
+        this.contactService.triggerOnReloadContactsList();
       },
       error => {
         this.errorMessage = SubscriptionErrorHandle(error);

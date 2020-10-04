@@ -3,5 +3,4 @@ export class Phone {
   countryCode: string;
   phoneNumber: string;
   contactId: number;
-
 }

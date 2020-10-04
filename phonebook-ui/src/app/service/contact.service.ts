@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Observable} from "rxjs";
+import {Observable, Subject} from "rxjs";
 import {Contact} from "../model/contact";
 import {HttpClient} from "@angular/common/http";
 
@@ -7,6 +7,8 @@ import {HttpClient} from "@angular/common/http";
   providedIn: 'root'
 })
 export class ContactService {
+  private _trigger = new Subject<void>();
+
   contacts: Observable<Contact[]>;
   profile: Observable<Contact>;
 
@@ -42,4 +44,13 @@ export class ContactService {
   getContactById(contactId: number) {
     return this.http.get<Contact>(`${this.contactPath}/${contactId}`);
   }
+
+  get trigger$() {
+    return this._trigger.asObservable();
+  }
+
+  triggerOnReloadContactsList() {
+    this._trigger.next();
+  }
+
 }

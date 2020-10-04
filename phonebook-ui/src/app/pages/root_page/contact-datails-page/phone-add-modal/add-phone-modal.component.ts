@@ -71,7 +71,7 @@ export class PhoneAddModalComponent implements OnInit {
         this.alertMessage = 'Phone number: (' + this.phone.countryCode + ")" + this.phone.phoneNumber + ' saved';
 
         this.phoneForm.reset();
-        this.phoneService.triggerOnMyButton();
+        this.phoneService.triggerOnReloadPhonesList();
       },
       error => {
         this.isSaved = false;

@@ -9,6 +9,7 @@ import {Subject} from "rxjs";
 
 export class PhoneService {
   private _trigger = new Subject<void>();
+
   private readonly basePath = '/api/phone';
 
   constructor(private http: HttpClient) {
@@ -26,7 +27,7 @@ export class PhoneService {
     return this._trigger.asObservable();
   }
 
-  triggerOnMyButton() {
+  triggerOnReloadPhonesList() {
     this._trigger.next();
   }
 }
