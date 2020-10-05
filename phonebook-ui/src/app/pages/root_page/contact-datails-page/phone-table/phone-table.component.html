@@ -8,12 +8,12 @@
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let phone of phonesToDisplay; index as i" id="row-id-{{i}}">
+    <tr *ngFor="let phoneItem of phonesToDisplay; index as i" id="row-id-{{i}}">
       <td id="row-id-{{i}}-cell-country-code">
-        <ngb-highlight [result]="phone.countryCode"></ngb-highlight>
+        <ngb-highlight [result]="phoneItem.countryCode"></ngb-highlight>
       </td>
       <td id="row-id-{{i}}-cell-phone-number">
-        <ngb-highlight [result]="phone.phoneNumber"></ngb-highlight>
+        <ngb-highlight [result]="phoneItem.phoneNumber"></ngb-highlight>
       </td>
       <td ngbDropdown class="nav-item ml-auto">
 
@@ -28,8 +28,10 @@
         </button>
 
         <div ngbDropdownMenu>
-          <button ngbDropdownItem id="row-id-{{i}}-btn-edit-phone">Edit</button>
-          <button ngbDropdownItem placement="bottom" ngbTooltip="permanently deleting" id="row-id-{{i}}-btn-remove-phone">Remove</button>
+          <button ngbDropdownItem id="row-id-{{i}}-btn-edit-phone" (click)="onClickEdit(phoneItem)">Edit</button>
+          <button ngbDropdownItem placement="bottom" ngbTooltip="permanently deleting"
+                  id="row-id-{{i}}-btn-remove-phone">Remove
+          </button>
         </div>
 
       </td>

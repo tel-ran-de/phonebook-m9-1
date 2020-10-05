@@ -35,6 +35,7 @@ export class PhoneComponent implements OnInit, OnDestroy {
     })
 
     this.reloadPhoneList();
+    this.phoneService.trigger$.subscribe(() => this.reloadPhoneList());
   }
 
   private reloadPhoneList(): void {
