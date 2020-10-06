@@ -4,6 +4,7 @@
     <span aria-hidden="true">&times;</span>
   </a>
 </div>
+
 <div class="modal-body">
   <form [formGroup]="form" novalidate (ngSubmit)="onClickSave()" id="add-contact-form">
     <div class="form-group">
@@ -24,22 +25,7 @@
              [readOnly]="form.invalid || loading">
     </div>
 
-    <div class="alert alert-danger" id="form-error-firstName"
-         *ngIf="form.invalid && (form.controls['firstName'].dirty || form.controls['firstName'].touched)">
-      To add a contact, you must specify a name
-    </div>
-
-    <div class="alert alert-danger" id="error-message"
-         *ngIf="errorMessage && !isSaved">
-      {{errorMessage}}
-    </div>
-
-    <div class="alert alert-success text-center" id="saved-message"
-         *ngIf="isSaved">
-      Contact saved successfully
-    </div>
-
-    <div class="modal-footer">
+    <div class="row d-flex justify-content-end">
       <button (click)="onClickCancel()" class="btn btn-secondary" type="reset">Cancel</button>
 
       <button *ngIf="!loading" [disabled]="form.invalid" class="btn btn-primary" type="submit">Save contact</button>
@@ -53,4 +39,24 @@
   </form>
 </div>
 
+<div class="card-footer">
+  <p>
+    <ngb-alert type="danger" [dismissible]="false" id="form-error-firstName"
+               *ngIf="form.invalid && (form.controls['firstName'].dirty || form.controls['firstName'].touched)">
+      To add a contact, you must specify a name
+    </ngb-alert>
+  </p>
+
+  <p>
+    <ngb-alert *ngIf="alertMessage" type="danger" (close)="alertMessage = ''" id="error-message">
+      {{alertMessage}}</ngb-alert>
+  </p>
+
+  <p>
+    <ngb-alert *ngIf="successMessage" type="success" (close)="successMessage = ''" id="saved-message">
+      {{successMessage}}
+    </ngb-alert>
+  </p>
+
+</div>
 

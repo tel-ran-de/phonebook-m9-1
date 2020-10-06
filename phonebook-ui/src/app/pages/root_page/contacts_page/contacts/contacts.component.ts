@@ -20,7 +20,12 @@ export class ContactsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.getProfile()
+    this.getProfile();
+    this.reloadContactsList();
+    this.contactService.trigger$.subscribe(() => this.reloadContactsList());
+  }
+
+  private reloadContactsList() {
     this.getProfileSubscription = this.contactService.getAllContacts()
       .subscribe(value => this.contacts = value);
   }

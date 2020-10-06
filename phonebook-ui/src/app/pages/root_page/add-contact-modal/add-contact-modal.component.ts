@@ -3,7 +3,7 @@ import {NgbActiveModal, NgbModalConfig} from "@ng-bootstrap/ng-bootstrap";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Subscription} from "rxjs";
 import {ContactService} from "../../../service/contact.service";
-import {SubscriptionErrorHandle} from "../../../service/subscriptionErrorHandler.ts";
+import {SubscriptionErrorHandle} from "../../../service/subscriptionErrorHandle";
 
 @Component({
   selector: 'app-modal-content',
@@ -21,12 +21,13 @@ export class AddContactModalComponent implements OnInit, OnDestroy {
 
   isSaved: boolean;
   loading: boolean;
-  errorMessage: string;
+  alertMessage: string;
   form: FormGroup;
   private subscription: Subscription;
+  successMessage: string;
 
   ngOnInit(): void {
-    this.createForm()
+    this.createForm();
   }
 
   private createForm() {
@@ -40,18 +41,21 @@ export class AddContactModalComponent implements OnInit, OnDestroy {
   onClickSave() {
     this.isSaved = false;
     this.loading = true;
-    this.errorMessage = '';
+    this.successMessage = '';
+    this.alertMessage = '';
 
     this.subscription = this.contactService.addContact(this.form.value).subscribe(() => {
         this.contactService.reload();
         this.loading = false;
         this.isSaved = true;
+        this.successMessage = 'Contact saved successfully';
         this.form.reset();
+        this.contactService.triggerOnReloadContactsList();
       },
       error => {
-        this.errorMessage = SubscriptionErrorHandle(error);
+        this.alertMessage = SubscriptionErrorHandle(error);
         this.isSaved = false;
-        if (this.errorMessage)
+        if (this.alertMessage)
           this.loading = false;
       }
     );
