@@ -9,22 +9,22 @@ import {Email} from "src/app/model/email";
 export class EmailTableComponent implements OnInit {
 
   @Input()
-  emailsToDisplay: Email[];
+  sortedEmailsToDisplay: Email[];
   reverseSort: boolean;
 
   constructor() {
   }
 
   ngOnInit(): void {
-    this.emailsToDisplay
+    this.sortedEmailsToDisplay
       .sort((emailNameA, emailNameB) => emailNameA.id > emailNameB.id ? -1 : 1);
   }
 
   sort() {
     this.reverseSort = !this.reverseSort;
-    this.emailsToDisplay
+    this.sortedEmailsToDisplay
       .sort((emailNameA, emailNameB) => emailNameA.email > emailNameB.email ? -1 : 1);
     if (this.reverseSort)
-      this.emailsToDisplay.reverse();
+      this.sortedEmailsToDisplay.reverse();
   }
 }

@@ -1,23 +1,21 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {EmailService} from "src/app/service/email.service";
 import {Email} from "src/app/model/email";
-import {Subscription} from "rxjs";
 import {FormBuilder, FormGroup} from "@angular/forms";
-import {SubscriptionErrorHandle} from "../../../../service/subscriptionErrorHandle";
+import {SubscriptionErrorHandle} from "src/app/service/subscriptionErrorHandle";
 
 @Component({
   selector: 'app-email',
   templateUrl: './email.component.html',
   styleUrls: ['./email.component.css']
 })
-export class EmailComponent implements OnInit, OnDestroy {
+export class EmailComponent implements OnInit {
   @Input()
   contactId: number;
 
   emailsFromServer: Email[] = [];
   emailsToDisplay: Email[] = [];
 
-  private getAllEmailsByContactSubscription: Subscription;
   searchFormEmail: FormGroup;
   errorMessage: string;
   loading: boolean;
@@ -31,39 +29,38 @@ export class EmailComponent implements OnInit, OnDestroy {
       searchInput: []
     })
 
-    this.searchFormEmail.get("searchInput").valueChanges.subscribe(searchText => {
-      if (searchText.length === 0)
-        this.emailsToDisplay = this.emailsFromServer;
-      else
-        this.emailsToDisplay = this.search(searchText);
-    });
-
     this.reloadEmails();
+
+    this.searchFormEmail.get("searchInput").valueChanges.subscribe(searchText => {
+      this.emailsToDisplay = this.search(searchText);
+    });
   }
 
-  private reloadEmails(): void {
-    this.getAllEmailsByContactSubscription = this.emailService.getAllEmailsByContactId(this.contactId)
-      .subscribe(value => {
-        this.errorMessage = ''
-        this.loading = false
-        this.emailsFromServer = value
-        this.emailsToDisplay = value;
+  reloadEmails(): void {
+    this.emailService.getAllEmailsByContactId(this.contactId)
+      .subscribe(email => {
+        this.callbackOk(email);
       }, error => {
-        this.errorMessage = SubscriptionErrorHandle(error)
-        this.loading = false
+        this.callbackError(error)
       });
-
   }
 
-  private search(text: string) {
-    return this.emailsFromServer.filter(value => {
+  callbackOk(value: Email[]) {
+    this.errorMessage = ''
+    this.loading = false
+    this.emailsFromServer = value
+    this.emailsToDisplay = value;
+  }
+
+  callbackError(error: any) {
+    this.errorMessage = SubscriptionErrorHandle(error)
+    this.loading = false
+  }
+
+  search(text: string) {
+    return this.emailsFromServer.filter(emailItem => {
       const term = text.toLowerCase()
-      return value.email.toLowerCase().includes(term)
+      return emailItem.email.toLowerCase().includes(term)
     })
-  }
-
-  ngOnDestroy(): void {
-    if (this.getAllEmailsByContactSubscription)
-      this.getAllEmailsByContactSubscription.unsubscribe();
   }
 }

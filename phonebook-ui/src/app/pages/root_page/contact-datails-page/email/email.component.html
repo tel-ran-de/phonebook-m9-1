@@ -6,7 +6,7 @@
     </div>
   </form>
 </div>
-<app-email-table *ngIf="emailsToDisplay" [emailsToDisplay]="emailsToDisplay"></app-email-table>
+<app-email-table *ngIf="emailsToDisplay" [sortedEmailsToDisplay]="emailsToDisplay"></app-email-table>
 
 <div *ngIf="emailsToDisplay.length === 0 && !errorMessage && !loading">
   <ngb-alert type="warning" role="alert" class="text-center" [dismissible]="false">
