@@ -3,12 +3,9 @@
     <thead>
     <tr>
       <th scope="col" class="w-95">
-        <a (click)="sort()" [routerLink]="'.'" class="text-secondary">Email
+        <a (click)="sort('email')" [routerLink]="'.'" class="text-secondary" placement="top" ngbTooltip="click to sort">Email
           <span>
-            <img *ngIf="reverseSort" src="/assets/icons/sort-alpha-up.svg" alt="" width="22" height="22"
-                 title="sort-za">
-            <img *ngIf="!reverseSort" src="/assets/icons/sort-alpha-down.svg" alt="" width="22" height="22"
-                 title="sort-az">
+            <app-sort-icon [show]="sortBy === 'email'" [iconUp]="reverseSort"></app-sort-icon>
           </span>
         </a>
       </th>
@@ -23,7 +20,7 @@
       <td ngbDropdown class="nav-item">
 
         <button class="btn btn-outline-light btn-block" ngbDropdownToggle>
-          <img src="/assets/icons/gear.svg" alt="" width="26" height="26" title="gear">
+          <app-action-btn-icon></app-action-btn-icon>
         </button>
 
         <div ngbDropdownMenu>

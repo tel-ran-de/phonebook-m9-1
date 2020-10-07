@@ -20,8 +20,8 @@ export class EmailService {
     return this.http.get<Email[]>(`${this.basePath}/${(contactId)}/all`);
   }
 
-  removeEmail(id: number) {
-    this.http.delete(`${this.basePath}/${(id)}`)
+  removeEmail(emailId: number) {
+    this.http.delete(`${this.basePath}/${(emailId)}`)
       .subscribe(() => this.triggerOnReloadEmailList());
   }
 

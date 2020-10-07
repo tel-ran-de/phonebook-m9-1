@@ -33,6 +33,8 @@ import {AddressTableComponent} from './pages/root_page/contact-datails-page/addr
 import {EmailTableComponent} from './pages/root_page/contact-datails-page/email-table/email-table.component';
 import {PhoneTableComponent} from './pages/root_page/contact-datails-page/phone-table/phone-table.component';
 import {PhoneAddModalComponent} from "./pages/root_page/contact-datails-page/phone-add-modal/add-phone-modal.component";
+import {SortIconComponent} from './pages/root_page/contact-datails-page/sort-icon/sort-icon.component';
+import {ActionBtnIconComponent} from './pages/root_page/contact-datails-page/action-btn-icon/action-btn-icon.component';
 
 @NgModule({
   declarations: [
@@ -60,6 +62,8 @@ import {PhoneAddModalComponent} from "./pages/root_page/contact-datails-page/pho
     EmailTableComponent,
     PhoneTableComponent,
     PhoneAddModalComponent,
+    SortIconComponent,
+    ActionBtnIconComponent,
   ],
   imports: [
     BrowserModule,

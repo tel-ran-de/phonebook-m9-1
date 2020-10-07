@@ -11,24 +11,30 @@ export class EmailTableComponent implements OnInit {
 
   @Input()
   sortedEmailsToDisplay: Email[];
+
   reverseSort: boolean;
+  sortBy: string;
 
   constructor(private emailService: EmailService) {
   }
 
   ngOnInit(): void {
-    this.sortedEmailsToDisplay
-      .sort((emailNameA, emailNameB) => emailNameA.id > emailNameB.id ? -1 : 1);
   }
 
-  sort() {
+  sort(sortBy: string) {
+    if (this.sortBy !== sortBy)
+      this.reverseSort = false;
+
+    this.sortBy = sortBy;
     this.reverseSort = !this.reverseSort;
-    this.sortedEmailsToDisplay
-      .sort((emailNameA, emailNameB) => emailNameA.email > emailNameB.email ? -1 : 1);
+
+    this.sortedEmailsToDisplay.sort((a, b) => a[sortBy] > b[sortBy] ? -1 : 1)
+
     if (this.reverseSort)
       this.sortedEmailsToDisplay.reverse();
   }
-  onClickRemove(id: number) {
-    this.emailService.removeEmail(id);
+
+  onClickRemove(emailId: number) {
+    this.emailService.removeEmail(emailId);
   }
 }
