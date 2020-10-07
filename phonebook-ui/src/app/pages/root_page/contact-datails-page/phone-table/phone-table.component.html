@@ -29,7 +29,7 @@
 
         <div ngbDropdownMenu>
           <button ngbDropdownItem class="btn-edit-phone" (click)="onClickEdit(phoneItem)">Edit</button>
-          <button ngbDropdownItem class="btn-remove-phone" placement="bottom" ngbTooltip="permanently deleting">Remove
+          <button ngbDropdownItem class="btn-remove-phone" placement="bottom" ngbTooltip="permanently deleting" (click)="onClickRemove(phoneItem.id)">Remove
           </button>
         </div>
 

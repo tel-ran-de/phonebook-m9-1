@@ -34,4 +34,9 @@ export class PhoneService {
   editPhone(phoneToEdit: Phone) {
     return this.http.put<Phone>(`${this.basePath}`, phoneToEdit);
   }
+
+  removePhone(phoneId: number) {
+    this.http.delete(`${this.basePath}/${(phoneId)}`)
+      .subscribe(() => this.triggerOnReloadPhonesList());
+  }
 }
