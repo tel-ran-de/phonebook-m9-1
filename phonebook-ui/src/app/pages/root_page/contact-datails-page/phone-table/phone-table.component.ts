@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Phone} from "src/app/model/phone";
+import {PhoneService} from "../../../../service/phone.service";
 
 @Component({
   selector: 'app-phone-table',
@@ -11,10 +12,13 @@ export class PhoneTableComponent implements OnInit {
   @Input()
   phonesToDisplay: Phone[];
 
-  constructor() {
+  constructor(private phoneService:PhoneService) {
   }
 
   ngOnInit(): void {
   }
 
+  onClickRemove(id: number) {
+    this.phoneService.removePhone(id);
+  }
 }
