@@ -30,4 +30,9 @@ export class PhoneService {
   triggerOnReloadPhonesList() {
     this._trigger.next();
   }
+
+  removePhone(id: number) {
+    this.http.delete(`${this.basePath}/${(id)}`)
+      .subscribe(() => this.triggerOnReloadPhonesList());
+  }
 }
