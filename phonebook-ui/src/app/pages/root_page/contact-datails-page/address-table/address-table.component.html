@@ -3,7 +3,8 @@
     <thead>
     <tr>
       <th scope="col">
-        <a (click)="sort('country')" [routerLink]="'.'" class="text-secondary">Country
+        <a (click)="sort('country')" [routerLink]="'.'" class="text-secondary sort-by-country" placement="top"
+           ngbTooltip="click to sort by country">Country
           <span>
             <app-sort-icon [show]="sortBy === 'country'" [iconUp]="reverseSort"></app-sort-icon>
           </span>
@@ -11,7 +12,8 @@
       </th>
       <th scope="col">
 
-        <a (click)="sort('city')" [routerLink]="'.'" class="text-secondary">City
+        <a (click)="sort('city')" [routerLink]="'.'" class="text-secondary sort-by-city" placement="top"
+           ngbTooltip="click to sort by city">City
           <span>
             <app-sort-icon [show]="sortBy === 'city'" [iconUp]="reverseSort"></app-sort-icon>
           </span>
@@ -20,7 +22,8 @@
       </th>
       <th scope="col">
 
-        <a (click)="sort('zip')" [routerLink]="'.'" class="text-secondary">Zip
+        <a (click)="sort('zip')" [routerLink]="'.'" class="text-secondary sort-by-zip" placement="top"
+           ngbTooltip="click to sort by zip">Zip
           <span>
             <app-sort-icon [show]="sortBy === 'zip'" [iconUp]="reverseSort"></app-sort-icon>
           </span>
@@ -29,7 +32,8 @@
       </th>
       <th scope="col">
 
-        <a (click)="sort('street')" [routerLink]="'.'" class="text-secondary" #street>Address
+        <a (click)="sort('street')" [routerLink]="'.'" class="text-secondary sort-by-street" placement="top"
+           ngbTooltip="click to sort by street">Address
           <span>
             <app-sort-icon [show]="sortBy === 'street'" [iconUp]="reverseSort"></app-sort-icon>
           </span>
@@ -56,7 +60,7 @@
       </td>
       <td ngbDropdown class="nav-item ml-auto">
         <button class="btn btn-outline-light btn-block" ngbDropdownToggle>
-          <img src="/assets/icons/gear.svg" alt="" width="26" height="26" title="gear">
+          <app-action-btn-icon></app-action-btn-icon>
         </button>
 
         <div ngbDropdownMenu>

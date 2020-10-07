@@ -18,8 +18,6 @@ export class AddressTableComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.sortBy = 'country'
-    this.sort(this.sortBy)
   }
 
   sort(sortBy: string) {
