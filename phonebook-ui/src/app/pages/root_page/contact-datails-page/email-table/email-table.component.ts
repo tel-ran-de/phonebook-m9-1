@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Email} from "src/app/model/email";
+import {EmailService} from "../../../../service/email.service";
 
 @Component({
   selector: 'app-email-table',
@@ -12,7 +13,7 @@ export class EmailTableComponent implements OnInit {
   sortedEmailsToDisplay: Email[];
   reverseSort: boolean;
 
-  constructor() {
+  constructor(private emailService: EmailService) {
   }
 
   ngOnInit(): void {
@@ -26,5 +27,8 @@ export class EmailTableComponent implements OnInit {
       .sort((emailNameA, emailNameB) => emailNameA.email > emailNameB.email ? -1 : 1);
     if (this.reverseSort)
       this.sortedEmailsToDisplay.reverse();
+  }
+  onClickRemove(id: number) {
+    this.emailService.removeEmail(id);
   }
 }

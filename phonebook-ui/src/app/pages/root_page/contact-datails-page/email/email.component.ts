@@ -34,6 +34,8 @@ export class EmailComponent implements OnInit {
     this.searchFormEmail.get("searchInput").valueChanges.subscribe(searchText => {
       this.emailsToDisplay = this.search(searchText);
     });
+
+    this.emailService.trigger$.subscribe(() => this.reloadEmails());
   }
 
   reloadEmails(): void {

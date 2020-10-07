@@ -28,7 +28,8 @@
 
         <div ngbDropdownMenu>
           <button ngbDropdownItem class="btn-email-edit">Edit</button>
-          <button ngbDropdownItem class="btn-email-remove" placement="bottom" ngbTooltip="permanently deleting">Remove
+          <button ngbDropdownItem class="btn-email-remove" placement="bottom" ngbTooltip="permanently deleting"
+                  (click)="onClickRemove(email.id)">Remove
           </button>
         </div>
 
