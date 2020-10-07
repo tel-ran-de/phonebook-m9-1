@@ -3,7 +3,6 @@ import {SubscriptionErrorHandle} from "../../../../service/subscriptionErrorHand
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Phone} from "../../../../model/phone";
 import {NgbActiveModal, NgbModalConfig} from "@ng-bootstrap/ng-bootstrap";
-import {Subscription} from "rxjs";
 import {PhoneService} from "../../../../service/phone.service";
 import {Country} from "../../../../model/country";
 import {COUNTRIES} from "../../../../model/countries";
@@ -25,8 +24,6 @@ export class PhoneEditModalComponent implements OnInit {
   loading: boolean;
   phoneForm: FormGroup;
 
-  private phoneAddSubscription: Subscription;
-
   preSelectedCountryCode: Country;
   selectedCountryCode: string = '';
 
@@ -39,66 +36,86 @@ export class PhoneEditModalComponent implements OnInit {
               private fb: FormBuilder,
               private phoneService: PhoneService) {
     config.backdrop = 'static';
-    this.sortedCountriesForSelect = COUNTRIES.sort((countryA, countryB) => countryA.name > countryB.name ? 1 : -1);
-
+    this.phoneListSortOnCreateComponent();
   }
 
   ngOnInit(): void {
-    this.preSelectedCountryCode = this.sortedCountriesForSelect
-      .find(value => value.dial_code === this.phoneToEdit.countryCode);
-    this.selectedCountryCode = this.preSelectedCountryCode.dial_code;
-
     this.createForm();
   }
 
-  private createForm() {
+  createForm() {
     this.phoneForm = this.fb.group({
       phoneNumber: [null, [Validators.required, Validators.pattern("[0-9 ]{5,12}")]]
     });
 
-    this.phoneForm.controls['phoneNumber'].setValue(this.phoneToEdit.phoneNumber);
+    this.setFormValue(this.phoneToEdit);
+  }
+
+  phoneListSortOnCreateComponent() {
+    this.sortedCountriesForSelect = COUNTRIES.sort((countryA, countryB) => countryA.name > countryB.name ? 1 : -1);
   }
 
   onClickSave() {
-    this.isSaved = false;
-    this.loading = true;
-    this.alertMessage = '';
+    this.reloadStats();
 
     this.phoneToEdit.countryCode = this.selectedCountryCode;
     this.phoneToEdit.phoneNumber = this.phoneForm.controls['phoneNumber'].value;
 
-    this.phoneAddSubscription = this.phoneService.editPhone(this.phoneToEdit).subscribe(() => {
-        this.loading = false;
-        this.isSaved = true;
+    this.phoneService.editPhone(this.phoneToEdit)
+      .subscribe(() =>
+          this.callBackOk(this.phoneToEdit),
+        error =>
+          this.callBackError(error)
+      );
+  }
 
-        this.alertType = 'success'
-        this.alertMessage = 'Phone number: (' + this.phoneToEdit.countryCode + ")" + this.phoneToEdit.phoneNumber + ' saved';
+  reloadStats() {
+    this.isSaved = false;
+    this.loading = true;
+    this.alertMessage = '';
+  }
 
-        this.phoneForm.reset();
-        this.phoneService.triggerOnReloadPhonesList();
-      },
-      error => {
-        this.isSaved = false;
+  callBackOk(phoneToEdit: Phone) {
+    this.loading = false;
+    this.isSaved = true;
 
-        this.alertType = 'danger'
-        this.alertMessage = SubscriptionErrorHandle(error);
+    const message = 'Phone number: (' + phoneToEdit.countryCode + ")" + phoneToEdit.phoneNumber + ' saved';
+    this.setAlert('success', message)
 
-        if (this.alertMessage)
-          this.loading = false;
-      }
-    );
+    this.phoneForm.reset();
+    this.phoneService.triggerOnReloadPhonesList();
+  }
+
+  callBackError(error: any) {
+    this.isSaved = false;
+
+    this.setAlert('danger', SubscriptionErrorHandle(error))
+
+    if (this.alertMessage)
+      this.loading = false;
+  }
+
+  setAlert(alertType: string, alertMessage: string) {
+    this.alertType = alertType;
+    this.alertMessage = alertMessage;
   }
 
   onCloseAlert() {
     this.alertMessage = '';
   }
 
-  selectChangeHandler(event: any) {
+  onChangeSelectedElement(event: any) {
     this.selectedCountryCode = event.target.value;
   }
 
-  ngOnDestroy(): void {
-    if (this.phoneAddSubscription)
-      this.phoneAddSubscription.unsubscribe();
+  setFormValue(phoneToEdit: Phone) {
+    this.preSelectedCountryCode = this.sortedCountriesForSelect
+      .find(value => value.dial_code === phoneToEdit.countryCode);
+    if (this.preSelectedCountryCode) {
+      this.selectedCountryCode = this.preSelectedCountryCode.dial_code;
+      this.phoneForm.controls['phoneNumber'].setValue(phoneToEdit.phoneNumber);
+    } else {
+      this.setAlert('danger', "Unknown input");
+    }
   }
 }

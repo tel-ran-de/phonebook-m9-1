@@ -5,11 +5,11 @@
     <span aria-hidden="true">&times;</span>
   </a>
 </div>
-<form [formGroup]="phoneForm" novalidate (ngSubmit)="onClickSave()" id="phone-form">
+<form [formGroup]="phoneForm" novalidate (ngSubmit)="onClickSave()" id="phone-form" *ngIf="preSelectedCountryCode">
   <div class="modal-body">
     <div class="form-group">
       <label for="cc-select">Select country code</label>
-      <select class="custom-select" (change)="selectChangeHandler($event)" id="cc-select" [disabled]="loading">
+      <select class="custom-select" (change)="onChangeSelectedElement($event)" id="cc-select" [disabled]="loading">
         <option selected [value]="preSelectedCountryCode.dial_code">
           {{preSelectedCountryCode.name}} ({{preSelectedCountryCode.dial_code}})
         </option>
@@ -36,16 +36,17 @@
       </div>
     </div>
   </div>
-
-  <div class="card-footer">
-    <p>
-      <ngb-alert *ngIf="alertMessage" type="{{alertType}}" (close)="onCloseAlert()" placement="top"
-                 ngbTooltip="close this window">
-        {{alertMessage}}
-      </ngb-alert>
-      <ngb-alert *ngIf="phoneForm.invalid && (phoneForm.dirty || phoneForm.touched)" type="info" [dismissible]="false">
-        Allowed length of the phone number must be between 5 and 12 digits
-      </ngb-alert>
-    </p>
-  </div>
 </form>
+<div class="card-footer">
+  <p>
+    <ngb-alert *ngIf="phoneForm.invalid && (phoneForm.dirty || phoneForm.touched)" type="info" [dismissible]="false"
+               class="text-center alert-form-invalid">
+      Allowed length of the phone number must be between 5 and 12 digits
+    </ngb-alert>
+    <ngb-alert *ngIf="alertMessage" type="{{alertType}}" (close)="onCloseAlert()"
+               [dismissible]="preSelectedCountryCode !== undefined" class="text-center alert-message">
+      {{alertMessage}}
+    </ngb-alert>
+  </p>
+</div>
+
