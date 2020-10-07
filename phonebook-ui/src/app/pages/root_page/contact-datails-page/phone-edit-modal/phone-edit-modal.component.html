@@ -41,7 +41,7 @@
   <p>
     <ngb-alert *ngIf="phoneForm.invalid && (phoneForm.dirty || phoneForm.touched)" type="info" [dismissible]="false"
                class="text-center alert-form-invalid">
-      Allowed length of the phone number must be between 5 and 12 digits
+      {{validationMessage}}
     </ngb-alert>
     <ngb-alert *ngIf="alertMessage" type="{{alertType}}" (close)="onCloseAlert()"
                [dismissible]="preSelectedCountryCode !== undefined" class="text-center alert-message">

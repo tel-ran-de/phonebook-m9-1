@@ -29,6 +29,7 @@ export class PhoneEditModalComponent implements OnInit {
 
   alertMessage: string;
   alertType: string;
+  validationMessage: string = 'Allowed length of the phone number must be between 5 and 12 digits';
 
 
   constructor(private config: NgbModalConfig,
