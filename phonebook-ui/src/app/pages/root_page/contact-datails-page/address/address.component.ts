@@ -1,63 +1,64 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {AddressService} from "src/app/service/address.service";
-import {Subscription} from "rxjs";
 import {Address} from "src/app/model/address";
 import {FormBuilder, FormGroup} from "@angular/forms";
+import {SubscriptionErrorHandle} from "../../../../service/subscriptionErrorHandle";
 
 @Component({
   selector: 'app-address',
   templateUrl: './address.component.html',
   styleUrls: ['./address.component.css']
 })
-export class AddressComponent implements OnInit, OnDestroy {
+export class AddressComponent implements OnInit {
 
   @Input()
   contactId: number;
 
-  addresses: Address[];
-  private addressGetAllContactSubscription: Subscription;
+  addressesFromServer: Address[];
+  addressesToDisplay: Address[] = [];
+
   searchFormAddress: FormGroup;
-  searchResultAddresses: Address[];
+  errorMessage: string;
+  loading: boolean;
 
   constructor(private addressService: AddressService, private fb: FormBuilder) {
   }
 
   ngOnInit(): void {
+    this.loading = true;
+
     this.searchFormAddress = this.fb.group({
       searchInput: []
     })
 
-    this.searchFormAddress.get("searchInput").valueChanges.subscribe(value => {
-      if (value.length === 0)
-        this.searchResultAddresses = null;
-      else
-        this.searchResultAddresses = this.search(value)
-    })
+    this.searchFormAddress.get("searchInput").valueChanges.subscribe(searchText =>
+      this.addressesToDisplay = this.search(searchText))
 
     this.reloadAddresses();
   }
 
-  private reloadAddresses(): void {
-    this.addressGetAllContactSubscription = this.addressService.getAllAddressesByContactId(this.contactId)
-      .subscribe(value => this.addresses = value);
+  reloadAddresses(): void {
+    this.addressService.getAllAddressesByContactId(this.contactId)
+      .subscribe(addresses => this.callbackOk(addresses), error => this.callbackError(error));
   }
 
-  sortBy(sortBy: string, reverseSort: boolean) {
-    this.addresses.sort((a, b) => a[sortBy] > b[sortBy] ? -1 : 1)
-    if (reverseSort)
-      this.addresses.reverse();
+  callbackOk(value: Address[]) {
+    this.errorMessage = ''
+    this.loading = false
+    this.addressesFromServer = value
+    this.addressesToDisplay = value;
   }
 
-  private search(text: string) {
-    return this.addresses.filter(value => {
+  callbackError(error: any) {
+    this.errorMessage = SubscriptionErrorHandle(error)
+    this.loading = false
+  }
+
+  search(text: string) {
+    return this.addressesFromServer.filter(addressItem => {
       const term = text.toLowerCase()
-      const valueToString = value.country + " " + value.city + " " + value.zip + " " + value.street
+      const valueToString = addressItem.country + " " + addressItem.city + " " + addressItem.zip + " " + addressItem.street
       return valueToString.toLowerCase().includes(term)
     })
-  }
-
-  ngOnDestroy(): void {
-    if (this.addressGetAllContactSubscription)
-      this.addressGetAllContactSubscription.unsubscribe();
   }
 }
