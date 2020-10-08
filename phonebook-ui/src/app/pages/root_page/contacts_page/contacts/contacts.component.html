@@ -6,23 +6,12 @@
   <app-contact-item [contactItem]="profile"></app-contact-item>
 </div>
 
-<ul ngbNav class="nav-tabs bg-secondary rounded text-white">
-  <li ngbNavItem class="d-flex align-items-center">
-    <div class="pl-3"><b>Contacts list</b></div>
-  </li>
-  <li ngbNavItem class="ml-auto">
-    <form [formGroup]="searchContactForm" id="search-form-contact">
-      <div class="form-group form-inline pr-3 pt-3">
-        <label for="input-search-contact">Search: </label>
-        <input class="form-control ml-2" type="text" formControlName="searchInput" placeholder="Search..."
-               id="input-search-contact">
-      </div>
-    </form>
-  </li>
-</ul>
+<div class="card-header bg-secondary text-white rounded">
+  <b>Contacts list</b>
+</div>
 
-<div *ngIf="contactsDisplay">
-  <div class="list-group" *ngFor="let contact of contactsDisplay" id="contacts-list">
+<div *ngIf="contacts">
+  <div class="list-group" *ngFor="let contact of contacts" id="contacts-list">
     <app-contact-item [contactItem]="contact"></app-contact-item>
   </div>
 </div>
