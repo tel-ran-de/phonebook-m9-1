@@ -1,5 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Phone} from "src/app/model/phone";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {PhoneEditModalComponent} from "../phone-edit-modal/phone-edit-modal.component";
 import {PhoneService} from "../../../../service/phone.service";
 
 @Component({
@@ -12,13 +14,19 @@ export class PhoneTableComponent implements OnInit {
   @Input()
   phonesToDisplay: Phone[];
 
-  constructor(private phoneService:PhoneService) {
+  constructor(private modalService: NgbModal,
+              private phoneService: PhoneService) {
   }
 
   ngOnInit(): void {
   }
 
-  onClickRemove(id: number) {
-    this.phoneService.removePhone(id);
+  onClickEdit(phoneToEdit: Phone) {
+    const modalRef = this.modalService.open(PhoneEditModalComponent);
+    modalRef.componentInstance.phoneToEdit = phoneToEdit;
+  }
+
+  onClickRemove(phoneId: number) {
+    this.phoneService.removePhone(phoneId);
   }
 }

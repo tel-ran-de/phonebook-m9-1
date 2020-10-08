@@ -8,16 +8,16 @@
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let phone of phonesToDisplay; index as i" id="row-id-{{i}}">
-      <td id="row-id-{{i}}-cell-country-code">
-        <ngb-highlight [result]="phone.countryCode"></ngb-highlight>
+    <tr class="col" *ngFor="let phoneItem of phonesToDisplay">
+      <td>
+        <ngb-highlight [result]="phoneItem.countryCode"></ngb-highlight>
       </td>
-      <td id="row-id-{{i}}-cell-phone-number">
-        <ngb-highlight [result]="phone.phoneNumber"></ngb-highlight>
+      <td>
+        <ngb-highlight [result]="phoneItem.phoneNumber"></ngb-highlight>
       </td>
       <td ngbDropdown class="nav-item ml-auto">
 
-        <button class="btn btn-outline-primary btn-block" ngbDropdownToggle id="row-id-{{i}}-btn-dropdown-action-phone">
+        <button class="btn btn-outline-primary btn-block" ngbDropdownToggle>
           <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-gear" fill="currentColor"
                xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd"
@@ -28,9 +28,9 @@
         </button>
 
         <div ngbDropdownMenu>
-          <button ngbDropdownItem id="row-id-{{i}}-btn-edit-phone">Edit</button>
-          <button ngbDropdownItem placement="bottom" ngbTooltip="permanently deleting" class="btn-remove-phone"
-                  (click)="onClickRemove(phone.id)">Remove</button>
+          <button ngbDropdownItem class="btn-edit-phone" (click)="onClickEdit(phoneItem)">Edit</button>
+          <button ngbDropdownItem class="btn-remove-phone" placement="bottom" ngbTooltip="permanently deleting" (click)="onClickRemove(phoneItem.id)">Remove
+          </button>
         </div>
 
       </td>
