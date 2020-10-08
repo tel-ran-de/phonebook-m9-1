@@ -3,6 +3,7 @@ import {Subscription} from "rxjs";
 import {ContactService} from 'src/app/service/contact.service';
 import {UserService} from 'src/app/service/user.service';
 import {Contact} from 'src/app/model/contact';
+import {FormBuilder, FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'app-contacts',
@@ -11,41 +12,72 @@ import {Contact} from 'src/app/model/contact';
 })
 export class ContactsComponent implements OnInit, OnDestroy {
 
+  private getAllContactsSubscription: Subscription;
   private getProfileSubscription: Subscription;
-  private getContactsSubscription: Subscription;
-  profile: Contact;
-  contacts: Contact[];
 
-  constructor(public contactService: ContactService, public userService: UserService) {
+  profile: Contact;
+  contactsFromServer: Contact[];
+  contactsDisplay: Contact[];
+
+  searchContactForm: FormGroup;
+
+  constructor(public contactService: ContactService,
+              public userService: UserService,
+              private fb: FormBuilder) {
   }
 
   ngOnInit(): void {
     this.getProfile();
     this.reloadContactsList();
+    this.createForm();
+
+    this.searchContactForm.get('searchInput').valueChanges.subscribe(value => {
+      this.contactsDisplay = this.searchContact(value)
+    })
+
     this.contactService.trigger$.subscribe(() => this.reloadContactsList());
   }
 
   private reloadContactsList() {
-    this.getProfileSubscription = this.contactService.getAllContacts()
-      .subscribe(value => this.contacts = value);
+    this.getAllContactsSubscription = this.contactService.getAllContacts()
+      .subscribe(contactList => this.callBackGetAllContactOk(contactList));
   }
 
   getProfile() {
     this.profile = new Contact();
     this.getProfileSubscription = this.contactService.getProfile()
-      .subscribe(value => {
-        if (!value.firstName)
-          value.firstName = 'No first name'
-        this.profile = value;
-      });
+      .subscribe(profile => this.callBackGetProfileOk(profile));
+  }
+
+  callBackGetProfileOk(value: Contact) {
+    if (!value.firstName)
+      value.firstName = 'No first name'
+    this.profile = value;
+  }
+
+  callBackGetAllContactOk(value: Contact[]) {
+    this.contactsDisplay = value;
+    this.contactsFromServer = value
+  }
+
+  createForm() {
+    this.searchContactForm = this.fb.group({
+      searchInput: []
+    });
+  }
+
+  searchContact(text: string) {
+    return this.contactsFromServer.filter(value => {
+      const term = text.toLowerCase()
+      const contact = value.firstName + value.lastName + value.description
+      return contact.toLowerCase().includes(term);
+    });
   }
 
   ngOnDestroy(): void {
     if (this.getProfileSubscription)
       this.getProfileSubscription.unsubscribe();
-
-    if (this.getContactsSubscription)
-      this.getContactsSubscription.unsubscribe();
+    if (this.getAllContactsSubscription)
+      this.getProfileSubscription.unsubscribe();
   }
-
 }
