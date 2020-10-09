@@ -6,8 +6,8 @@ import {Subject} from "rxjs";
 @Injectable({
   providedIn: 'root'
 })
-
 export class PhoneService {
+
   private _trigger = new Subject<void>();
 
   private readonly basePath = '/api/phone';
@@ -31,8 +31,12 @@ export class PhoneService {
     this._trigger.next();
   }
 
-  removePhone(id: number) {
-    this.http.delete(`${this.basePath}/${(id)}`)
+  editPhone(phoneToEdit: Phone) {
+    return this.http.put<Phone>(`${this.basePath}`, phoneToEdit);
+  }
+
+  removePhone(phoneId: number) {
+    this.http.delete(`${this.basePath}/${(phoneId)}`)
       .subscribe(() => this.triggerOnReloadPhonesList());
   }
 }

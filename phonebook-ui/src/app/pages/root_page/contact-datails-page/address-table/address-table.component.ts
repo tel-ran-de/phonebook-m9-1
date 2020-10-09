@@ -9,11 +9,27 @@ import {Address} from "src/app/model/address";
 export class AddressTableComponent implements OnInit {
 
   @Input()
-  addressesToDisplay: Address[];
+  sortedAddressesToDisplay: Address[];
+
+  reverseSort: boolean;
+  sortBy: string;
 
   constructor() {
   }
 
   ngOnInit(): void {
+  }
+
+  sort(sortBy: string) {
+    if (this.sortBy !== sortBy)
+      this.reverseSort = false;
+
+    this.sortBy = sortBy;
+    this.reverseSort = !this.reverseSort;
+
+    this.sortedAddressesToDisplay.sort((a, b) => a[sortBy] > b[sortBy] ? -1 : 1)
+
+    if (this.reverseSort)
+      this.sortedAddressesToDisplay.reverse();
   }
 }
