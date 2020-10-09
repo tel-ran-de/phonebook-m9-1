@@ -57,9 +57,7 @@ export class AddressAddModalComponent implements OnInit {
   }
 
   onClickSave() {
-    this.isSaved = false;
-    this.loading = true;
-    this.alertMessage = '';
+    this.reloadStats();
 
     this.address.contactId = this.contactId;
     this.address.country = this.selectedCountry;
@@ -72,26 +70,42 @@ export class AddressAddModalComponent implements OnInit {
     this.address.city = city === null ? '' : city;
     this.address.zip = zip === null ? '' : zip;
 
-    this.addressAddSubscription = this.addressService.addAddress(this.address).subscribe(() => {
-        this.loading = false;
-        this.isSaved = true;
-
-        this.alertType = 'success'
-        this.alertMessage = 'Address saved';
-
-        this.addressForm.reset();
-        this.addressService.triggerOnReloadAddressesList();
-      },
-      error => {
-        this.isSaved = false;
-
-        this.alertType = 'danger'
-        this.alertMessage = SubscriptionErrorHandle(error);
-
-        if (this.alertMessage)
-          this.loading = false;
-      }
+    this.addressAddSubscription = this.addressService.addAddress(this.address).subscribe(() =>
+        this.callBackOk(),
+      error =>
+        this.callBackError(error)
     );
+  }
+
+  reloadStats() {
+    this.isSaved = false;
+    this.loading = true;
+    this.alertMessage = '';
+  }
+
+  callBackOk() {
+    this.loading = false;
+    this.isSaved = true;
+
+    this.alertType = 'success'
+    this.alertMessage = 'Address saved';
+
+    this.addressForm.reset();
+    this.addressService.triggerOnReloadAddressesList();
+  }
+
+  callBackError(error: any) {
+    this.isSaved = false;
+
+    this.setAlert('danger', SubscriptionErrorHandle(error))
+
+    if (this.alertMessage)
+      this.loading = false;
+  }
+
+  setAlert(alertType: string, alertMessage: string) {
+    this.alertType = alertType;
+    this.alertMessage = alertMessage;
   }
 
   onCloseAlert() {
