@@ -3,6 +3,7 @@ import {PhoneService} from "src/app/service/phone.service";
 import {Phone} from "src/app/model/phone";
 import {Subscription} from "rxjs";
 import {FormBuilder, FormGroup} from "@angular/forms";
+import {SubscriptionErrorHandle} from "../../../../service/subscriptionErrorHandle";
 
 @Component({
   selector: 'app-phone',
@@ -14,10 +15,14 @@ export class PhoneComponent implements OnInit, OnDestroy {
   @Input()
   contactId: number;
 
-  phones: Phone[];
   private getAllPhoneByContactSubscription: Subscription;
   searchFormPhone: FormGroup;
-  searchResultPhones: Phone[];
+
+  phonesFromServer: Phone[] = [];
+  phonesToDisplay: Phone[] = [];
+
+  errorMessage: string;
+  loading: boolean;
 
   constructor(private phoneService: PhoneService, private fb: FormBuilder) {
   }
@@ -27,30 +32,39 @@ export class PhoneComponent implements OnInit, OnDestroy {
       searchInput: []
     })
 
-    this.searchFormPhone.get("searchInput").valueChanges.subscribe(value => {
-      if (value.length === 0)
-        this.searchResultPhones = null;
-      else
-        this.searchResultPhones = this.search(value)
-    })
+    this.reloadPhones();
 
-    this.reloadPhoneList();
-    this.phoneService.trigger$.subscribe(() => this.reloadPhoneList());
+    this.searchFormPhone.get("searchInput").valueChanges.subscribe(searchText => {
+      this.phonesToDisplay = this.search(searchText);
+
+    });
+
+    this.phoneService.trigger$.subscribe(() => this.reloadPhones());
   }
 
-  private reloadPhoneList(): void {
+  private reloadPhones(): void {
     this.getAllPhoneByContactSubscription = this.phoneService.getAllPhonesByContactId(this.contactId)
-      .subscribe(value => this.phones = value);
+      .subscribe(phones => {
+        this.callbackOk(phones)
+      }, error => {
+        this.callbackError(error);
+      });
   }
 
-  sortBy(sortBy: string, reverseSort: boolean) {
-    this.phones.sort((a, b) => a[sortBy] > b[sortBy] ? -1 : 1)
-    if (reverseSort)
-      this.phones.reverse();
+  callbackOk(value: Phone[]) {
+    this.errorMessage = ''
+    this.loading = false
+    this.phonesFromServer = value
+    this.phonesToDisplay = value;
   }
 
-  private search(text: string) {
-    return this.phones.filter(value => {
+  callbackError(error: any) {
+    this.errorMessage = SubscriptionErrorHandle(error)
+    this.loading = false
+  }
+
+  search(text: string) {
+    return this.phonesFromServer.filter(value => {
       const term = text.toLowerCase();
       const valueToString = value.countryCode + " " + value.phoneNumber;
       return valueToString.toLowerCase().includes(term)
