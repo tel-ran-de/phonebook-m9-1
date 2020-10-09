@@ -1,5 +1,4 @@
-export interface Address {
-  id: number;
+export class Address {
   street: string;
   zip: string;
   city: string;

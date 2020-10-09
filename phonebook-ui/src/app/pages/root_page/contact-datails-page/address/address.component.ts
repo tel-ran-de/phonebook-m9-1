@@ -35,6 +35,7 @@ export class AddressComponent implements OnInit {
       this.addressesToDisplay = this.search(searchText))
 
     this.reloadAddresses();
+    this.addressService.trigger$.subscribe(() => this.reloadAddresses());
   }
 
   reloadAddresses(): void {
