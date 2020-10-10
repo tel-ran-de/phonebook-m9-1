@@ -14,11 +14,27 @@ export class PhoneTableComponent implements OnInit {
   @Input()
   phonesToDisplay: Phone[];
 
+  reverseSort: boolean;
+  sortBy: string;
+
   constructor(private modalService: NgbModal,
               private phoneService: PhoneService) {
   }
 
   ngOnInit(): void {
+  }
+
+  sort(sortBy: string) {
+    if (this.sortBy !== sortBy)
+      this.reverseSort = false;
+
+    this.sortBy = sortBy;
+    this.reverseSort = !this.reverseSort;
+
+    this.phonesToDisplay.sort((a, b) => a[sortBy] > b[sortBy] ? -1 : 1)
+
+    if (this.reverseSort)
+      this.phonesToDisplay.reverse();
   }
 
   onClickEdit(phoneToEdit: Phone) {

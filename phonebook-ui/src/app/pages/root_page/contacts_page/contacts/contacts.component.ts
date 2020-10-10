@@ -69,4 +69,5 @@ export class ContactsComponent implements OnInit {
       return contact.toLowerCase().includes(term);
     });
   }
+
 }
