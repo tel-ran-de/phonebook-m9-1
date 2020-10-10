@@ -1,7 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Country} from "../../../../model/country";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {Subscription} from "rxjs";
 import {COUNTRIES} from "../../../../model/countries";
 import {NgbActiveModal, NgbModalConfig} from "@ng-bootstrap/ng-bootstrap";
 import {SubscriptionErrorHandle} from "../../../../service/subscriptionErrorHandle";
@@ -22,8 +21,6 @@ export class AddressAddModalComponent implements OnInit {
   isSaved: boolean;
   loading: boolean;
   addressForm: FormGroup;
-
-  private addressAddSubscription: Subscription;
 
   preSelectedCountry: Country;
   selectedCountry: string = '';
@@ -70,7 +67,7 @@ export class AddressAddModalComponent implements OnInit {
     this.address.city = city === null ? '' : city;
     this.address.zip = zip === null ? '' : zip;
 
-    this.addressAddSubscription = this.addressService.addAddress(this.address).subscribe(() =>
+    this.addressService.addAddress(this.address).subscribe(() =>
         this.callBackOk(),
       error =>
         this.callBackError(error)
@@ -114,10 +111,5 @@ export class AddressAddModalComponent implements OnInit {
 
   selectChangeHandler(event: any) {
     this.selectedCountry = event.target.value;
-  }
-
-  ngOnDestroy(): void {
-    if (this.addressAddSubscription)
-      this.addressAddSubscription.unsubscribe();
   }
 }
