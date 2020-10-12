@@ -35,7 +35,7 @@ export class ContactService {
   }
 
   removeContact(id: number) {
-    return this.http.delete(`${this.contactPath}/${id}`).subscribe(() => this.reload());
+    return this.http.delete(`${this.contactPath}/${id}`);
   }
 
   addContact(contact: Contact) {
