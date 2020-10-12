@@ -1,5 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Subscription} from "rxjs";
+import {Component, OnInit} from '@angular/core';
 import {ContactService} from 'src/app/service/contact.service';
 import {UserService} from 'src/app/service/user.service';
 import {Contact} from 'src/app/model/contact';
@@ -10,10 +9,7 @@ import {FormBuilder, FormGroup} from "@angular/forms";
   templateUrl: './contacts.component.html',
   styleUrls: ['./contacts.component.css']
 })
-export class ContactsComponent implements OnInit, OnDestroy {
-
-  private getAllContactsSubscription: Subscription;
-  private getProfileSubscription: Subscription;
+export class ContactsComponent implements OnInit {
 
   profile: Contact;
   contactsFromServer: Contact[];
@@ -31,21 +27,21 @@ export class ContactsComponent implements OnInit, OnDestroy {
     this.reloadContactsList();
     this.createForm();
 
-    this.searchContactForm.get('searchInput').valueChanges.subscribe(value => {
-      this.contactsDisplay = this.searchContact(value)
-    })
+    this.searchContactForm.get('searchInput').valueChanges.subscribe(value =>
+      this.contactsDisplay = this.searchContact(value));
 
-    this.contactService.trigger$.subscribe(() => this.reloadContactsList());
+    this.contactService.trigger$
+      .subscribe(() => this.reloadContactsList());
   }
 
   private reloadContactsList() {
-    this.getAllContactsSubscription = this.contactService.getAllContacts()
+    this.contactService.getAllContacts()
       .subscribe(contactList => this.callBackGetAllContactOk(contactList));
   }
 
   getProfile() {
     this.profile = new Contact();
-    this.getProfileSubscription = this.contactService.getProfile()
+    this.contactService.getProfile()
       .subscribe(profile => this.callBackGetProfileOk(profile));
   }
 
@@ -57,7 +53,7 @@ export class ContactsComponent implements OnInit, OnDestroy {
 
   callBackGetAllContactOk(value: Contact[]) {
     this.contactsDisplay = value;
-    this.contactsFromServer = value
+    this.contactsFromServer = value;
   }
 
   createForm() {
@@ -68,16 +64,10 @@ export class ContactsComponent implements OnInit, OnDestroy {
 
   searchContact(text: string) {
     return this.contactsFromServer.filter(value => {
-      const term = text.toLowerCase()
+      const term = text.toLowerCase();
       const contact = value.firstName + value.lastName + value.description
       return contact.toLowerCase().includes(term);
     });
   }
 
-  ngOnDestroy(): void {
-    if (this.getProfileSubscription)
-      this.getProfileSubscription.unsubscribe();
-    if (this.getAllContactsSubscription)
-      this.getProfileSubscription.unsubscribe();
-  }
 }

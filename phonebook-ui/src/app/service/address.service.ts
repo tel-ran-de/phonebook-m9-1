@@ -1,12 +1,14 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Address} from "../model/address";
-import {Observable} from "rxjs";
+import {Subject} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AddressService {
+
+  private _trigger = new Subject<void>();
 
   private readonly basePath = '/api/address';
 
@@ -15,5 +17,17 @@ export class AddressService {
 
   getAllAddressesByContactId(contactId: number) {
     return this.http.get<Address[]>(`${this.basePath}/${(contactId)}/all`);
+  }
+
+  addAddress(address: Address) {
+    return this.http.post<Address>(`${(this.basePath)}`, address);
+  }
+
+  get trigger$() {
+    return this._trigger.asObservable();
+  }
+
+  triggerOnReloadAddressesList() {
+    this._trigger.next();
   }
 }
