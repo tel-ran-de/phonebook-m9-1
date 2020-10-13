@@ -3,7 +3,7 @@ import {ActivatedRoute} from "@angular/router";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {PhoneAddModalComponent} from "../phone-add-modal/add-phone-modal.component";
 import {AddressAddModalComponent} from "../address-add-modal/address-add-modal.component";
-import {ContactRemoveModalComponent} from "../contact-remove-modal/contact-remove-modal.component";
+
 
 @Component({
   selector: 'app-contact-details',
@@ -32,11 +32,6 @@ export class ContactDetailsComponent implements OnInit, OnDestroy {
 
   openModalAddAddress() {
     const modalRef =  this.modalService.open(AddressAddModalComponent);
-    modalRef.componentInstance.contactId = this.contactId;
-  }
-
-  removeContact() {
-    const modalRef =  this.modalService.open(ContactRemoveModalComponent);
     modalRef.componentInstance.contactId = this.contactId;
   }
 }

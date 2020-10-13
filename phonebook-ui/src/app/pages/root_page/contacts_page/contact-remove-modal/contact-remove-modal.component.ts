@@ -1,7 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {NgbActiveModal, NgbModalConfig} from "@ng-bootstrap/ng-bootstrap";
 import {ContactService} from "../../../../service/contact.service";
-import {Router} from "@angular/router";
 import {SubscriptionErrorHandle} from "../../../../service/subscriptionErrorHandle";
 
 @Component({
@@ -23,8 +22,7 @@ export class ContactRemoveModalComponent implements OnInit {
 
   constructor(private config: NgbModalConfig,
               public activeModal: NgbActiveModal,
-              private contactService: ContactService,
-              private router: Router) {
+              private contactService: ContactService) {
     config.backdrop = 'static';
   }
 
@@ -50,8 +48,7 @@ export class ContactRemoveModalComponent implements OnInit {
 
   callbackOk() {
     this.loading = false;
-
-    this.router.navigate(['./contacts']);
+    this.contactService.triggerOnReloadContactsList();
     this.activeModal.close();
   }
 

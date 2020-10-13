@@ -14,8 +14,7 @@
       <button *ngIf="!loading" type="button" class="btn btn-warning btn-block" (click)="onClickRemove()"
               [disabled]="!isChecked"
               [class.btn-danger]="isChecked"
-              id="submit-remove">Remove
-        contact
+              id="submit-remove">Remove contact
       </button>
       <button *ngIf="loading" class="btn btn-warning btn-block" type="button" disabled>
         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
