@@ -1,4 +1,4 @@
-<div class="nav navbar row bg-light">
+<div class="nav navbar row">
   <form [formGroup]="searchFormAddress" id="search-form-address">
     <div class="form-group form-inline pt-2">
       Search: <label>
@@ -8,7 +8,6 @@
     </div>
   </form>
 </div>
-
 <app-address-table *ngIf="addressesFromServer" [sortedAddressesToDisplay]="addressesToDisplay"></app-address-table>
 
 <div *ngIf="addressesToDisplay.length === 0 && !errorMessage && !loading">

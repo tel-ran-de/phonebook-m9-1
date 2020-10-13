@@ -30,4 +30,9 @@ export class AddressService {
   triggerOnReloadAddressesList() {
     this._trigger.next();
   }
+
+  removeAddress(addressId: number) {
+    this.http.delete(`${this.basePath}/${(addressId)}`)
+      .subscribe(() => this.triggerOnReloadAddressesList());
+  }
 }
