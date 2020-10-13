@@ -1,5 +1,5 @@
 <div class="d-flex justify-content-center" *ngIf="sortedEmailsToDisplay">
-  <table class="w-75 table table-striped" id="items-table-email">
+  <table class="table table-striped" id="items-table-email">
     <thead>
     <tr>
       <th scope="col" class="w-95">
@@ -9,15 +9,15 @@
           </span>
         </a>
       </th>
-      <th scope="col" class="w-5 ml-auto">Action</th>
+      <th scope="col" class="w-5 text-center">Action</th>
     </tr>
     </thead>
     <tbody>
     <tr *ngFor="let email of sortedEmailsToDisplay">
-      <td class="row-table">
+      <td class="row-table w-95">
         <ngb-highlight [result]="email.email"></ngb-highlight>
       </td>
-      <td ngbDropdown class="nav-item">
+      <td ngbDropdown class="nav-item w-5">
 
         <button class="btn btn-outline-light btn-block" ngbDropdownToggle>
           <app-action-btn-icon></app-action-btn-icon>

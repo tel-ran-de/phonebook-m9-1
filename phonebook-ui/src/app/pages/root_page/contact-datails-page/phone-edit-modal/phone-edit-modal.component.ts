@@ -63,11 +63,7 @@ export class PhoneEditModalComponent implements OnInit {
     this.phoneToEdit.phoneNumber = this.phoneForm.controls['phoneNumber'].value;
 
     this.phoneService.editPhone(this.phoneToEdit)
-      .subscribe(() =>
-          this.callBackOk(this.phoneToEdit),
-        error =>
-          this.callBackError(error)
-      );
+      .subscribe(() => this.callBackOkPhoneEdit(this.phoneToEdit), error => this.callBackErrorPhoneEdit(error));
   }
 
   reloadStats() {
@@ -76,7 +72,7 @@ export class PhoneEditModalComponent implements OnInit {
     this.alertMessage = '';
   }
 
-  callBackOk(phoneToEdit: Phone) {
+  callBackOkPhoneEdit(phoneToEdit: Phone) {
     this.loading = false;
     this.isSaved = true;
 
@@ -87,7 +83,7 @@ export class PhoneEditModalComponent implements OnInit {
     this.phoneService.triggerOnReloadPhonesList();
   }
 
-  callBackError(error: any) {
+  callBackErrorPhoneEdit(error: any) {
     this.isSaved = false;
 
     this.setAlert('danger', SubscriptionErrorHandle(error))
