@@ -8,7 +8,6 @@
     </div>
   </form>
 </div>
-
 <app-address-table *ngIf="addressesFromServer" [sortedAddressesToDisplay]="addressesToDisplay"></app-address-table>
 
 <div *ngIf="addressesToDisplay.length === 0 && !errorMessage && !loading">
