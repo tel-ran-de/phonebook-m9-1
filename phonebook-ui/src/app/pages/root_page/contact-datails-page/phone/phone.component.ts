@@ -28,6 +28,7 @@ export class PhoneComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.loading = true
     this.searchFormPhone = this.fb.group({
       searchInput: []
     })
