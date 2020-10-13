@@ -37,6 +37,7 @@ import {PhoneEditModalComponent} from './pages/root_page/contact-datails-page/ph
 import {PhoneAddModalComponent} from "./pages/root_page/contact-datails-page/phone-add-modal/add-phone-modal.component";
 import {SortIconComponent} from './pages/root_page/contact-datails-page/sort-icon/sort-icon.component';
 import {ActionBtnIconComponent} from './pages/root_page/contact-datails-page/action-btn-icon/action-btn-icon.component';
+import {AddressAddModalComponent} from './pages/root_page/contact-datails-page/address-add-modal/address-add-modal.component';
 
 @NgModule({
   declarations: [
@@ -68,6 +69,7 @@ import {ActionBtnIconComponent} from './pages/root_page/contact-datails-page/act
     SortIconComponent,
     ActionBtnIconComponent,
     PhoneEditModalComponent,
+    AddressAddModalComponent,
   ],
   imports: [
     BrowserModule,

@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {PhoneAddModalComponent} from "../phone-add-modal/add-phone-modal.component";
-import {EmailAddModalComponent} from "../email-add-modal/add-email-modal.component";
+import {AddressAddModalComponent} from "../address-add-modal/address-add-modal.component";
 
 @Component({
   selector: 'app-contact-details',
@@ -24,13 +24,13 @@ export class ContactDetailsComponent implements OnInit, OnDestroy {
     this.contactId = null;
   }
 
-  openModal() {
+  openModalAddPhone() {
     const modalRef =  this.modalService.open(PhoneAddModalComponent);
     modalRef.componentInstance.contactId = this.contactId;
   }
 
-  openModalAddEmail() {
-    const modalRef =  this.modalService.open(EmailAddModalComponent);
+  openModalAddAddress() {
+    const modalRef =  this.modalService.open(AddressAddModalComponent);
     modalRef.componentInstance.contactId = this.contactId;
   }
 }
