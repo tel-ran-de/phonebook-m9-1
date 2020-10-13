@@ -52,29 +52,33 @@ export class EmailAddModalComponent implements OnInit {
     this.email.email = this.emailForm.controls['email'].value;
     this.email.contactId = this.contactId;
 
-    this.emailAddSubscription = this.emailService.addEmail(this.email).subscribe(() => {
-        this.loading = false;
-        this.isSaved = true;
-
-        this.alertType = 'success'
-        this.alertMessage = 'Email: ' + this.email.email + ' saved';
-
-        this.emailForm.reset();
-        this.emailService.triggerOnReloadEmailList();
-      },
-      error => {
-        this.isSaved = false;
-
-        this.alertType = 'danger'
-        this.alertMessage = SubscriptionErrorHandle(error);
-
-        if (this.alertMessage)
-          this.loading = false;
-      }
-    );
+    this.emailAddSubscription = this.emailService.addEmail(this.email).subscribe(() => this.callBackOkAddEmail(),
+      error => this.callBackErrorAddEmail(error));
   }
 
-  onCloseAlert() {
-    this.alertMessage = '';
+  callBackOkAddEmail() {
+    this.loading = false;
+    this.isSaved = true;
+
+    this.alertType = 'success'
+    this.alertMessage = 'Email: ' + this.email.email + ' saved';
+
+    this.emailForm.reset();
+    this.emailService.triggerOnReloadEmailList();
   }
+
+  callBackErrorAddEmail(error: any) {
+    this.isSaved = false;
+
+    this.alertType = 'danger'
+    this.alertMessage = SubscriptionErrorHandle(error);
+
+    if (this.alertMessage)
+      this.loading = false;
+  }
+
+onCloseAlert()
+{
+  this.alertMessage = '';
+}
 }

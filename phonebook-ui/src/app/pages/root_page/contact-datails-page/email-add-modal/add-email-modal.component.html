@@ -1,4 +1,4 @@
-<div class="modal-header" id="add-contact-modal">
+<div class="modal-header" id="add-email-modal">
   <h4 class="modal-title">Add new email</h4>
   <a type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')" placement="bottom"
      ngbTooltip="close this window">
@@ -7,10 +7,10 @@
 </div>
 <form [formGroup]="emailForm" novalidate (ngSubmit)="onClickSave()" id="email-form">
   <div class="modal-body">
-    <label for="id">Email</label>
+    <label for="input-email">Email</label>
     <div class="input-group mb-3">
       <input class="form-control" type="email" placeholder="Email..." [readOnly]="loading"
-             formControlName="email" id="id">
+             formControlName="email" id="input-email">
       <div class="input-group-append">
         <button *ngIf="!loading" [disabled]="emailForm.invalid" class="btn btn-primary" type="submit">Save email
         </button>
