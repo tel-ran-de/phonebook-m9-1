@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Address} from "src/app/model/address";
+import {AddressService} from "../../../../service/address.service";
 
 @Component({
   selector: 'app-address-table',
@@ -14,7 +15,7 @@ export class AddressTableComponent implements OnInit {
   reverseSort: boolean;
   sortBy: string;
 
-  constructor() {
+  constructor(private addressService: AddressService) {
   }
 
   ngOnInit(): void {
@@ -31,5 +32,9 @@ export class AddressTableComponent implements OnInit {
 
     if (this.reverseSort)
       this.sortedAddressesToDisplay.reverse();
+  }
+
+  onClickRemove(addressId: number) {
+    this.addressService.removeAddress(addressId);
   }
 }
