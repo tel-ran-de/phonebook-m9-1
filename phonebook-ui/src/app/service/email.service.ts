@@ -32,4 +32,9 @@ export class EmailService {
   triggerOnReloadEmailList() {
     this._trigger.next();
   }
-}
+
+  addEmail(email: Email) {
+      return this.http.post<Email>(`${(this.basePath)}`, email);
+    }
+  }
+

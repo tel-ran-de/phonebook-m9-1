@@ -27,6 +27,7 @@ import {ContactDetailsComponent} from "./pages/root_page/contact-datails-page/co
 import {PhoneComponent} from "./pages/root_page/contact-datails-page/phone/phone.component";
 import {AddressComponent} from "./pages/root_page/contact-datails-page/address/address.component";
 import {EmailComponent} from "./pages/root_page/contact-datails-page/email/email.component";
+import {EmailAddModalComponent} from "./pages/root_page/contact-datails-page/email-add-modal/add-email-modal.component";
 import {AddContactModalComponent} from "./pages/root_page/add-contact-modal/add-contact-modal.component";
 import {ContactComponent} from "./pages/root_page/contact-datails-page/contact/contact.component";
 import {AddressTableComponent} from './pages/root_page/contact-datails-page/address-table/address-table.component';
@@ -61,6 +62,7 @@ import {ActionBtnIconComponent} from './pages/root_page/contact-datails-page/act
     ContactComponent,
     AddressTableComponent,
     EmailTableComponent,
+    EmailAddModalComponent,
     PhoneTableComponent,
     PhoneAddModalComponent,
     SortIconComponent,
