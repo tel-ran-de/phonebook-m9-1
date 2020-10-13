@@ -14,7 +14,7 @@ export class AddressComponent implements OnInit {
   @Input()
   contactId: number;
 
-  addressesFromServer: Address[];
+  addressesFromServer: Address[] = [];
   addressesToDisplay: Address[] = [];
 
   searchFormAddress: FormGroup;
