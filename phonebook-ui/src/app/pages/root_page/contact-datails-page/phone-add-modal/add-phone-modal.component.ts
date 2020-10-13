@@ -1,7 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {NgbActiveModal, NgbModalConfig} from "@ng-bootstrap/ng-bootstrap";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {Subscription} from "rxjs";
 import {PhoneService} from "src/app//service/phone.service";
 import {Phone} from "src/app//model/phone";
 import {Country} from "src/app/model/country";
@@ -16,14 +15,12 @@ import {SubscriptionErrorHandle} from "src/app/service/subscriptionErrorHandle";
 export class PhoneAddModalComponent implements OnInit {
 
   @Input()
-  private contactId: number;
+  contactId: number;
   sortedCountriesForSelect: Country[];
 
   isSaved: boolean;
   loading: boolean;
   phoneForm: FormGroup;
-
-  private phoneAddSubscription: Subscription;
 
   preSelectedCountryCode: Country;
   selectedCountryCode: string = '';
@@ -63,26 +60,29 @@ export class PhoneAddModalComponent implements OnInit {
     this.phone.phoneNumber = this.phoneForm.controls['phoneNumber'].value;
     this.phone.contactId = this.contactId;
 
-    this.phoneAddSubscription = this.phoneService.addPhone(this.phone).subscribe(() => {
-        this.loading = false;
-        this.isSaved = true;
+    this.phoneService.addPhone(this.phone)
+      .subscribe(() => this.callBackOkAddPhone(), error => this.callBackErrorAddPhone(error));
+  }
 
-        this.alertType = 'success'
-        this.alertMessage = 'Phone number: (' + this.phone.countryCode + ")" + this.phone.phoneNumber + ' saved';
+  callBackOkAddPhone() {
+    this.loading = false;
+    this.isSaved = true;
 
-        this.phoneForm.reset();
-        this.phoneService.triggerOnReloadPhonesList();
-      },
-      error => {
-        this.isSaved = false;
+    this.alertType = 'success'
+    this.alertMessage = 'Phone number: (' + this.phone.countryCode + ")" + this.phone.phoneNumber + ' saved';
 
-        this.alertType = 'danger'
-        this.alertMessage = SubscriptionErrorHandle(error);
+    this.phoneForm.reset();
+    this.phoneService.triggerOnReloadPhonesList();
+  }
 
-        if (this.alertMessage)
-          this.loading = false;
-      }
-    );
+  callBackErrorAddPhone(error: any) {
+    this.isSaved = false;
+
+    this.alertType = 'danger'
+    this.alertMessage = SubscriptionErrorHandle(error);
+
+    if (this.alertMessage)
+      this.loading = false;
   }
 
   onCloseAlert() {
@@ -91,10 +91,5 @@ export class PhoneAddModalComponent implements OnInit {
 
   selectChangeHandler(event: any) {
     this.selectedCountryCode = event.target.value;
-  }
-
-  ngOnDestroy(): void {
-    if (this.phoneAddSubscription)
-      this.phoneAddSubscription.unsubscribe();
   }
 }
