@@ -16,28 +16,28 @@
       <div class="card-body" *ngIf="contactToDisplay">
         <form [formGroup]="editContactForm" novalidate (ngSubmit)="onClickSave()" id="edit-contact-form">
           <div class="row">
-            <div class="col-sm-2" id="contact-first-name"><p><b>First name: </b></p></div>
-            <div *ngIf="!isEditStat" class="col-sm-10 d-flex justify-content-between">
+            <div class="col-sm-2" ><p><b>First name: </b></p></div>
+            <div *ngIf="!isEditStat" class="col-sm-10" id="contact-first-name">
               {{contactToDisplay.firstName}}
             </div>
             <div *ngIf="isEditStat" class="col-sm-10">
-              <input class="form-control" type="text" formControlName="firstName">
+              <input class="form-control" type="text" formControlName="firstName" name="input-ec-firstName">
             </div>
           </div>
           <div class="row">
-            <div class="col-sm-2" id="contact-last-name"><p><b>Last name: </b></p></div>
-            <div *ngIf="!isEditStat" class="col-sm-10">{{contactToDisplay.lastName}}</div>
+            <div class="col-sm-2"><p><b>Last name: </b></p></div>
+            <div *ngIf="!isEditStat" class="col-sm-10" id="contact-last-name">{{contactToDisplay.lastName}}</div>
             <div *ngIf="isEditStat" class="col-sm-10">
-              <input class="form-control" type="text" formControlName="lastName">
+              <input class="form-control" type="text" formControlName="lastName" name="input-ec-lastName">
             </div>
           </div>
           <div class="row">
-            <div class="col-sm-2" id="contact-description"><p><b>About: </b></p></div>
-            <div *ngIf="!isEditStat" class="col-sm-10">
+            <div class="col-sm-2"><p><b>About: </b></p></div>
+            <div *ngIf="!isEditStat" class="col-sm-10" id="contact-description">
               {{contactToDisplay.description}}
             </div>
             <div *ngIf="isEditStat" class="col-sm-10">
-              <textarea class="form-control" type="text" formControlName="description"></textarea>
+              <textarea class="form-control" type="text" formControlName="description" name="input-ec-description"></textarea>
             </div>
           </div>
           <div *ngIf="isEditStat" class="row pt-2">
@@ -58,11 +58,11 @@
             </div>
             <div class="col-sm-3">
               <div class="row d-flex justify-content-end mt-1">
-                <button (click)="onClickCancel()" class="btn btn-secondary" type="button">Cancel</button>
-                <button *ngIf="!loading" [disabled]="editContactForm.invalid" class="btn btn-primary" type="submit">
+                <button (click)="onClickCancel()" class="btn btn-secondary cancel-btn-ec" type="button">Cancel</button>
+                <button *ngIf="!loading" [disabled]="editContactForm.invalid" class="btn btn-primary submit-btn-ec" type="submit">
                   Save contact
                 </button>
-                <button *ngIf="loading" class="btn btn-primary" disabled type="button">
+                <button *ngIf="loading" class="btn btn-primary" disabled type="button" id="loading-spinner-btn-ec">
                   <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                   Loading...
                 </button>
