@@ -1,10 +1,13 @@
 <div class="nav navbar row">
   <form [formGroup]="searchFormEmail" id="search-form-email">
-    <div class="form-group form-inline pt-2 ml-auto">
+    <div class="form-group form-inline pt-2 mr-auto">
       <label for="search">Search: </label>
       <input class="form-control ml-2" type="text" formControlName="searchInput" placeholder="Search..." id="search">
     </div>
   </form>
+  <div class="ml-auto">
+    <button class="btn btn-info text-white" id="btn-add-phone" (click)="openModalAddEmail()">Add email</button>
+  </div>
 </div>
 <app-email-table *ngIf="emailsToDisplay" [sortedEmailsToDisplay]="emailsToDisplay"></app-email-table>
 

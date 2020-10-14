@@ -3,6 +3,8 @@ import {PhoneService} from "src/app/service/phone.service";
 import {Phone} from "src/app/model/phone";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {SubscriptionErrorHandle} from "../../../../service/subscriptionErrorHandle";
+import {PhoneAddModalComponent} from "../phone-add-modal/add-phone-modal.component";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-phone',
@@ -22,7 +24,9 @@ export class PhoneComponent implements OnInit {
   errorMessage: string;
   loading: boolean;
 
-  constructor(private phoneService: PhoneService, private fb: FormBuilder) {
+  constructor(private phoneService: PhoneService,
+              private fb: FormBuilder,
+              private modalService: NgbModal) {
   }
 
   ngOnInit(): void {
@@ -63,5 +67,10 @@ export class PhoneComponent implements OnInit {
       const valueToString = value.countryCode + " " + value.phoneNumber;
       return valueToString.toLowerCase().includes(term)
     })
+  }
+
+  openModalAddPhone() {
+    const modalRef = this.modalService.open(PhoneAddModalComponent);
+    modalRef.componentInstance.contactId = this.contactId;
   }
 }

@@ -3,6 +3,8 @@ import {AddressService} from "src/app/service/address.service";
 import {Address} from "src/app/model/address";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {SubscriptionErrorHandle} from "../../../../service/subscriptionErrorHandle";
+import {AddressAddModalComponent} from "../address-add-modal/address-add-modal.component";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-address',
@@ -21,7 +23,9 @@ export class AddressComponent implements OnInit {
   errorMessage: string;
   loading: boolean;
 
-  constructor(private addressService: AddressService, private fb: FormBuilder) {
+  constructor(private addressService: AddressService,
+              private fb: FormBuilder,
+              private modalService: NgbModal) {
   }
 
   ngOnInit(): void {
@@ -61,5 +65,10 @@ export class AddressComponent implements OnInit {
       const valueToString = addressItem.country + " " + addressItem.city + " " + addressItem.zip + " " + addressItem.street
       return valueToString.toLowerCase().includes(term)
     })
+  }
+
+  openModalAddAddress() {
+    const modalRef = this.modalService.open(AddressAddModalComponent);
+    modalRef.componentInstance.contactId = this.contactId;
   }
 }

@@ -3,6 +3,8 @@ import {EmailService} from "src/app/service/email.service";
 import {Email} from "src/app/model/email";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {SubscriptionErrorHandle} from "src/app/service/subscriptionErrorHandle";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {EmailAddModalComponent} from "../email-add-modal/add-email-modal.component";
 
 @Component({
   selector: 'app-email',
@@ -20,7 +22,9 @@ export class EmailComponent implements OnInit {
   errorMessage: string;
   loading: boolean;
 
-  constructor(private emailService: EmailService, private fb: FormBuilder) {
+  constructor(private emailService: EmailService,
+              private fb: FormBuilder,
+              private modalService: NgbModal) {
   }
 
   ngOnInit(): void {
@@ -64,5 +68,10 @@ export class EmailComponent implements OnInit {
       const term = text.toLowerCase()
       return emailItem.email.toLowerCase().includes(term)
     })
+  }
+
+  openModalAddEmail() {
+    const modalRef = this.modalService.open(EmailAddModalComponent);
+    modalRef.componentInstance.contactId = this.contactId;
   }
 }
