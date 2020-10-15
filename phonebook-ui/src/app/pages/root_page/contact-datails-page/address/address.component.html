@@ -1,12 +1,15 @@
 <div class="nav navbar row">
   <form [formGroup]="searchFormAddress" id="search-form-address">
-    <div class="form-group form-inline pt-2">
+    <div class="form-group form-inline pt-2 mr-auto">
       Search: <label>
       <input class="form-control ml-2" type="text" formControlName="searchInput" placeholder="Search..."
              id="search">
     </label>
     </div>
   </form>
+  <div class="ml-auto">
+    <button class="btn btn-info text-white" id="btn-add-phone" (click)="openModalAddAddress()">Add address</button>
+  </div>
 </div>
 <app-address-table *ngIf="addressesFromServer" [sortedAddressesToDisplay]="addressesToDisplay"></app-address-table>
 

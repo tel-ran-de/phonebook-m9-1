@@ -1,11 +1,14 @@
 <div class="nav navbar row">
   <form [formGroup]="searchFormPhone" id="search-form-phone">
-    <div class="form-group form-inline pt-2 ml-auto">
+    <div class="form-group form-inline pt-2 mr-auto">
       <label for="search">Search: </label>
       <input class="form-control ml-2" type="text" formControlName="searchInput" placeholder="Search..."
              id="search">
     </div>
   </form>
+  <div class="ml-auto">
+    <button class="btn btn-info text-white" id="btn-add-phone" (click)="openModalAddPhone()">Add phone</button>
+  </div>
 </div>
 <app-phone-table *ngIf="phonesToDisplay" [phonesToDisplay]="phonesToDisplay"></app-phone-table>
 
