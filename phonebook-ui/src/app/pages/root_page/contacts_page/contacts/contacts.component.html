@@ -21,8 +21,8 @@
   </li>
 </ul>
 
-<div *ngIf="contactsDisplay">
-  <div class="list-group" *ngFor="let contact of contactsDisplay" id="contacts-list">
+<div *ngIf="contactsDisplay" id="contacts-list">
+  <div class="list-group" *ngFor="let contact of contactsDisplay">
     <app-contact-item [contactItem]="contact"></app-contact-item>
   </div>
 </div>
