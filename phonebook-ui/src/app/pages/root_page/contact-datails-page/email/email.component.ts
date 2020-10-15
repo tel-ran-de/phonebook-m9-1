@@ -3,6 +3,8 @@ import {EmailService} from "src/app/service/email.service";
 import {Email} from "src/app/model/email";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {SubscriptionErrorHandle} from "src/app/service/subscriptionErrorHandle";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {EmailAddModalComponent} from "../email-add-modal/add-email-modal.component";
 import {Subscription} from "rxjs";
 
 @Component({
@@ -22,7 +24,9 @@ export class EmailComponent implements OnInit, OnDestroy {
   loading: boolean;
   private triggerSubscription: Subscription;
 
-  constructor(private emailService: EmailService, private fb: FormBuilder) {
+  constructor(private emailService: EmailService,
+              private fb: FormBuilder,
+              private modalService: NgbModal) {
   }
 
   ngOnInit(): void {
@@ -73,6 +77,11 @@ export class EmailComponent implements OnInit, OnDestroy {
     })
   }
 
+  openModalAddEmail() {
+    const modalRef = this.modalService.open(EmailAddModalComponent);
+    modalRef.componentInstance.contactId = this.contactId;
+  }
+  
   ngOnDestroy(): void {
     this.triggerSubscription.unsubscribe();
   }
