@@ -1,38 +1,75 @@
-<div class="d-flex justify-content-center" *ngIf="contactToDisplay">
-  <div class="w-75">
-
+<div class="d-flex justify-content-center">
+  <div class="w-100">
     <div class="card">
       <div class="card-header">
         <div class="row text-center">
           <h5>Contact info</h5>
-          <button type="button" class="btn btn-outline-primary ml-auto" id="btn-edit-contact">
-            Edit
-            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-wrench" fill="currentColor"
-                 xmlns="http://www.w3.org/2000/svg">
-              <path fill-rule="evenodd"
-                    d="M.102 2.223A3.004 3.004 0 0 0 3.78 5.897l6.341 6.252A3.003 3.003 0 0 0 13 16a3 3 0 1 0-.851-5.878L5.897 3.781A3.004 3.004 0 0 0 2.223.1l2.141 2.142L4 4l-1.757.364L.102 2.223zm13.37 9.019L13 11l-.471.242-.529.026-.287.445-.445.287-.026.529L11 13l.242.471.026.529.445.287.287.445.529.026L13 15l.471-.242.529-.026.287-.445.445-.287.026-.529L15 13l-.242-.471-.026-.529-.445-.287-.287-.445-.529-.026z"></path>
-            </svg>
+          <button type="button" class="btn btn-info ml-auto" id="btn-edit-contact"
+                  (click)="onClickEditContact()"
+                  [disabled]="isEditStat">Edit
+            <span>
+              <img class="ml-1" src="assets/icons/wrench.svg" alt="" width="20" height="20" title="">
+            </span>
           </button>
         </div>
       </div>
-      <div class="card-body">
-        <div class="row">
-          <div class="col-sm-2" id="contact-first-name"><p><b>First name: </b></p></div>
-          <div class="col-sm-10 d-flex justify-content-between">
-            {{contactToDisplay.firstName}}
+      <div class="card-body" *ngIf="contactToDisplay">
+        <form [formGroup]="editContactForm" novalidate (ngSubmit)="onClickSave()" id="edit-contact-form">
+          <div class="row">
+            <div class="col-sm-2" ><p><b>First name: </b></p></div>
+            <div *ngIf="!isEditStat" class="col-sm-10" id="contact-first-name">
+              {{contactToDisplay.firstName}}
+            </div>
+            <div *ngIf="isEditStat" class="col-sm-10">
+              <input class="form-control" type="text" formControlName="firstName" name="input-ec-firstName">
+            </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-2"  id="contact-last-name"><p><b>Last name: </b></p></div>
-          <div class="col-sm-10">{{contactToDisplay.lastName}}</div>
-        </div>
-
-        <div class="row">
-          <div class="col-sm-2"  id="contact-description"><p><b>About: </b></p></div>
-          <div class="col-sm-10">
-            {{contactToDisplay.description}}
+          <div class="row">
+            <div class="col-sm-2"><p><b>Last name: </b></p></div>
+            <div *ngIf="!isEditStat" class="col-sm-10" id="contact-last-name">{{contactToDisplay.lastName}}</div>
+            <div *ngIf="isEditStat" class="col-sm-10">
+              <input class="form-control" type="text" formControlName="lastName" name="input-ec-lastName">
+            </div>
           </div>
-        </div>
+          <div class="row">
+            <div class="col-sm-2"><p><b>About: </b></p></div>
+            <div *ngIf="!isEditStat" class="col-sm-10" id="contact-description">
+              {{contactToDisplay.description}}
+            </div>
+            <div *ngIf="isEditStat" class="col-sm-10">
+              <textarea class="form-control" type="text" formControlName="description" name="input-ec-description"></textarea>
+            </div>
+          </div>
+          <div *ngIf="isEditStat" class="row pt-2">
+            <hr>
+            <div class="col-sm-9">
+              <div class="alert-message-block">
+                <p>
+                  <ngb-alert type="danger" [dismissible]="false" id="form-error-firstName"
+                             *ngIf="editContactForm.invalid && (editContactForm.controls['firstName'].dirty || editContactForm.controls['firstName'].touched)">
+                    To add a contact, you must specify a name
+                  </ngb-alert>
+                </p>
+                <p>
+                  <ngb-alert *ngIf="alertMessage" type="danger" (close)="alertMessage = ''" id="error-message">
+                    {{alertMessage}}</ngb-alert>
+                </p>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <div class="row d-flex justify-content-end mt-1">
+                <button (click)="onClickCancel()" class="btn btn-secondary cancel-btn-ec" type="button">Cancel</button>
+                <button *ngIf="!loading" [disabled]="editContactForm.invalid" class="btn btn-primary submit-btn-ec" type="submit">
+                  Save contact
+                </button>
+                <button *ngIf="loading" class="btn btn-primary" disabled type="button" id="loading-spinner-btn-ec">
+                  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  Loading...
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
   </div>
