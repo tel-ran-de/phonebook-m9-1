@@ -1,3 +1,15 @@
-<button type="button" class="list-group-item list-group-item-action" routerLink="/contacts/{{contactItem.id}}">
-  <b>{{contactItem.firstName}}</b> {{contactItem.lastName}}
-</button>
+<div class="d-flex justify-content-between">
+  <button type="button" class="list-group-item list-group-item-action" routerLink="/contacts/{{contactItem.id}}"
+          [class.bg-dark]="isSelected"
+          [class.text-white]="isSelected">
+    <b>{{contactItem.firstName}}</b> {{contactItem.lastName}}
+  </button>
+
+  <button type="button" class="list-group-item"
+          (mouseover)="isSelected = true"
+          (mouseleave)="isSelected = false"
+          [class.bg-warning]="isSelected"
+          (click)="removeContact()">
+    <img class="ml-2 mr-2" src="/assets/icons/trash.svg" alt="" width="28" height="26" title="">
+  </button>
+</div>
