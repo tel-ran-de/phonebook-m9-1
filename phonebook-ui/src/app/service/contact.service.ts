@@ -53,4 +53,8 @@ export class ContactService {
   triggerOnReloadContactsList() {
     this._trigger.next();
   }
+
+  editContact(contactToEdit: Contact): Observable<any> {
+    return this.http.put<Contact>(`${this.contactPath}`, contactToEdit);
+  }
 }
