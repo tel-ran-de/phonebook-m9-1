@@ -1,15 +1,18 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {AddressService} from "src/app/service/address.service";
 import {Address} from "src/app/model/address";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {SubscriptionErrorHandle} from "../../../../service/subscriptionErrorHandle";
+import {AddressAddModalComponent} from "../address-add-modal/address-add-modal.component";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-address',
   templateUrl: './address.component.html',
   styleUrls: ['./address.component.css']
 })
-export class AddressComponent implements OnInit {
+export class AddressComponent implements OnInit, OnDestroy {
 
   @Input()
   contactId: number;
@@ -20,25 +23,34 @@ export class AddressComponent implements OnInit {
   searchFormAddress: FormGroup;
   errorMessage: string;
   loading: boolean;
+  private triggerSubscription: Subscription;
 
-  constructor(private addressService: AddressService, private fb: FormBuilder) {
+  constructor(private addressService: AddressService,
+              private fb: FormBuilder,
+              private modalService: NgbModal) {
   }
 
   ngOnInit(): void {
-    this.loading = true;
-
     this.searchFormAddress = this.fb.group({
       searchInput: []
     })
+
+    this.reloadAddresses();
 
     this.searchFormAddress.get("searchInput").valueChanges.subscribe(searchText =>
       this.addressesToDisplay = this.search(searchText))
 
     this.reloadAddresses();
-    this.addressService.trigger$.subscribe(() => this.reloadAddresses());
+    this.triggerSubscription = this.addressService.trigger$
+      .subscribe(() => {
+        this.addressesToDisplay = [];
+        this.reloadAddresses();
+      });
   }
 
   reloadAddresses(): void {
+    this.loading = true;
+
     this.addressService.getAllAddressesByContactId(this.contactId)
       .subscribe(addresses => this.callbackOk(addresses), error => this.callbackError(error));
   }
@@ -61,5 +73,14 @@ export class AddressComponent implements OnInit {
       const valueToString = addressItem.country + " " + addressItem.city + " " + addressItem.zip + " " + addressItem.street
       return valueToString.toLowerCase().includes(term)
     })
+  }
+
+  openModalAddAddress() {
+    const modalRef = this.modalService.open(AddressAddModalComponent);
+    modalRef.componentInstance.contactId = this.contactId;
+  }
+
+  ngOnDestroy(): void {
+    this.triggerSubscription.unsubscribe();
   }
 }

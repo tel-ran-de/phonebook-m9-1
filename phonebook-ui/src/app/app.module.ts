@@ -39,6 +39,7 @@ import {SortIconComponent} from './pages/root_page/contact-datails-page/sort-ico
 import {ActionBtnIconComponent} from './pages/root_page/contact-datails-page/action-btn-icon/action-btn-icon.component';
 import {AddressAddModalComponent} from './pages/root_page/contact-datails-page/address-add-modal/address-add-modal.component';
 import {ContactRemoveModalComponent} from "./pages/root_page/contacts_page/contact-remove-modal/contact-remove-modal.component";
+import {EmailEditModalComponent} from './pages/root_page/contact-datails-page/email-edit-modal/email-edit-modal.component';
 
 @NgModule({
   declarations: [
@@ -72,6 +73,7 @@ import {ContactRemoveModalComponent} from "./pages/root_page/contacts_page/conta
     PhoneEditModalComponent,
     AddressAddModalComponent,
     ContactRemoveModalComponent,
+    EmailEditModalComponent,
   ],
   imports: [
     BrowserModule,
