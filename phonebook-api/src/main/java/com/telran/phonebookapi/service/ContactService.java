@@ -42,7 +42,7 @@ public class ContactService {
         this.emailMapper = emailMapper;
     }
 
-    public Contact add(String firstName, String lastName, String description, String email) {
+    public void add(String firstName, String lastName, String description, String email) {
         String userId = email.toLowerCase().trim();
 
         User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException(USER_DOES_NOT_EXIST));
@@ -50,8 +50,6 @@ public class ContactService {
         contact.setLastName(lastName);
         contact.setDescription(description);
         contactRepository.save(contact);
-
-        return contact;
     }
 
     public Contact getById(int id) {
