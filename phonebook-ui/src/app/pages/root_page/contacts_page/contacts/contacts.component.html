@@ -1,22 +1,24 @@
-<div class="card-header bg-secondary text-white rounded">
+<div class="card-header bg-secondary text-white d-flex align-items-center">
   <b>My profile</b>
 </div>
 
 <div class="list-group" *ngIf="profile" id="profile">
-  <app-contact-item [contactItem]="profile"></app-contact-item>
+  <div class="d-flex justify-content-between pb-2">
+    <button type="button" class="list-group-item list-group-item-action" routerLink="/contacts/{{profile.id}}">
+      <b>{{profile.firstName}}</b> {{profile.lastName}}
+    </button>
+  </div>
 </div>
 
-<ul ngbNav class="nav-tabs bg-secondary rounded text-white">
-  <li ngbNavItem class="d-flex align-items-center">
+<ul ngbNav class="nav-tabs bg-secondary text-white d-flex align-items-center p-2">
+  <li ngbNavItem class="mr-auto">
     <div class="pl-3"><b>Contacts list</b></div>
   </li>
   <li ngbNavItem class="ml-auto">
-    <form [formGroup]="searchContactForm" id="search-form-contact">
-      <div class="form-group form-inline pr-3 pt-3">
-        <label for="input-search-contact">Search: </label>
-        <input class="form-control ml-2" type="text" formControlName="searchInput" placeholder="Search..."
-               id="input-search-contact">
-      </div>
+    <form [formGroup]="searchContactForm" class="form-inline pr-1" id="search-form-contact">
+      <label for="input-search-contact"></label><input class="form-control form-control-sm ml-2"
+                                                       formControlName="searchInput" id="input-search-contact"
+                                                       placeholder="Search..." type="text">
     </form>
   </li>
 </ul>

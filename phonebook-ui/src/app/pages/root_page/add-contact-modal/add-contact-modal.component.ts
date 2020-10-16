@@ -2,10 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {NgbActiveModal, NgbModalConfig} from "@ng-bootstrap/ng-bootstrap";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ContactService} from "../../../service/contact.service";
-import {SubscriptionErrorHandle} from "../../../service/subscriptionErrorHandle";
 import {ToastService} from "../../../service/toast.service";
-import {HttpErrorResponse} from "@angular/common/http";
-import {Contact} from "../../../model/contact";
 import {Router} from "@angular/router";
 
 @Component({
@@ -25,7 +22,7 @@ export class AddContactModalComponent implements OnInit {
               private fb: FormBuilder,
               private contactService: ContactService,
               private toastService: ToastService,
-              private router: Router,) {
+              private router: Router) {
 
     config.backdrop = 'static';
   }
@@ -43,29 +40,30 @@ export class AddContactModalComponent implements OnInit {
     });
   }
 
-  async onClickSave(): Promise<void> {
+  onClickSave(): void {
     this.isSaved = false;
     this.loading = true;
     this.alertMessage = '';
 
-    await this.contactService.addContact(this.form.value)
-      .subscribe(contact => this.callBackOkAddContact(contact), error => this.callBackErrorAddContact(error));
+    this.contactService.addContact(this.form.value)
+      .subscribe(() => this.callBackOkAddContact(), () => this.callBackErrorAddContact());
   }
 
-  callBackOkAddContact(contact: Contact): void {
+  callBackOkAddContact(): void {
     this.loading = false;
     this.isSaved = true;
 
-    this.router.navigate(['./contacts/' + contact.id])
+    if (this.router.url !== '/contacts')
+      this.router.navigate(['./contacts/'])
+    else this.contactService.triggerOnReloadContactsList();
+
     this.toastService.show('Contact saved successfully', {classname: 'bg-success text-light', delay: 10000});
     this.onClickCancel();
   }
 
-  callBackErrorAddContact(error: HttpErrorResponse): void {
-    this.alertMessage = SubscriptionErrorHandle(error);
+  callBackErrorAddContact(): void {
     this.isSaved = false;
-    if (this.alertMessage)
-      this.loading = false;
+    this.onClickCancel();
   }
 
   onClickCancel(): void {
