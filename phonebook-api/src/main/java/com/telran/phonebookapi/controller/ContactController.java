@@ -30,10 +30,11 @@ public class ContactController {
     }
 
     @PostMapping("")
-    public void addContact(Authentication auth, @Valid @RequestBody ContactDto contactDto) {
+    public ContactDto addContact(Authentication auth, @Valid @RequestBody ContactDto contactDto) {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
         String email = userDetails.getUsername();
-        contactService.add(contactDto.firstName, contactDto.lastName, contactDto.description, email);
+        Contact contact = contactService.add(contactDto.firstName, contactDto.lastName, contactDto.description, email);
+        return new ContactDto(contact.getId(), contact.getFirstName(), contact.getLastName(), contact.getDescription(), contact.getUser().getEmail());
     }
 
     @GetMapping("/{id}")
