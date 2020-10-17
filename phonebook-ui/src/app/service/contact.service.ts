@@ -83,6 +83,6 @@ export class ContactService {
       id: `pop-up-error-${popUpId}`
     });
 
-    return throwError(error.error.message || `${error.status}, ${error.statusText}`);
+    return throwError(error);
   }
 }
