@@ -57,7 +57,12 @@ export class AddContactModalComponent implements OnInit {
       this.router.navigate(['./contacts/'])
     else this.contactService.triggerOnReloadContactsList();
 
-    this.toastService.show('Contact saved successfully', {classname: 'bg-success text-light', delay: 10000});
+    this.toastService.show('Contact saved successfully', {
+      classname: 'bg-success text-light',
+      delay: 10_000,
+      id: 'pop-up-success-add-contact'
+    });
+
     this.onClickCancel();
   }
 

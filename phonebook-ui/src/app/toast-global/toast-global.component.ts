@@ -6,10 +6,11 @@ import {ToastService} from "../service/toast.service";
   template: `
     <ngb-toast
       *ngFor="let toast of toastService.toasts"
-      [class]="toast.classname"
-      [autohide]="true"
-      [delay]="toast.delay || 5000"
       (hide)="toastService.remove(toast)"
+      [autohide]="true"
+      [class]="toast.classname"
+      [delay]="toast.delay || 5000"
+      [id]="toast.id || ''"
     >
       <ng-template [ngIf]="isTemplate(toast)" [ngIfElse]="text">
         <ng-template [ngTemplateOutlet]="toast.textOrTpl"></ng-template>
