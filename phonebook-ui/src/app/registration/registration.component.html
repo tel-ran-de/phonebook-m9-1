@@ -56,7 +56,7 @@
               <div *ngIf="form.controls['password'].errors.minlength" id="password-error-minlength">
                 Password must be at least 8 characters.
               </div>
-              <div *ngIf="form.controls['password'].errors.maxlength" id="password-error-maxlength">
+              <div *ngIf="form.controls['password'].errors.maxlength" id="password-error-maxlength" class="alert-longer-pass">
                 Password must be no longer than 20 characters.
               </div>
             </div>
