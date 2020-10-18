@@ -18,12 +18,11 @@ export class AddressEditModalComponent implements OnInit {
   @Input()
   sortedCountriesForSelect: Country[];
 
-  isSaved: boolean;
   loading: boolean;
-  addressForm: FormGroup;
+  addressEditForm: FormGroup;
 
   preSelectedCountry: Country;
-  selectedCountry: Country;
+  selectedCountry: string = '';
 
   alertMessage: string;
   alertType: string;
@@ -37,18 +36,16 @@ export class AddressEditModalComponent implements OnInit {
               private addressService: AddressService) {
     config.backdrop = 'static';
     this.sortedCountriesForSelect = COUNTRIES.sort((countryA, countryB) => countryA.name > countryB.name ? 1 : -1);
-    this.preSelectedCountry = this.sortedCountriesForSelect.find(value => value.name === 'Germany');
-    this.selectedCountry.name = this.preSelectedCountry.name;
   }
 
 
-ngOnInit(): void {
+  ngOnInit(): void {
     this.createForm();
   }
 
-  createForm() {
-    this.addressForm = this.fb.group({
-      city: [],
+  createForm(): void {
+    this.addressEditForm = this.fb.group({
+      city: [null, [Validators.required]],
       zip: [],
       street: [null, [Validators.required]]
     });
@@ -56,40 +53,30 @@ ngOnInit(): void {
     this.setFormValue(this.addressToEdit);
   }
 
-  onClickSave() {
-    this.reloadStats();
-
-    this.addressToEdit.country = this.selectedCountry.name;
-    this.addressToEdit.city = this.addressForm.controls['city'].value;
-    this.addressToEdit.street = this.addressForm.controls['street'].value;
-    this.addressToEdit.zip = this.addressForm.controls['zip'].value;
-
-    this.addressService.editAddress(this.addressToEdit)
-      .subscribe(() => this.callBackOkAddressEdit(this.addressToEdit), error => this.callBackErrorPhoneEdit(error));
-  }
-
-  reloadStats() {
-    this.isSaved = false;
+  onClickSave(): void {
     this.loading = true;
     this.alertMessage = '';
+
+    this.addressToEdit.country = this.selectedCountry;
+    this.addressToEdit.city = this.addressEditForm.controls['city'].value;
+    this.addressToEdit.street = this.addressEditForm.controls['street'].value;
+    this.addressToEdit.zip = this.addressEditForm.controls['zip'].value;
+
+    this.addressService.editAddress(this.addressToEdit)
+      .subscribe(() => this.callBackOkAddressEdit(), error => this.callBackErrorPhoneEdit(error));
   }
 
-  callBackOkAddressEdit(addressToEdit: Address) {
+  callBackOkAddressEdit(): void {
     this.loading = false;
-    this.isSaved = true;
 
-    const message = 'Address: ' + addressToEdit.country + "," + addressToEdit.city + "," + addressToEdit.street
-      + "," + addressToEdit.zip + ' saved';
-    this.setAlert('success', message)
-
-    this.addressForm.reset();
     this.addressService.triggerOnReloadAddressesList();
+    this.addressEditForm.reset();
+    this.activeModal.close();
   }
 
-  callBackErrorPhoneEdit(error: any) {
-    this.isSaved = false;
-
-    this.setAlert('danger', SubscriptionErrorHandle(error))
+  callBackErrorPhoneEdit(error: any): void {
+    this.alertMessage = SubscriptionErrorHandle(error)
+    this.setAlert('danger', this.alertMessage)
 
     if (this.alertMessage)
       this.loading = false;
@@ -100,23 +87,23 @@ ngOnInit(): void {
     this.alertMessage = alertMessage;
   }
 
-  onCloseAlert() {
+  onCloseAlert(): void {
     this.alertMessage = '';
   }
 
-  onChangeSelectedElement(event: any) {
+  onChangeSelectedElement(event: any): void {
     this.selectedCountry = event.target.value;
   }
 
   setFormValue(addressToEdit: Address) {
     this.preSelectedCountry = this.sortedCountriesForSelect
-      .find(value => value.dial_code === addressToEdit.country);
-    if (this.preSelectedCountry) {
-      this.selectedCountry = this.preSelectedCountry;
-      this.addressForm.controls['city'].setValue(addressToEdit.city);
-      this.addressForm.controls['street'].setValue(addressToEdit.street);
-      this.addressForm.controls['zip'].setValue(addressToEdit.zip);
+      .find(value => value.name === addressToEdit.country);
 
+    if (this.preSelectedCountry) {
+      this.selectedCountry = this.preSelectedCountry.name;
+      this.addressEditForm.controls['city'].setValue(addressToEdit.city);
+      this.addressEditForm.controls['street'].setValue(addressToEdit.street);
+      this.addressEditForm.controls['zip'].setValue(addressToEdit.zip);
     } else {
       this.setAlert('danger', "Unknown input");
     }

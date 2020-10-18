@@ -5,10 +5,10 @@
     <span aria-hidden="true">&times;</span>
   </a>
 </div>
-<form [formGroup]="addressForm" novalidate (ngSubmit)="onClickSave()" id="address-form">
-<div class="modal-body">
-  <div class="form-group">
-    <label for="cc-select">Select country</label>
+<form [formGroup]="addressEditForm" novalidate (ngSubmit)="onClickSave()" id="edit-address-form">
+  <div class="modal-body">
+    <div class="form-group">
+      <label for="cc-select">Select country</label>
       <select class="custom-select" (change)="onChangeSelectedElement($event)" id="cc-select" [disabled]="loading">
         <option selected [value]="preSelectedCountry.name">
           {{preSelectedCountry.name}}
@@ -18,32 +18,29 @@
         </option>
       </select>
     </div>
-  <div class="form-group">
-    <label for="input-city">City</label>
-    <input class="form-control" type="tel" placeholder="City..." [readOnly]="loading"
-           formControlName="city" id="input-city">
-  </div>
-  <div class="form-group">
-    <label for="input-zip">Zip</label>
-    <input class="form-control" type="tel" placeholder="Zip..." [readOnly]="loading"
-           formControlName="zip" id="input-zip">
-  </div>
-  <div class="form-group">
-    <label for="input-street">Address*</label>
-    <input class="form-control" type="tel" placeholder="Address..." [readOnly]="loading"
-           formControlName="street" id="input-street">
-  </div>
-  <div>
-    <button *ngIf="!loading" [disabled]="addressForm.invalid" class="btn btn-primary btn-block" type="submit">Save
-      address
-    </button>
+    <div class="form-group">
+      <label for="input-city">City</label>
+      <input class="form-control" type="text" [readOnly]="loading" formControlName="city" id="input-city">
+    </div>
+    <div class="form-group">
+      <label for="input-zip">Zip</label>
+      <input class="form-control" type="text" [readOnly]="loading" formControlName="zip" id="input-zip">
+    </div>
+    <div class="form-group">
+      <label for="input-street">Address*</label>
+      <input class="form-control" type="text" [readOnly]="loading" formControlName="street" id="input-street">
+    </div>
+    <div>
+      <button *ngIf="!loading" [disabled]="addressEditForm.invalid" class="btn btn-primary btn-block" type="submit">Save
+        address
+      </button>
 
-    <button *ngIf="loading" class="btn btn-primary btn-block loading-btn" disabled type="button">
-      <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-      Loading...
-    </button>
+      <button *ngIf="loading" class="btn btn-primary btn-block loading-btn" disabled type="button">
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        Loading...
+      </button>
+    </div>
   </div>
-</div>
 </form>
 <div class="card-footer">
   <p>
@@ -51,7 +48,7 @@
                ngbTooltip="close this window">
       {{alertMessage}}
     </ngb-alert>
-    <ngb-alert *ngIf="addressForm.invalid && (addressForm.dirty || addressForm.touched)" type="info"
+    <ngb-alert *ngIf="addressEditForm.invalid && (addressEditForm.dirty || addressEditForm.touched)" type="info"
                [dismissible]="false">
       To save, you must fill in the address field
     </ngb-alert>
