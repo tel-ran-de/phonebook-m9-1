@@ -35,7 +35,7 @@ export class ContactService {
   }
 
   removeContact(id: number) {
-    return this.http.delete(`${this.contactPath}/${id}`).subscribe(() => this.reload());
+    return this.http.delete(`${this.contactPath}/${id}`);
   }
 
   addContact(contact: Contact) {
@@ -52,5 +52,9 @@ export class ContactService {
 
   triggerOnReloadContactsList() {
     this._trigger.next();
+  }
+
+  editContact(contactToEdit: Contact): Observable<any> {
+    return this.http.put<Contact>(`${this.contactPath}`, contactToEdit);
   }
 }

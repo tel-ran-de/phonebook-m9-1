@@ -1,15 +1,18 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {PhoneService} from "src/app/service/phone.service";
 import {Phone} from "src/app/model/phone";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {SubscriptionErrorHandle} from "../../../../service/subscriptionErrorHandle";
+import {PhoneAddModalComponent} from "../phone-add-modal/add-phone-modal.component";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-phone',
   templateUrl: './phone.component.html',
   styleUrls: ['./phone.component.css']
 })
-export class PhoneComponent implements OnInit {
+export class PhoneComponent implements OnInit, OnDestroy {
 
   @Input()
   contactId: number;
@@ -21,12 +24,14 @@ export class PhoneComponent implements OnInit {
 
   errorMessage: string;
   loading: boolean;
+  private triggerSubscription: Subscription;
 
-  constructor(private phoneService: PhoneService, private fb: FormBuilder) {
+  constructor(private phoneService: PhoneService,
+              private fb: FormBuilder,
+              private modalService: NgbModal) {
   }
 
   ngOnInit(): void {
-    this.loading = true
     this.searchFormPhone = this.fb.group({
       searchInput: []
     })
@@ -37,10 +42,16 @@ export class PhoneComponent implements OnInit {
       this.phonesToDisplay = this.search(searchText);
     });
 
-    this.phoneService.trigger$.subscribe(() => this.reloadPhones());
+    this.triggerSubscription = this.phoneService.trigger$
+      .subscribe(() => {
+        this.phonesToDisplay = [];
+        this.reloadPhones();
+      });
   }
 
   reloadPhones(): void {
+    this.loading = true
+
     this.phoneService.getAllPhonesByContactId(this.contactId)
       .subscribe(phones => this.callbackOkGetAllPhones(phones), error => this.callbackErrorGetAllPhones(error));
   }
@@ -63,5 +74,14 @@ export class PhoneComponent implements OnInit {
       const valueToString = value.countryCode + " " + value.phoneNumber;
       return valueToString.toLowerCase().includes(term)
     })
+  }
+
+  openModalAddPhone() {
+    const modalRef = this.modalService.open(PhoneAddModalComponent);
+    modalRef.componentInstance.contactId = this.contactId;
+  }
+
+  ngOnDestroy(): void {
+    this.triggerSubscription.unsubscribe();
   }
 }

@@ -1,1 +1,13 @@
-/* You can add global styles to this file, and also import other style files */
+.w-95 {
+  width: 95% !important
+}
+
+.w-5 {
+  width: 5% !important
+}
+
+@media screen and (max-width: 1390px) {
+  .alert-longer-pass {
+    font-size: 13px;
+  }
+}

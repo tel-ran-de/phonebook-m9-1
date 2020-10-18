@@ -1,6 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Email} from "src/app/model/email";
 import {EmailService} from "../../../../service/email.service";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {EmailEditModalComponent} from "../email-edit-modal/email-edit-modal.component";
 
 @Component({
   selector: 'app-email-table',
@@ -15,7 +17,8 @@ export class EmailTableComponent implements OnInit {
   reverseSort: boolean;
   sortBy: string;
 
-  constructor(private emailService: EmailService) {
+  constructor(private modalService: NgbModal,
+              private emailService: EmailService) {
   }
 
   ngOnInit(): void {
@@ -36,5 +39,10 @@ export class EmailTableComponent implements OnInit {
 
   onClickRemove(emailId: number) {
     this.emailService.removeEmail(emailId);
+  }
+
+  onClickEditEmail(emailToEdit: Email) {
+    const modalRef = this.modalService.open(EmailEditModalComponent);
+    modalRef.componentInstance.emailToEdit = emailToEdit;
   }
 }
