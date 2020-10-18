@@ -2,6 +2,9 @@ package com.telran.phonebookapi.security.filter;
 
 import com.telran.phonebookapi.security.model.JWToken;
 import com.telran.phonebookapi.security.service.JwtService;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.SignatureException;
+import org.apache.catalina.filters.ExpiresFilter;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,16 +31,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
         String tokenString = request.getHeader(tokenHeader);
         if (tokenString == null) {
             filterChain.doFilter(request, response);
             return;
         }
-
-        JWToken token = jwtService.parseToken(tokenString);
-
-        String username = token.getUsername();
+        JWToken token;
+        try {
+            token = jwtService.parseToken(tokenString);
+        } catch (ExpiredJwtException | SignatureException e) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+           String username = token.getUsername();
         UserDetails userDetails = userDetailService.loadUserByUsername(username);
 
         Authentication auth = new UsernamePasswordAuthenticationToken(
@@ -50,3 +57,4 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 }
+
