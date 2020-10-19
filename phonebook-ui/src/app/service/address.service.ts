@@ -35,4 +35,9 @@ export class AddressService {
     this.http.delete(`${this.basePath}/${(addressId)}`)
       .subscribe(() => this.triggerOnReloadAddressesList());
   }
+
+  editAddress(addressToEdit: Address) {
+    return this.http.put<Address>(`${this.basePath}`, addressToEdit);
+
+  }
 }

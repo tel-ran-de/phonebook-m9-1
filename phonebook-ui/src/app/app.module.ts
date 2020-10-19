@@ -40,6 +40,7 @@ import {ActionBtnIconComponent} from './pages/root_page/contact-datails-page/act
 import {AddressAddModalComponent} from './pages/root_page/contact-datails-page/address-add-modal/address-add-modal.component';
 import {ContactRemoveModalComponent} from "./pages/root_page/contacts_page/contact-remove-modal/contact-remove-modal.component";
 import {EmailEditModalComponent} from './pages/root_page/contact-datails-page/email-edit-modal/email-edit-modal.component';
+import {AddressEditModalComponent} from "./pages/root_page/contact-datails-page/address-edit-modal/address-edit-modal.component";
 
 @NgModule({
   declarations: [
@@ -74,6 +75,7 @@ import {EmailEditModalComponent} from './pages/root_page/contact-datails-page/em
     AddressAddModalComponent,
     ContactRemoveModalComponent,
     EmailEditModalComponent,
+    AddressEditModalComponent,
   ],
   imports: [
     BrowserModule,
