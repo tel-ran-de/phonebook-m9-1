@@ -29,7 +29,7 @@ export class ContactComponent implements OnInit {
 
   ngOnInit(): void {
     this.contactService.getContactById(this.contactId)
-      .subscribe(contact => this.callBackOkGetContact(contact), error => this.callBackErrorGetContact(error));
+      .subscribe(contact => this.callBackOkGetContact(contact));
     this.createForm();
   }
 
@@ -87,10 +87,6 @@ export class ContactComponent implements OnInit {
     this.loading = false;
     this.contactToDisplay = contact;
     this.isEditStat = false;
-  }
-
-  callBackErrorGetContact(error: any) {
-    alert(SubscriptionErrorHandle(error));
   }
 
   onClickCancel() {

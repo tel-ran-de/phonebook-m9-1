@@ -71,12 +71,6 @@ export class ContactService {
   private handleError(error: HttpErrorResponse, popUpId: string) {
     const errorMessage = SubscriptionErrorHandle(error);
 
-    this.toastService.show('Error!', {
-      classname: `bg-danger text-light`,
-      delay: 10_000,
-      id: `pop-up-error`
-    });
-
     this.toastService.show(errorMessage, {
       classname: `bg-danger text-light`,
       delay: 10_000,

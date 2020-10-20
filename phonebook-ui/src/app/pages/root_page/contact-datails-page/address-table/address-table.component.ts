@@ -4,6 +4,7 @@ import {AddressService} from "../../../../service/address.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {AddressEditModalComponent} from "../address-edit-modal/address-edit-modal.component";
 import {Subscription} from "rxjs";
+import {ToastService} from "../../../../service/toast.service";
 
 @Component({
   selector: 'app-address-table',
@@ -18,10 +19,11 @@ export class AddressTableComponent implements OnInit, OnDestroy {
   reverseSort: boolean;
   sortBy: string;
 
-  private subscription: Subscription;
+  private removeSubscription: Subscription;
 
   constructor(private modalService: NgbModal,
-              private addressService: AddressService) {
+              private addressService: AddressService,
+              private toastService: ToastService) {
   }
 
   ngOnInit(): void {
@@ -41,12 +43,26 @@ export class AddressTableComponent implements OnInit, OnDestroy {
   }
 
   onClickRemove(addressId: number): void {
-    this.subscription = this.addressService.removeAddress(addressId)
-      .subscribe(() => this.callBackOkAddressEdit());
+    this.removeSubscription = this.addressService.removeAddress(addressId)
+      .subscribe(() => this.callBackOkAddressRemove(),() =>  this.callBackErrorAddressRemove());
   }
 
-  callBackOkAddressEdit(): void {
+  callBackOkAddressRemove(): void {
+    this.toastService.show('Address removed', {
+      classname: 'bg-success text-light',
+      delay: 5_000,
+      id: 'pop-up-success-remove-address'
+    });
+
     this.addressService.triggerOnReloadAddressesList();
+  }
+
+  callBackErrorAddressRemove() {
+    this.toastService.show('Remove address failed', {
+      classname: `bg-danger text-light`,
+      delay: 7_000,
+      id: `pop-up-error-remove-address`
+    });
   }
 
   onClickEdit(addressToEdit: Address): void {
@@ -55,7 +71,7 @@ export class AddressTableComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.subscription)
-      this.subscription.unsubscribe();
+    if (this.removeSubscription)
+      this.removeSubscription.unsubscribe();
   }
 }

@@ -1,6 +1,6 @@
 <div class="modal-header" id="edit-address-modal">
   <h4 class="modal-title">Edit address</h4>
-  <a type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')" placement="bottom"
+  <a type="button" class="close" aria-label="Close" (click)="onClickCancel()" placement="bottom"
      ngbTooltip="close this window">
     <span aria-hidden="true">&times;</span>
   </a>
@@ -44,7 +44,7 @@
 </form>
 <div class="card-footer">
   <p>
-    <ngb-alert *ngIf="alertMessage" type="{{alertType}}" (close)="onCloseAlert()" placement="top"
+    <ngb-alert *ngIf="alertMessage" type="danger" (close)="onCloseAlert()" placement="top"
                ngbTooltip="close this window">
       {{alertMessage}}
     </ngb-alert>
