@@ -1,6 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Address} from "src/app/model/address";
 import {AddressService} from "../../../../service/address.service";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {AddressEditModalComponent} from "../address-edit-modal/address-edit-modal.component";
 
 @Component({
   selector: 'app-address-table',
@@ -15,7 +17,8 @@ export class AddressTableComponent implements OnInit {
   reverseSort: boolean;
   sortBy: string;
 
-  constructor(private addressService: AddressService) {
+  constructor(private modalService: NgbModal,
+              private addressService: AddressService) {
   }
 
   ngOnInit(): void {
@@ -36,5 +39,10 @@ export class AddressTableComponent implements OnInit {
 
   onClickRemove(addressId: number) {
     this.addressService.removeAddress(addressId);
+  }
+
+  onClickEdit(addressToEdit: Address) {
+    const modalRef = this.modalService.open(AddressEditModalComponent);
+    modalRef.componentInstance.addressToEdit = addressToEdit;
   }
 }

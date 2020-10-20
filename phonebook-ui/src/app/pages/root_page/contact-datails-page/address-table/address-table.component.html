@@ -64,7 +64,7 @@
         </button>
 
         <div ngbDropdownMenu>
-          <button ngbDropdownItem class="btn-address-edit">Edit</button>
+          <button ngbDropdownItem class="btn-address-edit" (click)="onClickEdit(address)">Edit</button>
           <button ngbDropdownItem class="btn-address-remove" placement="bottom" ngbTooltip="permanently deleting"
                   (click)="onClickRemove(address.id)">
             Remove

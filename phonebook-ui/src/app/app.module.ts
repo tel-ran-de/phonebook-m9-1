@@ -41,6 +41,7 @@ import {AddressAddModalComponent} from './pages/root_page/contact-datails-page/a
 import {ContactRemoveModalComponent} from "./pages/root_page/contacts_page/contact-remove-modal/contact-remove-modal.component";
 import {EmailEditModalComponent} from './pages/root_page/contact-datails-page/email-edit-modal/email-edit-modal.component';
 import {ToastGlobalComponent} from './toast-global/toast-global.component';
+import {AddressEditModalComponent} from "./pages/root_page/contact-datails-page/address-edit-modal/address-edit-modal.component";
 
 @NgModule({
   declarations: [
@@ -76,6 +77,7 @@ import {ToastGlobalComponent} from './toast-global/toast-global.component';
     ContactRemoveModalComponent,
     EmailEditModalComponent,
     ToastGlobalComponent,
+    AddressEditModalComponent,
   ],
   imports: [
     BrowserModule,
