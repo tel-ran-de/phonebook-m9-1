@@ -1,9 +1,11 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {PhoneService} from "src/app/service/phone.service";
 import {Phone} from "src/app/model/phone";
-import {Subscription} from "rxjs";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {SubscriptionErrorHandle} from "../../../../service/subscriptionErrorHandle";
+import {PhoneAddModalComponent} from "../phone-add-modal/add-phone-modal.component";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-phone',
@@ -15,7 +17,6 @@ export class PhoneComponent implements OnInit, OnDestroy {
   @Input()
   contactId: number;
 
-  private getAllPhoneByContactSubscription: Subscription;
   searchFormPhone: FormGroup;
 
   phonesFromServer: Phone[] = [];
@@ -23,8 +24,11 @@ export class PhoneComponent implements OnInit, OnDestroy {
 
   errorMessage: string;
   loading: boolean;
+  private triggerSubscription: Subscription;
 
-  constructor(private phoneService: PhoneService, private fb: FormBuilder) {
+  constructor(private phoneService: PhoneService,
+              private fb: FormBuilder,
+              private modalService: NgbModal) {
   }
 
   ngOnInit(): void {
@@ -36,29 +40,30 @@ export class PhoneComponent implements OnInit, OnDestroy {
 
     this.searchFormPhone.get("searchInput").valueChanges.subscribe(searchText => {
       this.phonesToDisplay = this.search(searchText);
-
     });
 
-    this.phoneService.trigger$.subscribe(() => this.reloadPhones());
-  }
-
-  private reloadPhones(): void {
-    this.getAllPhoneByContactSubscription = this.phoneService.getAllPhonesByContactId(this.contactId)
-      .subscribe(phones => {
-        this.callbackOk(phones)
-      }, error => {
-        this.callbackError(error);
+    this.triggerSubscription = this.phoneService.trigger$
+      .subscribe(() => {
+        this.phonesToDisplay = [];
+        this.reloadPhones();
       });
   }
 
-  callbackOk(value: Phone[]) {
+  reloadPhones(): void {
+    this.loading = true
+
+    this.phoneService.getAllPhonesByContactId(this.contactId)
+      .subscribe(phones => this.callbackOkGetAllPhones(phones), error => this.callbackErrorGetAllPhones(error));
+  }
+
+  callbackOkGetAllPhones(value: Phone[]) {
     this.errorMessage = ''
     this.loading = false
     this.phonesFromServer = value
     this.phonesToDisplay = value;
   }
 
-  callbackError(error: any) {
+  callbackErrorGetAllPhones(error: any) {
     this.errorMessage = SubscriptionErrorHandle(error)
     this.loading = false
   }
@@ -71,8 +76,12 @@ export class PhoneComponent implements OnInit, OnDestroy {
     })
   }
 
+  openModalAddPhone() {
+    const modalRef = this.modalService.open(PhoneAddModalComponent);
+    modalRef.componentInstance.contactId = this.contactId;
+  }
+
   ngOnDestroy(): void {
-    if (this.getAllPhoneByContactSubscription)
-      this.getAllPhoneByContactSubscription.unsubscribe();
+    this.triggerSubscription.unsubscribe();
   }
 }

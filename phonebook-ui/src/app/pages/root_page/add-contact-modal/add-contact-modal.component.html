@@ -21,12 +21,12 @@
 
     <div class="form-group">
       <label for="form-about">About contact</label>
-      <input class="form-control" id="form-about" placeholder="About ..." type="text" formControlName="description"
+      <input class="form-control" id="form-about" placeholder="About" type="text" formControlName="description"
              [readOnly]="form.invalid || loading">
     </div>
 
-    <div class="row d-flex justify-content-end">
-      <button (click)="onClickCancel()" class="btn btn-secondary" type="reset">Cancel</button>
+    <div class="row d-flex justify-content-end mr-2">
+      <button (click)="onClickCancel()" class="btn btn-secondary mr-2" type="reset">Cancel</button>
 
       <button *ngIf="!loading" [disabled]="form.invalid" class="btn btn-primary" type="submit">Save contact</button>
 
@@ -46,17 +46,5 @@
       To add a contact, you must specify a name
     </ngb-alert>
   </p>
-
-  <p>
-    <ngb-alert *ngIf="alertMessage" type="danger" (close)="alertMessage = ''" id="error-message">
-      {{alertMessage}}</ngb-alert>
-  </p>
-
-  <p>
-    <ngb-alert *ngIf="successMessage" type="success" (close)="successMessage = ''" id="saved-message">
-      {{successMessage}}
-    </ngb-alert>
-  </p>
-
 </div>
 

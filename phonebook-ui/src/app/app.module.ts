@@ -27,6 +27,7 @@ import {ContactDetailsComponent} from "./pages/root_page/contact-datails-page/co
 import {PhoneComponent} from "./pages/root_page/contact-datails-page/phone/phone.component";
 import {AddressComponent} from "./pages/root_page/contact-datails-page/address/address.component";
 import {EmailComponent} from "./pages/root_page/contact-datails-page/email/email.component";
+import {EmailAddModalComponent} from "./pages/root_page/contact-datails-page/email-add-modal/add-email-modal.component";
 import {AddContactModalComponent} from "./pages/root_page/add-contact-modal/add-contact-modal.component";
 import {ContactComponent} from "./pages/root_page/contact-datails-page/contact/contact.component";
 import {AddressTableComponent} from './pages/root_page/contact-datails-page/address-table/address-table.component';
@@ -37,6 +38,10 @@ import {PhoneAddModalComponent} from "./pages/root_page/contact-datails-page/pho
 import {SortIconComponent} from './pages/root_page/contact-datails-page/sort-icon/sort-icon.component';
 import {ActionBtnIconComponent} from './pages/root_page/contact-datails-page/action-btn-icon/action-btn-icon.component';
 import {AddressAddModalComponent} from './pages/root_page/contact-datails-page/address-add-modal/address-add-modal.component';
+import {ContactRemoveModalComponent} from "./pages/root_page/contacts_page/contact-remove-modal/contact-remove-modal.component";
+import {EmailEditModalComponent} from './pages/root_page/contact-datails-page/email-edit-modal/email-edit-modal.component';
+import {ToastGlobalComponent} from './toast-global/toast-global.component';
+import {AddressEditModalComponent} from "./pages/root_page/contact-datails-page/address-edit-modal/address-edit-modal.component";
 
 @NgModule({
   declarations: [
@@ -62,12 +67,17 @@ import {AddressAddModalComponent} from './pages/root_page/contact-datails-page/a
     ContactComponent,
     AddressTableComponent,
     EmailTableComponent,
+    EmailAddModalComponent,
     PhoneTableComponent,
     PhoneAddModalComponent,
     SortIconComponent,
     ActionBtnIconComponent,
     PhoneEditModalComponent,
     AddressAddModalComponent,
+    ContactRemoveModalComponent,
+    EmailEditModalComponent,
+    ToastGlobalComponent,
+    AddressEditModalComponent,
   ],
   imports: [
     BrowserModule,
