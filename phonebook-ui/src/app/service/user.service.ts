@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core'
 import {User} from "../model/user";
 import {HttpClient} from '@angular/common/http'
+import {Observable} from "rxjs";
 
 @Injectable()
 export class UserService {
@@ -15,36 +16,36 @@ export class UserService {
   constructor(private http: HttpClient) {
   }
 
-  newUserRegistration(user: User) {
+  newUserRegistration(user: User): Observable<User> {
     return this.http.post<User>(this.userPath, user);
   }
 
-  sendRequestToConfirmRegistration(token: string) {
-    return this.http.get(`${this.activationPath}${token}`)
+  sendRequestToConfirmRegistration(token: string): Observable<any> {
+    return this.http.get<any>(`${this.activationPath}${token}`)
   }
 
-  forgotPassword(userEmail: String) {
+  forgotPassword(userEmail: String): Observable<User> {
     return this.http.post<User>(this.forgotPasswordPath, {
       email: userEmail
     });
   }
 
-  resetPassword(password: string, token: string) {
+  resetPassword(password: string, token: string): Observable<User> {
     return this.http.put<User>(this.resetPasswordPath, {
       password: password,
       token: token
     });
   }
 
-  login(user: User) {
+  login(user: User): Observable<any> {
     return this.http.post<User>(this.loginPath, user, {observe: 'response'});
-  };
+  }
 
-  getUserData() {
+  getUserData(): Observable<User> {
     return this.http.get<User>(this.userPath);
   };
 
-  changePassAuthUser(newPassword: string) {
+  changePassAuthUser(newPassword: string): Observable<any> {
     return this.http.put(this.resetPasswordAuthUserPath, {password: newPassword});
   }
 }
