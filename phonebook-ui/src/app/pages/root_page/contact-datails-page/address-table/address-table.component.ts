@@ -1,15 +1,17 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {Address} from "src/app/model/address";
 import {AddressService} from "../../../../service/address.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {AddressEditModalComponent} from "../address-edit-modal/address-edit-modal.component";
+import {Subscription} from "rxjs";
+import {ToastService} from "../../../../service/toast.service";
 
 @Component({
   selector: 'app-address-table',
   templateUrl: './address-table.component.html',
   styleUrls: ['./address-table.component.css']
 })
-export class AddressTableComponent implements OnInit {
+export class AddressTableComponent implements OnInit, OnDestroy {
 
   @Input()
   sortedAddressesToDisplay: Address[];
@@ -17,14 +19,17 @@ export class AddressTableComponent implements OnInit {
   reverseSort: boolean;
   sortBy: string;
 
+  private removeSubscription: Subscription;
+
   constructor(private modalService: NgbModal,
-              private addressService: AddressService) {
+              private addressService: AddressService,
+              private toastService: ToastService) {
   }
 
   ngOnInit(): void {
   }
 
-  sort(sortBy: string) {
+  sort(sortBy: string): void {
     if (this.sortBy !== sortBy)
       this.reverseSort = false;
 
@@ -37,12 +42,36 @@ export class AddressTableComponent implements OnInit {
       this.sortedAddressesToDisplay.reverse();
   }
 
-  onClickRemove(addressId: number) {
-    this.addressService.removeAddress(addressId);
+  onClickRemove(addressId: number): void {
+    this.removeSubscription = this.addressService.removeAddress(addressId)
+      .subscribe(() => this.callBackOkAddressRemove(),() =>  this.callBackErrorAddressRemove());
   }
 
-  onClickEdit(addressToEdit: Address) {
+  callBackOkAddressRemove(): void {
+    this.toastService.show('Address removed', {
+      classname: 'bg-success text-light',
+      delay: 5_000,
+      id: 'pop-up-success-remove-address'
+    });
+
+    this.addressService.triggerOnReloadAddressesList();
+  }
+
+  callBackErrorAddressRemove() {
+    this.toastService.show('Remove address failed', {
+      classname: `bg-danger text-light`,
+      delay: 7_000,
+      id: `pop-up-error-remove-address`
+    });
+  }
+
+  onClickEdit(addressToEdit: Address): void {
     const modalRef = this.modalService.open(AddressEditModalComponent);
     modalRef.componentInstance.addressToEdit = addressToEdit;
+  }
+
+  ngOnDestroy(): void {
+    if (this.removeSubscription)
+      this.removeSubscription.unsubscribe();
   }
 }

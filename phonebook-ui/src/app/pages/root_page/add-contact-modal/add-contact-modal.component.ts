@@ -68,6 +68,13 @@ export class AddContactModalComponent implements OnInit {
 
   callBackErrorAddContact(): void {
     this.isSaved = false;
+
+    this.toastService.show('Add contact failed', {
+      classname: `bg-danger text-light`,
+      delay: 7_000,
+      id: `pop-up-error-add-contact`
+    });
+
     this.onClickCancel();
   }
 

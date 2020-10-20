@@ -1,6 +1,6 @@
 <div class="modal-header" id="add-contact-modal">
-  <h4 class="modal-title">Add new phone</h4>
-  <a type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')" placement="bottom"
+  <h4 class="modal-title">Add new address</h4>
+  <a type="button" class="close" aria-label="Close" (click)="onClickCancel()" placement="bottom"
      ngbTooltip="close this window">
     <span aria-hidden="true">&times;</span>
   </a>
@@ -48,10 +48,6 @@
 
 <div class="card-footer">
   <p>
-    <ngb-alert *ngIf="alertMessage" type="{{alertType}}" (close)="onCloseAlert()" placement="top"
-               ngbTooltip="close this window">
-      {{alertMessage}}
-    </ngb-alert>
     <ngb-alert *ngIf="addressForm.invalid && (addressForm.dirty || addressForm.touched)" type="info"
                [dismissible]="false">
       To save, you must fill in the address field
