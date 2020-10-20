@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {SubscriptionErrorHandle} from "../../../../service/subscriptionErrorHandle";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {NgbActiveModal, NgbModalConfig} from "@ng-bootstrap/ng-bootstrap";
@@ -6,13 +6,14 @@ import {Country} from "../../../../model/country";
 import {COUNTRIES} from "../../../../model/countries";
 import {Address} from "../../../../model/address";
 import {AddressService} from "../../../../service/address.service";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-address-edit-modal',
   templateUrl: './address-edit-modal.component.html',
   styleUrls: ['./address-edit-modal.component.css']
 })
-export class AddressEditModalComponent implements OnInit {
+export class AddressEditModalComponent implements OnInit, OnDestroy {
 
 
   @Input()
@@ -29,6 +30,7 @@ export class AddressEditModalComponent implements OnInit {
   address: Address;
   addressToEdit: Address;
 
+  private subscription: Subscription;
 
   constructor(private config: NgbModalConfig,
               public activeModal: NgbActiveModal,
@@ -62,7 +64,7 @@ export class AddressEditModalComponent implements OnInit {
     this.addressToEdit.street = this.addressEditForm.controls['street'].value;
     this.addressToEdit.zip = this.addressEditForm.controls['zip'].value;
 
-    this.addressService.editAddress(this.addressToEdit)
+    this.subscription = this.addressService.editAddress(this.addressToEdit)
       .subscribe(() => this.callBackOkAddressEdit(), error => this.callBackErrorPhoneEdit(error));
   }
 
@@ -82,7 +84,7 @@ export class AddressEditModalComponent implements OnInit {
       this.loading = false;
   }
 
-  setAlert(alertType: string, alertMessage: string) {
+  setAlert(alertType: string, alertMessage: string): void {
     this.alertType = alertType;
     this.alertMessage = alertMessage;
   }
@@ -95,7 +97,7 @@ export class AddressEditModalComponent implements OnInit {
     this.selectedCountry = event.target.value;
   }
 
-  setFormValue(addressToEdit: Address) {
+  setFormValue(addressToEdit: Address): void {
     this.preSelectedCountry = this.sortedCountriesForSelect
       .find(value => value.name === addressToEdit.country);
 
@@ -107,5 +109,10 @@ export class AddressEditModalComponent implements OnInit {
     } else {
       this.setAlert('danger', "Unknown input");
     }
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscription)
+      this.subscription.unsubscribe();
   }
 }

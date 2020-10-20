@@ -49,16 +49,12 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.isLoggedIn = true;
   }
 
-  ngOnDestroy(): void {
-    if (this.subscription)
-      this.subscription.unsubscribe();
-  }
-
   onSubmit() {
     this.loading = true;
     this.errorMessage = '';
 
-    this.userService.login(this.form.value).pipe(first())
+    this.subscription = this.userService.login(this.form.value)
+      .pipe(first())
       .subscribe(
         (data: HttpResponse<any>) => {
           this.tokenStorage.signOut();
@@ -74,5 +70,10 @@ export class LoginComponent implements OnInit, OnDestroy {
           if (this.errorMessage)
             this.loading = false;
         });
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscription)
+      this.subscription.unsubscribe();
   }
 }

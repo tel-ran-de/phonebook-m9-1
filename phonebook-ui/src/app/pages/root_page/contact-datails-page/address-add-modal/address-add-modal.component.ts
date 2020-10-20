@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {Country} from "../../../../model/country";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {COUNTRIES} from "../../../../model/countries";
@@ -6,13 +6,14 @@ import {NgbActiveModal, NgbModalConfig} from "@ng-bootstrap/ng-bootstrap";
 import {SubscriptionErrorHandle} from "../../../../service/subscriptionErrorHandle";
 import {Address} from "../../../../model/address";
 import {AddressService} from "../../../../service/address.service";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-address-add-modal',
   templateUrl: './address-add-modal.component.html',
   styleUrls: ['./address-add-modal.component.css']
 })
-export class AddressAddModalComponent implements OnInit {
+export class AddressAddModalComponent implements OnInit, OnDestroy {
 
   @Input()
   private contactId: number;
@@ -30,6 +31,8 @@ export class AddressAddModalComponent implements OnInit {
 
   address: Address;
 
+  private subscription: Subscription;
+
   constructor(private config: NgbModalConfig,
               public activeModal: NgbActiveModal,
               private fb: FormBuilder,
@@ -45,7 +48,7 @@ export class AddressAddModalComponent implements OnInit {
     this.createForm();
   }
 
-  private createForm() {
+  private createForm(): void {
     this.addressForm = this.fb.group({
       city: [],
       zip: [],
@@ -53,7 +56,7 @@ export class AddressAddModalComponent implements OnInit {
     });
   }
 
-  onClickSave() {
+  onClickSave(): void {
     this.reloadStats();
 
     this.address.contactId = this.contactId;
@@ -67,20 +70,20 @@ export class AddressAddModalComponent implements OnInit {
     this.address.city = city === null ? '' : city;
     this.address.zip = zip === null ? '' : zip;
 
-    this.addressService.addAddress(this.address).subscribe(() =>
+    this.subscription = this.addressService.addAddress(this.address).subscribe(() =>
         this.callBackOk(),
       error =>
         this.callBackError(error)
     );
   }
 
-  reloadStats() {
+  reloadStats(): void {
     this.isSaved = false;
     this.loading = true;
     this.alertMessage = '';
   }
 
-  callBackOk() {
+  callBackOk(): void {
     this.loading = false;
     this.isSaved = true;
 
@@ -91,7 +94,7 @@ export class AddressAddModalComponent implements OnInit {
     this.addressService.triggerOnReloadAddressesList();
   }
 
-  callBackError(error: any) {
+  callBackError(error: any): void {
     this.isSaved = false;
 
     this.setAlert('danger', SubscriptionErrorHandle(error))
@@ -105,11 +108,16 @@ export class AddressAddModalComponent implements OnInit {
     this.alertMessage = alertMessage;
   }
 
-  onCloseAlert() {
+  onCloseAlert(): void {
     this.alertMessage = '';
   }
 
-  selectChangeHandler(event: any) {
+  selectChangeHandler(event: any): void {
     this.selectedCountry = event.target.value;
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscription)
+      this.subscription.unsubscribe();
   }
 }

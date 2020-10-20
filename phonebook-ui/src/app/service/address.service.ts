@@ -1,7 +1,10 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {Address} from "../model/address";
-import {Subject} from "rxjs";
+import {Observable, Subject, throwError} from "rxjs";
+import {SubscriptionErrorHandle} from "./subscriptionErrorHandle";
+import {ToastService} from "./toast.service";
+import {catchError} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
@@ -12,32 +15,53 @@ export class AddressService {
 
   private readonly basePath = '/api/address';
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,
+              private toastService: ToastService) {
   }
 
-  getAllAddressesByContactId(contactId: number) {
-    return this.http.get<Address[]>(`${this.basePath}/${(contactId)}/all`);
+  getAllAddressesByContactId(contactId: number): Observable<Address[]> {
+    return this.http.get<Address[]>(`${this.basePath}/${(contactId)}/all`)
+      .pipe(catchError(error => this.handleError(error, 'get-all-address')));
   }
 
-  addAddress(address: Address) {
-    return this.http.post<Address>(`${(this.basePath)}`, address);
+  addAddress(address: Address): Observable<Address> {
+    return this.http.post<Address>(`${(this.basePath)}`, address)
+      .pipe(catchError(error => this.handleError(error, 'add-address')));
   }
 
-  get trigger$() {
+  removeAddress(addressId: number): Observable<any> {
+    return this.http.delete(`${this.basePath}/${(addressId)}`)
+      .pipe(catchError(error => this.handleError(error, 'remove-address')));
+  }
+
+  editAddress(addressToEdit: Address): Observable<Address> {
+    return this.http.put<Address>(`${this.basePath}`, addressToEdit)
+      .pipe(catchError(error => this.handleError(error, 'edit-address')));
+  }
+
+  get trigger$(): Observable<any> {
     return this._trigger.asObservable();
   }
 
-  triggerOnReloadAddressesList() {
+  triggerOnReloadAddressesList(): void {
     this._trigger.next();
   }
 
-  removeAddress(addressId: number) {
-    this.http.delete(`${this.basePath}/${(addressId)}`)
-      .subscribe(() => this.triggerOnReloadAddressesList());
-  }
+  private handleError(error: HttpErrorResponse, popUpId: string) {
+    const errorMessage = SubscriptionErrorHandle(error);
 
-  editAddress(addressToEdit: Address) {
-    return this.http.put<Address>(`${this.basePath}`, addressToEdit);
+    this.toastService.show('Error!', {
+      classname: `bg-danger text-light`,
+      delay: 10_000,
+      id: `pop-up-error`
+    });
 
+    this.toastService.show(errorMessage, {
+      classname: `bg-danger text-light`,
+      delay: 10_000,
+      id: `pop-up-error-${popUpId}`
+    });
+
+    return throwError(error);
   }
 }

@@ -23,7 +23,8 @@ export class AddressComponent implements OnInit, OnDestroy {
   searchFormAddress: FormGroup;
   errorMessage: string;
   loading: boolean;
-  private triggerSubscription: Subscription;
+
+  private subscription: Subscription;
 
   constructor(private addressService: AddressService,
               private fb: FormBuilder,
@@ -41,33 +42,33 @@ export class AddressComponent implements OnInit, OnDestroy {
       this.addressesToDisplay = this.search(searchText))
 
     this.reloadAddresses();
-    this.triggerSubscription = this.addressService.trigger$
+    this.subscription.add(this.subscription = this.addressService.trigger$
       .subscribe(() => {
         this.addressesToDisplay = [];
         this.reloadAddresses();
-      });
+      }));
   }
 
   reloadAddresses(): void {
     this.loading = true;
 
-    this.addressService.getAllAddressesByContactId(this.contactId)
-      .subscribe(addresses => this.callbackOk(addresses), error => this.callbackError(error));
+    this.subscription.add(this.addressService.getAllAddressesByContactId(this.contactId)
+      .subscribe(addresses => this.callbackOk(addresses), error => this.callbackError(error)));
   }
 
-  callbackOk(value: Address[]) {
+  callbackOk(value: Address[]): void {
     this.errorMessage = ''
     this.loading = false
     this.addressesFromServer = value
     this.addressesToDisplay = value;
   }
 
-  callbackError(error: any) {
+  callbackError(error: any): void {
     this.errorMessage = SubscriptionErrorHandle(error)
     this.loading = false
   }
 
-  search(text: string) {
+  search(text: string): Address[] {
     return this.addressesFromServer.filter(addressItem => {
       const term = text.toLowerCase()
       const valueToString = addressItem.country + " " + addressItem.city + " " + addressItem.zip + " " + addressItem.street
@@ -75,12 +76,12 @@ export class AddressComponent implements OnInit, OnDestroy {
     })
   }
 
-  openModalAddAddress() {
+  openModalAddAddress(): void {
     const modalRef = this.modalService.open(AddressAddModalComponent);
     modalRef.componentInstance.contactId = this.contactId;
   }
 
   ngOnDestroy(): void {
-    this.triggerSubscription.unsubscribe();
+    this.subscription.unsubscribe();
   }
 }
