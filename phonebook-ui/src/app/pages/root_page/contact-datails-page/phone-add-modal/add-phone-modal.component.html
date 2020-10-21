@@ -1,11 +1,11 @@
 <div class="modal-header" id="add-contact-modal">
   <h4 class="modal-title">Add new phone</h4>
-  <a type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')" placement="bottom"
+  <a type="button" class="close" aria-label="Close" (click)="onClickCancel()" placement="bottom"
      ngbTooltip="close this window">
     <span aria-hidden="true">&times;</span>
   </a>
 </div>
-<form [formGroup]="phoneForm" novalidate (ngSubmit)="onClickSave()" id="phone-form">
+<form [formGroup]="phoneAddForm" novalidate (ngSubmit)="onClickSave()" id="phone-add-form">
   <div class="modal-body">
     <div class="form-group">
       <label for="cc-select">Select country code</label>
@@ -26,7 +26,7 @@
       <input class="form-control" type="tel" placeholder="Phone number..." [readOnly]="loading"
              formControlName="phoneNumber" id="selected-cc">
       <div class="input-group-append">
-        <button *ngIf="!loading" [disabled]="phoneForm.invalid" class="btn btn-primary" type="submit">Save phone
+        <button *ngIf="!loading" [disabled]="phoneAddForm.invalid" class="btn btn-primary" type="submit">Save phone
         </button>
 
         <button *ngIf="loading" class="btn btn-primary" disabled type="button">
@@ -39,12 +39,9 @@
 
   <div class="card-footer">
     <p>
-      <ngb-alert *ngIf="alertMessage" type="{{alertType}}" (close)="onCloseAlert()" placement="top"
-                 ngbTooltip="close this window">
-        {{alertMessage}}
-      </ngb-alert>
-      <ngb-alert *ngIf="phoneForm.invalid && (phoneForm.dirty || phoneForm.touched)" type="info" [dismissible]="false">
-        Allowed length of the phone number must be between 5 and 12 digits
+      <ngb-alert *ngIf="phoneAddForm.invalid && (phoneAddForm.dirty || phoneAddForm.touched)" type="info"
+                 [dismissible]="false">
+        Allowed length of the phone number 5 - 12 digits
       </ngb-alert>
     </p>
   </div>

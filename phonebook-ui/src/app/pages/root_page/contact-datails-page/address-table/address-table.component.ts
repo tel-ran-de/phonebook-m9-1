@@ -51,7 +51,6 @@ export class AddressTableComponent implements OnInit, OnDestroy {
   callBackOkAddressRemove(): void {
     this.toastService.show('Address removed', {
       classname: 'bg-success text-light',
-      delay: 5_000,
       id: 'pop-up-success-remove-address'
     });
 
@@ -61,7 +60,6 @@ export class AddressTableComponent implements OnInit, OnDestroy {
   callBackErrorAddressRemove() {
     this.toastService.show('Remove address failed', {
       classname: `bg-danger text-light`,
-      delay: 7_000,
       id: `pop-up-error-remove-address`
     });
   }
