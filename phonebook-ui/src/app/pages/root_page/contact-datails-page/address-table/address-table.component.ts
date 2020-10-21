@@ -19,7 +19,7 @@ export class AddressTableComponent implements OnInit, OnDestroy {
   reverseSort: boolean;
   sortBy: string;
 
-  private removeSubscription: Subscription;
+  removeSubscription: Subscription;
 
   constructor(private modalService: NgbModal,
               private addressService: AddressService,
@@ -40,11 +40,12 @@ export class AddressTableComponent implements OnInit, OnDestroy {
 
     if (this.reverseSort)
       this.sortedAddressesToDisplay.reverse();
+
   }
 
   onClickRemove(addressId: number): void {
     this.removeSubscription = this.addressService.removeAddress(addressId)
-      .subscribe(() => this.callBackOkAddressRemove(),() =>  this.callBackErrorAddressRemove());
+      .subscribe(() => this.callBackOkAddressRemove(), () => this.callBackErrorAddressRemove());
   }
 
   callBackOkAddressRemove(): void {
