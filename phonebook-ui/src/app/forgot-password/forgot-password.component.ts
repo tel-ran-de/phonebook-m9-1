@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Subscription} from "rxjs";
 import {UserService} from "../service/user.service";
 import {SubscriptionErrorHandle} from "../service/subscriptionErrorHandle";
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-forgot-password',
@@ -20,10 +21,14 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
   load: boolean;
   email: string;
 
-  private subscription: Subscription;
+  forgotPassSubscription: Subscription;
 
   constructor(private fb: FormBuilder,
               private userService: UserService) {
+    this.createForm();
+  }
+
+  ngOnInit(): void {
   }
 
   createForm() {
@@ -33,34 +38,35 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnInit(): void {
-    this.createForm();
-  }
-
   onSubmit() {
     this.loading = true;
     this.errorMessage = '';
     this.email = '';
 
-    this.subscription = this.userService.forgotPassword(this.form.value.email.toLowerCase())
-      .subscribe(
-        () => {
-          this.loading = false;
-          this.load = true;
-          this.email = this.form.value['email']
-        },
-        error => {
-          this.errorMessage = SubscriptionErrorHandle(error);
+    this.forgotPassSubscription = this.userService.forgotPassword(this.form.value.email.toLowerCase())
+      .subscribe(() => this.callbackOkFP(), error => this.callbackErrorFP(error));
+  }
 
-          if (this.errorMessage) {
-            this.loading = false;
-            this.load = true;
-          }
-        });
+  callbackOkFP(): void {
+    this.loading = false;
+    this.load = true;
+
+    this.email = this.form.value['email']
+  }
+
+  callbackErrorFP(error: HttpErrorResponse): void {
+    this.errorMessage = SubscriptionErrorHandle(error);
+
+    if (this.errorMessage) {
+      this.loading = false;
+      this.load = true;
+    }
+
+    this.form.reset();
   }
 
   ngOnDestroy(): void {
-    if (this.subscription)
-      this.subscription.unsubscribe();
+    if (this.forgotPassSubscription)
+      this.forgotPassSubscription.unsubscribe();
   }
 }
