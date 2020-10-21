@@ -17,14 +17,16 @@ export class PhoneComponent implements OnInit, OnDestroy {
   @Input()
   contactId: number;
 
-  searchFormPhone: FormGroup;
-
   phonesFromServer: Phone[] = [];
   phonesToDisplay: Phone[] = [];
 
+  searchFormPhone: FormGroup;
   errorMessage: string;
   loading: boolean;
-  private triggerSubscription: Subscription;
+
+  formSubscription: Subscription;
+  getAllSubscription: Subscription;
+  triggerSubscription: Subscription;
 
   constructor(private phoneService: PhoneService,
               private fb: FormBuilder,
@@ -34,15 +36,14 @@ export class PhoneComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.searchFormPhone = this.fb.group({
       searchInput: []
-    })
+    });
 
     this.reloadPhones();
 
-    this.searchFormPhone.get("searchInput").valueChanges.subscribe(searchText => {
-      this.phonesToDisplay = this.search(searchText);
-    });
+    this.searchFormPhone.get("searchInput").valueChanges.subscribe(searchText =>
+      this.phonesToDisplay = this.search(searchText));
 
-    this.triggerSubscription = this.phoneService.trigger$
+    this.formSubscription = this.triggerSubscription = this.phoneService.trigger$
       .subscribe(() => {
         this.phonesToDisplay = [];
         this.reloadPhones();
@@ -50,38 +51,45 @@ export class PhoneComponent implements OnInit, OnDestroy {
   }
 
   reloadPhones(): void {
-    this.loading = true
+    this.loading = true;
 
-    this.phoneService.getAllPhonesByContactId(this.contactId)
+    this.getAllSubscription = this.phoneService.getAllPhonesByContactId(this.contactId)
       .subscribe(phones => this.callbackOkGetAllPhones(phones), error => this.callbackErrorGetAllPhones(error));
   }
 
-  callbackOkGetAllPhones(value: Phone[]) {
-    this.errorMessage = ''
-    this.loading = false
-    this.phonesFromServer = value
+  callbackOkGetAllPhones(value: Phone[]): void {
+    this.errorMessage = '';
+    this.loading = false;
+
+    this.phonesFromServer = value;
     this.phonesToDisplay = value;
   }
 
   callbackErrorGetAllPhones(error: any) {
-    this.errorMessage = SubscriptionErrorHandle(error)
-    this.loading = false
+    this.errorMessage = SubscriptionErrorHandle(error);
+
+    this.loading = false;
   }
 
-  search(text: string) {
+  search(text: string): Phone[] {
     return this.phonesFromServer.filter(value => {
       const term = text.toLowerCase();
       const valueToString = value.countryCode + " " + value.phoneNumber;
-      return valueToString.toLowerCase().includes(term)
+      return valueToString.toLowerCase().includes(term);
     })
   }
 
-  openModalAddPhone() {
+  openModalAddPhone(): void {
     const modalRef = this.modalService.open(PhoneAddModalComponent);
     modalRef.componentInstance.contactId = this.contactId;
   }
 
   ngOnDestroy(): void {
-    this.triggerSubscription.unsubscribe();
+    if (this.formSubscription)
+      this.formSubscription.unsubscribe();
+    if (this.getAllSubscription)
+      this.getAllSubscription.unsubscribe();
+    if (this.triggerSubscription)
+      this.triggerSubscription.unsubscribe();
   }
 }
