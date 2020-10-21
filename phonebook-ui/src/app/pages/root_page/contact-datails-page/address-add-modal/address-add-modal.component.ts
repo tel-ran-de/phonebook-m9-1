@@ -45,7 +45,7 @@ export class AddressAddModalComponent implements OnInit, OnDestroy {
     this.createForm();
   }
 
-  private createForm(): void {
+  createForm(): void {
     this.addressForm = this.fb.group({
       city: [],
       zip: [],

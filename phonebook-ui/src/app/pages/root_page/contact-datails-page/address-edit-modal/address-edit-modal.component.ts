@@ -81,7 +81,7 @@ export class AddressEditModalComponent implements OnInit, OnDestroy {
     this.onClickCancel();
   }
 
-  callBackErrorAddressEdit() {
+  callBackErrorAddressEdit(): void  {
     this.loading = false;
 
     this.toastService.show('Edit address failed', {

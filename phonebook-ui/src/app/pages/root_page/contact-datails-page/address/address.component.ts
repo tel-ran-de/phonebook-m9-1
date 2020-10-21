@@ -43,7 +43,6 @@ export class AddressComponent implements OnInit, OnDestroy {
     this.formSubscription = this.searchFormAddress.get("searchInput").valueChanges.subscribe(searchText =>
       this.addressesToDisplay = this.search(searchText));
 
-    this.reloadAddresses();
     this.triggerSubscription = this.addressService.trigger$
       .subscribe(() => {
         this.addressesToDisplay = [];
@@ -59,6 +58,7 @@ export class AddressComponent implements OnInit, OnDestroy {
   }
 
   callbackOk(value: Address[]): void {
+    this.errorMessage = '';
     this.loading = false;
 
     this.addressesFromServer = value;
@@ -74,8 +74,8 @@ export class AddressComponent implements OnInit, OnDestroy {
   search(text: string): Address[] {
     return this.addressesFromServer.filter(addressItem => {
       const term = text.toLowerCase();
-      const valueToString = addressItem.country + " " + addressItem.city + " " + addressItem.zip + " " + addressItem.street
-      return valueToString.toLowerCase().includes(term)
+      const valueToString = addressItem.country + " " + addressItem.city + " " + addressItem.zip + " " + addressItem.street;
+      return valueToString.toLowerCase().includes(term);
     });
   }
 
