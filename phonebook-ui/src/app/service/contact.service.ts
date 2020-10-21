@@ -13,9 +13,6 @@ export class ContactService {
 
   private _trigger = new Subject<void>();
 
-  contacts: Observable<Contact[]>;
-  profile: Observable<Contact>;
-
   private readonly contactPath = '/api/contact';
   private readonly profilePath = '/profile';
 
@@ -24,14 +21,7 @@ export class ContactService {
   }
 
   getAllContacts(): Observable<Contact[]> {
-    if (!this.contacts)
-      this.reload();
-    return this.contacts;
-  }
-
-  reload(): void {
-    this.getProfile();
-    this.contacts = this.http.get<Contact[]>(`${this.contactPath}`)
+    return this.http.get<Contact[]>(`${this.contactPath}`)
       .pipe(catchError(error => this.handleError(error, 'get-all-contacts')));
   }
 

@@ -1,21 +1,24 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {NgbActiveModal, NgbModalConfig} from "@ng-bootstrap/ng-bootstrap";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ContactService} from "../../../service/contact.service";
 import {ToastService} from "../../../service/toast.service";
 import {Router} from "@angular/router";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-modal-content',
   templateUrl: './add-contact-modal.component.html',
   styleUrls: ['./add-contact-modal.component.css']
 })
-export class AddContactModalComponent implements OnInit {
+export class AddContactModalComponent implements OnInit, OnDestroy {
 
   isSaved: boolean;
   loading: boolean;
   alertMessage: string;
   form: FormGroup;
+
+  addContactSubscription: Subscription;
 
   constructor(private config: NgbModalConfig,
               public activeModal: NgbActiveModal,
@@ -45,7 +48,7 @@ export class AddContactModalComponent implements OnInit {
     this.loading = true;
     this.alertMessage = '';
 
-    this.contactService.addContact(this.form.value)
+    this.addContactSubscription = this.contactService.addContact(this.form.value)
       .subscribe(contact => this.callBackOkAddContact(contact.id), () => this.callBackErrorAddContact());
   }
 
@@ -77,5 +80,10 @@ export class AddContactModalComponent implements OnInit {
   onClickCancel(): void {
     this.form.reset();
     this.activeModal.close();
+  }
+
+  ngOnDestroy(): void {
+    if (this.addContactSubscription)
+      this.addContactSubscription.unsubscribe();
   }
 }

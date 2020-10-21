@@ -38,7 +38,7 @@ export class UserService {
   }
 
   login(user: User): Observable<any> {
-    return this.http.post<User>(this.loginPath, user, {observe: 'response'});
+    return this.http.post<any>(this.loginPath, user, {observe: 'response'});
   }
 
   getUserData(): Observable<User> {

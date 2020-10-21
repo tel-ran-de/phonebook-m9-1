@@ -23,7 +23,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   userExistMessage: boolean;
   loading: boolean;
 
-  subscription: Subscription;
+  private userRegSubscription: Subscription;
 
   constructor(private fb: FormBuilder,
               private router: Router,
@@ -50,7 +50,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.errorMessage = '';
 
-    this.userService.newUserRegistration(this.form.value)
+    this.userRegSubscription = this.userService.newUserRegistration(this.form.value)
       .subscribe(() => this.callbackOkFP(), error => this.callbackErrorFP(error));
   }
 
@@ -71,7 +71,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.subscription)
-      this.subscription.unsubscribe();
+    if (this.userRegSubscription)
+      this.userRegSubscription.unsubscribe();
   }
 }

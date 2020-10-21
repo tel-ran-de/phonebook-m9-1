@@ -55,7 +55,7 @@ export class ContactRemoveModalComponent implements OnInit, OnDestroy {
 
     this.contactService.triggerOnReloadContactsList();
 
-    this.toastService.show('Contact removed success', {
+    this.toastService.show('Contact removed', {
       classname: 'bg-success text-light',
       id: 'pop-up-success-removed-contact'
     });
