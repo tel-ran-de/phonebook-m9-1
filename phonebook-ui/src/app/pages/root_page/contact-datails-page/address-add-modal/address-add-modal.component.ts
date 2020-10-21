@@ -16,7 +16,7 @@ import {ToastService} from "../../../../service/toast.service";
 export class AddressAddModalComponent implements OnInit, OnDestroy {
 
   @Input()
-  private contactId: number;
+  contactId: number;
   sortedCountriesForSelect: Country[];
 
   loading: boolean;
