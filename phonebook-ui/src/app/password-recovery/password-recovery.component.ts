@@ -5,6 +5,7 @@ import {Subscription} from 'rxjs';
 import {UserService} from "../service/user.service";
 import {ConfirmedValidator} from "../service/confirmed.validator";
 import {SubscriptionErrorHandle} from "../service/subscriptionErrorHandle";
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-password-recovery',
@@ -19,20 +20,27 @@ export class PasswordRecoveryComponent implements OnInit, OnDestroy {
 
   errorMessage: string;
   token: string;
+
   tokenInvalid: boolean;
-  isSuccess: boolean;
   loading: boolean;
   load: boolean;
 
-  private subscription: Subscription;
+  resetPassSubscription: Subscription;
 
   constructor(private fb: FormBuilder,
               private router: Router,
               private userService: UserService,
               private route: ActivatedRoute) {
+    this.createForm();
   }
 
-  createForm() {
+
+  ngOnInit(): void {
+    this.token = this.route.snapshot.paramMap.get('token');
+  }
+
+
+  createForm(): void {
     this.form = this.fb.group({
       password: [null, [Validators.minLength(8),
         Validators.required, Validators.maxLength(20)]],
@@ -41,11 +49,6 @@ export class PasswordRecoveryComponent implements OnInit, OnDestroy {
     }, {
       validators: ConfirmedValidator('password', "confirm_password")
     });
-  }
-
-  ngOnInit(): void {
-    this.token = this.route.snapshot.paramMap.get('token');
-    this.createForm();
   }
 
   onSubmit() {
@@ -58,27 +61,28 @@ export class PasswordRecoveryComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.errorMessage = '';
 
-    this.subscription = this.userService.resetPassword(this.form.value.password, this.token)
-      .subscribe(
-        () => {
-          this.isSuccess = true;
-          this.loading = false;
-          this.load = true;
-        },
-        error => {
-          this.errorMessage = SubscriptionErrorHandle(error);
-          this.isSuccess = false;
+    this.resetPassSubscription = this.userService.resetPassword(this.form.value.password, this.token)
+      .subscribe(() => this.callbackOkRP(), error => this.callbackErrorRP(error));
+  }
 
+  callbackOkRP(): void {
+    this.loading = false;
+    this.load = true;
+  }
 
-          if (this.errorMessage) {
-            this.loading = false;
-            this.load = true;
-          }
-        });
+  callbackErrorRP(error: HttpErrorResponse): void {
+    this.errorMessage = SubscriptionErrorHandle(error);
+
+    if (this.errorMessage) {
+      this.loading = false;
+      this.load = true;
+    }
+
+    this.form.reset();
   }
 
   ngOnDestroy(): void {
-    if (this.subscription)
-      this.subscription.unsubscribe();
+    if (this.resetPassSubscription)
+      this.resetPassSubscription.unsubscribe();
   }
 }

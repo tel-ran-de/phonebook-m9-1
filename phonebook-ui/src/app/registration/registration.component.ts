@@ -5,6 +5,7 @@ import {Subscription} from 'rxjs';
 import {UserService} from "../service/user.service";
 import {ConfirmedValidator} from "../service/confirmed.validator";
 import {SubscriptionErrorHandle} from "../service/subscriptionErrorHandle";
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-registration',
@@ -22,14 +23,18 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   userExistMessage: boolean;
   loading: boolean;
 
-  private subscription: Subscription;
+  subscription: Subscription;
 
   constructor(private fb: FormBuilder,
               private router: Router,
               private userService: UserService) {
+    this.createForm();
   }
 
-  createForm() {
+  ngOnInit(): void {
+  }
+
+  createForm(): void {
     this.form = this.fb.group({
       email: [null, [Validators.required, Validators.pattern("^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,10}$")]],
       password: [null, [Validators.minLength(8),
@@ -41,29 +46,28 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnInit(): void {
-    this.createForm();
-  }
-
-  onSubmit() {
+  onSubmit(): void {
     this.loading = true;
     this.errorMessage = '';
 
     this.userService.newUserRegistration(this.form.value)
-      .subscribe(
-        () => {
-          this.loading = false;
-          this.router.navigate(['user/activate-email']).then();
-        },
-        error => {
-          this.errorMessage = SubscriptionErrorHandle(error);
-          if (this.errorMessage === 'Error! User already exists')
-            this.userExistMessage = true;
+      .subscribe(() => this.callbackOkFP(), error => this.callbackErrorFP(error));
+  }
 
-          if (this.errorMessage)
-            this.loading = false;
-        }
-      );
+  callbackOkFP(): void {
+    this.loading = false;
+    this.router.navigate(['user/activate-email']).then();
+  }
+
+  callbackErrorFP(error: HttpErrorResponse): void {
+    this.errorMessage = SubscriptionErrorHandle(error);
+    if (this.errorMessage === 'Error! User already exists')
+      this.userExistMessage = true;
+
+    if (this.errorMessage)
+      this.loading = false;
+
+    this.form.reset();
   }
 
   ngOnDestroy(): void {
