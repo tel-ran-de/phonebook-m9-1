@@ -46,20 +46,17 @@ export class AddContactModalComponent implements OnInit {
     this.alertMessage = '';
 
     this.contactService.addContact(this.form.value)
-      .subscribe(() => this.callBackOkAddContact(), () => this.callBackErrorAddContact());
+      .subscribe(contact => this.callBackOkAddContact(contact.id), () => this.callBackErrorAddContact());
   }
 
-  callBackOkAddContact(): void {
+  callBackOkAddContact(contactId: number): void {
     this.loading = false;
     this.isSaved = true;
 
-    if (this.router.url !== '/contacts')
-      this.router.navigate(['./contacts/'])
-    else this.contactService.triggerOnReloadContactsList();
+    this.router.navigate(['./contacts/' + contactId])
 
     this.toastService.show('Contact saved successfully', {
       classname: 'bg-success text-light',
-      delay: 10_000,
       id: 'pop-up-success-add-contact'
     });
 
@@ -71,7 +68,6 @@ export class AddContactModalComponent implements OnInit {
 
     this.toastService.show('Add contact failed', {
       classname: `bg-danger text-light`,
-      delay: 7_000,
       id: `pop-up-error-add-contact`
     });
 
