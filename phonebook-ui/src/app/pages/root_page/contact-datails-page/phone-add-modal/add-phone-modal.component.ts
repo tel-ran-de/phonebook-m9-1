@@ -5,36 +5,35 @@ import {PhoneService} from "src/app//service/phone.service";
 import {Phone} from "src/app//model/phone";
 import {Country} from "src/app/model/country";
 import {COUNTRIES} from "src/app/model/countries";
-import {SubscriptionErrorHandle} from "src/app/service/subscriptionErrorHandle";
 import {Subscription} from "rxjs";
+import {ToastService} from "../../../../service/toast.service";
 
 @Component({
-  selector: 'app-phone-edit-modal',
+  selector: 'app-phone-add-modal',
   templateUrl: './add-phone-modal.component.html',
   styleUrls: ['./add-phone-modal.component.css']
 })
 export class PhoneAddModalComponent implements OnInit, OnDestroy {
+
   @Input()
   contactId: number;
   sortedCountriesForSelect: Country[];
-  isSaved: boolean;
 
   loading: boolean;
-  phoneForm: FormGroup;
+  phoneAddForm: FormGroup;
+
   preSelectedCountryCode: Country;
-
   selectedCountryCode: string = '';
-  alertMessage: string;
 
-  alertType: string;
   phone: Phone = new Phone();
 
-  private subscription: Subscription = new Subscription();
+  addPhoneSubscription: Subscription = new Subscription();
 
   constructor(private config: NgbModalConfig,
               public activeModal: NgbActiveModal,
               private fb: FormBuilder,
-              private phoneService: PhoneService) {
+              private phoneService: PhoneService,
+              private toastService: ToastService) {
     config.backdrop = 'static';
     this.sortedCountriesForSelect = COUNTRIES.sort((countryA, countryB) => countryA.name > countryB.name ? 1 : -1);
     this.preSelectedCountryCode = this.sortedCountriesForSelect.find(value => value.name === 'Germany');
@@ -46,55 +45,59 @@ export class PhoneAddModalComponent implements OnInit, OnDestroy {
     this.createForm();
   }
 
-  private createForm() {
-    this.phoneForm = this.fb.group({
+  createForm(): void {
+    this.phoneAddForm = this.fb.group({
       phoneNumber: [null, [Validators.required, Validators.pattern("[0-9 ]{5,12}")]]
     });
   }
 
   onClickSave() {
-    this.isSaved = false;
     this.loading = true;
-    this.alertMessage = '';
 
     this.phone.countryCode = this.selectedCountryCode;
-    this.phone.phoneNumber = this.phoneForm.controls['phoneNumber'].value;
+    this.phone.phoneNumber = this.phoneAddForm.controls['phoneNumber'].value;
     this.phone.contactId = this.contactId;
 
-    this.subscription = this.phoneService.addPhone(this.phone)
-      .subscribe(() => this.callBackOkAddPhone(), error => this.callBackErrorAddPhone(error));
+    this.addPhoneSubscription = this.phoneService.addPhone(this.phone)
+      .subscribe(() => this.callBackOkAddPhone(), () => this.callBackErrorAddPhone());
   }
 
-  callBackOkAddPhone() {
+  callBackOkAddPhone(): void {
     this.loading = false;
-    this.isSaved = true;
 
-    this.alertType = 'success'
-    this.alertMessage = 'Phone number: (' + this.phone.countryCode + ")" + this.phone.phoneNumber + ' saved';
-
-    this.phoneForm.reset();
     this.phoneService.triggerOnReloadPhonesList();
+
+    this.toastService.show('Phone saved', {
+      classname: 'bg-success text-light',
+      id: 'pop-up-success-add-phone'
+    });
+
+    this.onClickCancel();
   }
 
-  callBackErrorAddPhone(error: any) {
-    this.isSaved = false;
+  callBackErrorAddPhone(): void {
+    this.loading = false;
 
-    this.alertType = 'danger'
-    this.alertMessage = SubscriptionErrorHandle(error);
+    this.toastService.show('Add phone failed', {
+      classname: `bg-danger text-light`,
+      id: `pop-up-error-add-phone`
+    });
 
-    if (this.alertMessage)
-      this.loading = false;
+    this.onClickCancel();
   }
 
-  onCloseAlert() {
-    this.alertMessage = '';
-  }
 
-  selectChangeHandler(event: any) {
+  selectChangeHandler(event: any): void {
     this.selectedCountryCode = event.target.value;
   }
 
+  onClickCancel(): void {
+    this.phoneAddForm.reset();
+    this.activeModal.close();
+  }
+
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    if (this.addPhoneSubscription)
+      this.addPhoneSubscription.unsubscribe();
   }
 }
