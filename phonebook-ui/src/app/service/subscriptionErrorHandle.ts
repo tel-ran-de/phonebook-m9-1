@@ -1,13 +1,11 @@
 import {HttpErrorResponse} from "@angular/common/http";
 
 export function SubscriptionErrorHandle(error: HttpErrorResponse): string {
-  let errorMessage: string;
+
+  if (error.status === 504 || 400 || 404)
+    return 'Something bad happened; please try again later.';
   if (error.error instanceof ErrorEvent)
     return 'No internet connection';
-  else errorMessage = error.error.message;
 
-  if (errorMessage === null || !errorMessage)
-    errorMessage = 'Error code: ' + error.status
-      + '. If you have this error again, please contact us: \n support@phone-book.com';
-  return errorMessage;
+  return error.error.message || 'If you have this error again, please contact us.';
 }
