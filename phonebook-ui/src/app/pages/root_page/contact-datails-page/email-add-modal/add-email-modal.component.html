@@ -1,18 +1,18 @@
 <div class="modal-header" id="add-email-modal">
   <h4 class="modal-title">Add new email</h4>
-  <a type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')" placement="bottom"
+  <a type="button" class="close" aria-label="Close" (click)="onClickCancel()" placement="bottom"
      ngbTooltip="close this window">
     <span aria-hidden="true">&times;</span>
   </a>
 </div>
-<form [formGroup]="emailForm" novalidate (ngSubmit)="onClickSave()" id="email-form">
+<form [formGroup]="emailAddForm" novalidate (ngSubmit)="onClickSave()" id="email-add-form">
   <div class="modal-body">
     <label for="input-email">Email</label>
     <div class="input-group mb-3">
       <input class="form-control" type="email" placeholder="Email..." [readOnly]="loading"
              formControlName="email" id="input-email">
       <div class="input-group-append">
-        <button *ngIf="!loading" [disabled]="emailForm.invalid" class="btn btn-primary" type="submit">Save email
+        <button *ngIf="!loading" [disabled]="emailAddForm.invalid" class="btn btn-primary" type="submit">Save email
         </button>
 
         <button *ngIf="loading" class="btn btn-primary" disabled type="button">
@@ -25,11 +25,7 @@
 
   <div class="card-footer">
     <p>
-      <ngb-alert *ngIf="alertMessage" type="{{alertType}}" (close)="onCloseAlert()" placement="top"
-                 ngbTooltip="close this window">
-        {{alertMessage}}
-      </ngb-alert>
-      <ngb-alert *ngIf="emailForm.invalid && (emailForm.dirty || emailForm.touched)" type="info" [dismissible]="false">
+      <ngb-alert *ngIf="emailAddForm.invalid && (emailAddForm.dirty || emailAddForm.touched)" type="info" [dismissible]="false">
         Only email is allowed here
       </ngb-alert>
     </p>

@@ -53,7 +53,7 @@ export class AddressService {
     this.toastService.show(errorMessage, {
       classname: `bg-danger text-light`,
       delay: 7_000,
-      id: `pop-up-error-${popUpId}`
+      id: `pu-error-${popUpId}`
     });
 
     return throwError(error);

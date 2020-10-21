@@ -73,8 +73,8 @@ export class ContactService {
 
     this.toastService.show(errorMessage, {
       classname: `bg-danger text-light`,
-      delay: 10_000,
-      id: `pop-up-error-${popUpId}`
+      delay: 7_000,
+      id: `pu-error-${popUpId}`
     });
 
     return throwError(error);

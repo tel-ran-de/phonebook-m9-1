@@ -1,34 +1,31 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Email} from "../../../../model/email";
 import {Subscription} from "rxjs";
 import {NgbActiveModal, NgbModalConfig} from "@ng-bootstrap/ng-bootstrap";
 import {EmailService} from "../../../../service/email.service";
-import {SubscriptionErrorHandle} from "../../../../service/subscriptionErrorHandle";
+import {ToastService} from "../../../../service/toast.service";
 
 @Component({
   selector: 'app-email-edit-modal',
   templateUrl: './email-edit-modal.component.html',
   styleUrls: ['./email-edit-modal.component.css']
 })
-export class EmailEditModalComponent implements OnInit {
+export class EmailEditModalComponent implements OnInit, OnDestroy {
 
   @Input()
   emailToEdit: Email;
 
-  isSaved: boolean;
   loading: boolean;
   emailEditForm: FormGroup;
 
-  alertMessage: string;
-  alertType: string;
-
-  private emailAddSubscription: Subscription;
+  emailEditSubscription: Subscription;
 
   constructor(private config: NgbModalConfig,
               public activeModal: NgbActiveModal,
               private fb: FormBuilder,
-              private emailService: EmailService) {
+              private emailService: EmailService,
+              private toastService: ToastService) {
     config.backdrop = 'static';
   }
 
@@ -36,7 +33,7 @@ export class EmailEditModalComponent implements OnInit {
     this.createForm();
   }
 
-  createForm() {
+  createForm(): void {
     this.emailEditForm = this.fb.group({
       email: [null, [Validators.required, Validators.pattern("^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,10}$")]]
     });
@@ -44,43 +41,52 @@ export class EmailEditModalComponent implements OnInit {
     this.setFormValue(this.emailToEdit);
   }
 
-  onClickSave() {
-    this.isSaved = false;
+  onClickSave(): void {
     this.loading = true;
-    this.alertMessage = '';
 
     this.emailToEdit.email = this.emailEditForm.controls['email'].value;
 
-    this.emailAddSubscription = this.emailService.editEmail(this.emailToEdit)
-      .subscribe(() => this.callBackOkEditEmail(), error => this.callBackErrorEditEmail(error));
+    this.emailEditSubscription = this.emailService.editEmail(this.emailToEdit)
+      .subscribe(() => this.callBackOkEditEmail(), () => this.callBackErrorEditEmail());
   }
 
-  callBackOkEditEmail() {
+  callBackOkEditEmail(): void {
     this.loading = false;
-    this.isSaved = true;
 
-    this.alertType = 'success'
-    this.alertMessage = 'Email: ' + this.emailToEdit.email + ' saved';
-
-    this.emailEditForm.reset();
     this.emailService.triggerOnReloadEmailList();
+
+    this.toastService.show('Edit email success', {
+      classname: 'bg-success text-light',
+      delay: 5_000,
+      id: 'pop-up-success-edit-email'
+    });
+
+    this.onClickCancel();
   }
 
-  callBackErrorEditEmail(error: any) {
-    this.isSaved = false;
+  callBackErrorEditEmail(): void {
+    this.loading = false;
 
-    this.alertType = 'danger'
-    this.alertMessage = SubscriptionErrorHandle(error);
+    this.toastService.show('Edit email failed', {
+      classname: `bg-danger text-light`,
+      delay: 7_000,
+      id: `pop-up-error-edit-email`
+    });
 
-    if (this.alertMessage)
-      this.loading = false;
+    this.onClickCancel();
   }
 
-  onCloseAlert() {
-    this.alertMessage = '';
+  onClickCancel(): void {
+    this.emailEditForm.reset();
+    this.activeModal.close();
   }
 
-  setFormValue(emailToEdit: Email) {
+  setFormValue(emailToEdit: Email): void {
     this.emailEditForm.controls['email'].setValue(emailToEdit.email);
+  }
+
+  ngOnDestroy(): void {
+    if (this.emailEditSubscription)
+      this.emailEditSubscription.unsubscribe();
   }
 }
