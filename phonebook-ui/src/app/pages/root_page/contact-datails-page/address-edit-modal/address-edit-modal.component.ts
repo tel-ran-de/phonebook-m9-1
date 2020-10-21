@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {NgbActiveModal, NgbModalConfig} from "@ng-bootstrap/ng-bootstrap";
 import {Country} from "../../../../model/country";
@@ -15,8 +15,6 @@ import {ToastService} from "../../../../service/toast.service";
 })
 export class AddressEditModalComponent implements OnInit, OnDestroy {
 
-
-  @Input()
   sortedCountriesForSelect: Country[];
 
   loading: boolean;
@@ -26,7 +24,6 @@ export class AddressEditModalComponent implements OnInit, OnDestroy {
   selectedCountry: string = '';
 
   alertMessage: string;
-  address: Address;
   addressToEdit: Address;
 
   editSubscription: Subscription;
@@ -57,6 +54,7 @@ export class AddressEditModalComponent implements OnInit, OnDestroy {
 
   onClickSave(): void {
     this.loading = true;
+    this.alertMessage = '';
 
     this.addressToEdit.country = this.selectedCountry;
     this.addressToEdit.city = this.addressEditForm.controls['city'].value;
@@ -81,7 +79,7 @@ export class AddressEditModalComponent implements OnInit, OnDestroy {
     this.onClickCancel();
   }
 
-  callBackErrorAddressEdit(): void  {
+  callBackErrorAddressEdit(): void {
     this.loading = false;
 
     this.toastService.show('Edit address failed', {
