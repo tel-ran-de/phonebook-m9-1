@@ -23,7 +23,10 @@ export class AddressComponent implements OnInit, OnDestroy {
   searchFormAddress: FormGroup;
   errorMessage: string;
   loading: boolean;
-  private triggerSubscription: Subscription;
+
+  formSubscription: Subscription;
+  getAllSubscription: Subscription;
+  triggerSubscription: Subscription;
 
   constructor(private addressService: AddressService,
               private fb: FormBuilder,
@@ -33,12 +36,12 @@ export class AddressComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.searchFormAddress = this.fb.group({
       searchInput: []
-    })
+    });
 
     this.reloadAddresses();
 
-    this.searchFormAddress.get("searchInput").valueChanges.subscribe(searchText =>
-      this.addressesToDisplay = this.search(searchText))
+    this.formSubscription = this.searchFormAddress.get("searchInput").valueChanges.subscribe(searchText =>
+      this.addressesToDisplay = this.search(searchText));
 
     this.reloadAddresses();
     this.triggerSubscription = this.addressService.trigger$
@@ -51,36 +54,42 @@ export class AddressComponent implements OnInit, OnDestroy {
   reloadAddresses(): void {
     this.loading = true;
 
-    this.addressService.getAllAddressesByContactId(this.contactId)
+    this.getAllSubscription = this.addressService.getAllAddressesByContactId(this.contactId)
       .subscribe(addresses => this.callbackOk(addresses), error => this.callbackError(error));
   }
 
-  callbackOk(value: Address[]) {
-    this.errorMessage = ''
-    this.loading = false
-    this.addressesFromServer = value
+  callbackOk(value: Address[]): void {
+    this.loading = false;
+
+    this.addressesFromServer = value;
     this.addressesToDisplay = value;
   }
 
-  callbackError(error: any) {
-    this.errorMessage = SubscriptionErrorHandle(error)
-    this.loading = false
+  callbackError(error: any): void {
+    this.loading = false;
+
+    this.errorMessage = SubscriptionErrorHandle(error);
   }
 
-  search(text: string) {
+  search(text: string): Address[] {
     return this.addressesFromServer.filter(addressItem => {
-      const term = text.toLowerCase()
+      const term = text.toLowerCase();
       const valueToString = addressItem.country + " " + addressItem.city + " " + addressItem.zip + " " + addressItem.street
       return valueToString.toLowerCase().includes(term)
-    })
+    });
   }
 
-  openModalAddAddress() {
+  openModalAddAddress(): void {
     const modalRef = this.modalService.open(AddressAddModalComponent);
     modalRef.componentInstance.contactId = this.contactId;
   }
 
   ngOnDestroy(): void {
-    this.triggerSubscription.unsubscribe();
+    if (this.formSubscription)
+      this.formSubscription.unsubscribe();
+    if (this.getAllSubscription)
+      this.getAllSubscription.unsubscribe();
+    if (this.triggerSubscription)
+      this.triggerSubscription.unsubscribe();
   }
 }

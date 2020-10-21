@@ -1,39 +1,39 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {Country} from "../../../../model/country";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {COUNTRIES} from "../../../../model/countries";
 import {NgbActiveModal, NgbModalConfig} from "@ng-bootstrap/ng-bootstrap";
-import {SubscriptionErrorHandle} from "../../../../service/subscriptionErrorHandle";
 import {Address} from "../../../../model/address";
 import {AddressService} from "../../../../service/address.service";
+import {Subscription} from "rxjs";
+import {ToastService} from "../../../../service/toast.service";
 
 @Component({
   selector: 'app-address-add-modal',
   templateUrl: './address-add-modal.component.html',
   styleUrls: ['./address-add-modal.component.css']
 })
-export class AddressAddModalComponent implements OnInit {
+export class AddressAddModalComponent implements OnInit, OnDestroy {
 
   @Input()
   private contactId: number;
   sortedCountriesForSelect: Country[];
 
-  isSaved: boolean;
   loading: boolean;
   addressForm: FormGroup;
 
   preSelectedCountry: Country;
   selectedCountry: string = '';
 
-  alertMessage: string;
-  alertType: string;
-
   address: Address;
+
+  addSubscription: Subscription;
 
   constructor(private config: NgbModalConfig,
               public activeModal: NgbActiveModal,
               private fb: FormBuilder,
-              private addressService: AddressService) {
+              private addressService: AddressService,
+              private toastService: ToastService) {
     config.backdrop = 'static';
     this.sortedCountriesForSelect = COUNTRIES.sort((countryA, countryB) => countryA.name > countryB.name ? 1 : -1);
     this.preSelectedCountry = this.sortedCountriesForSelect.find(value => value.name === 'Germany');
@@ -45,7 +45,7 @@ export class AddressAddModalComponent implements OnInit {
     this.createForm();
   }
 
-  private createForm() {
+  private createForm(): void {
     this.addressForm = this.fb.group({
       city: [],
       zip: [],
@@ -53,8 +53,8 @@ export class AddressAddModalComponent implements OnInit {
     });
   }
 
-  onClickSave() {
-    this.reloadStats();
+  onClickSave(): void {
+    this.loading = true;
 
     this.address.contactId = this.contactId;
     this.address.country = this.selectedCountry;
@@ -67,49 +67,47 @@ export class AddressAddModalComponent implements OnInit {
     this.address.city = city === null ? '' : city;
     this.address.zip = zip === null ? '' : zip;
 
-    this.addressService.addAddress(this.address).subscribe(() =>
-        this.callBackOk(),
-      error =>
-        this.callBackError(error)
-    );
+    this.addSubscription = this.addressService.addAddress(this.address)
+      .subscribe(() => this.callBackOkAddAddress(), () => this.callBackErrorAddAddress());
   }
 
-  reloadStats() {
-    this.isSaved = false;
-    this.loading = true;
-    this.alertMessage = '';
-  }
-
-  callBackOk() {
+  callBackOkAddAddress(): void {
     this.loading = false;
-    this.isSaved = true;
 
-    this.alertType = 'success'
-    this.alertMessage = 'Address saved';
-
-    this.addressForm.reset();
     this.addressService.triggerOnReloadAddressesList();
+
+    this.toastService.show('Address saved', {
+      classname: 'bg-success text-light',
+      delay: 5_000,
+      id: 'pop-up-success-add-address'
+    });
+
+    this.onClickCancel();
   }
 
-  callBackError(error: any) {
-    this.isSaved = false;
+  callBackErrorAddAddress() {
+    this.loading = false;
 
-    this.setAlert('danger', SubscriptionErrorHandle(error))
+    this.toastService.show('Add address failed', {
+      classname: `bg-danger text-light`,
+      delay: 7_000,
+      id: `pop-up-error-add-address`
+    });
 
-    if (this.alertMessage)
-      this.loading = false;
+    this.onClickCancel();
   }
 
-  setAlert(alertType: string, alertMessage: string) {
-    this.alertType = alertType;
-    this.alertMessage = alertMessage;
-  }
-
-  onCloseAlert() {
-    this.alertMessage = '';
-  }
-
-  selectChangeHandler(event: any) {
+  selectChangeHandler(event: any): void {
     this.selectedCountry = event.target.value;
+  }
+
+  onClickCancel(): void {
+    this.addressForm.reset();
+    this.activeModal.close();
+  }
+
+  ngOnDestroy(): void {
+    if (this.addSubscription)
+      this.addSubscription.unsubscribe();
   }
 }

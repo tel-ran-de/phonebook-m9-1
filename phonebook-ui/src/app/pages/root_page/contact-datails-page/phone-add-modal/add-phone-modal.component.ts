@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {NgbActiveModal, NgbModalConfig} from "@ng-bootstrap/ng-bootstrap";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {PhoneService} from "src/app//service/phone.service";
@@ -6,29 +6,30 @@ import {Phone} from "src/app//model/phone";
 import {Country} from "src/app/model/country";
 import {COUNTRIES} from "src/app/model/countries";
 import {SubscriptionErrorHandle} from "src/app/service/subscriptionErrorHandle";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-phone-edit-modal',
   templateUrl: './add-phone-modal.component.html',
   styleUrls: ['./add-phone-modal.component.css']
 })
-export class PhoneAddModalComponent implements OnInit {
-
+export class PhoneAddModalComponent implements OnInit, OnDestroy {
   @Input()
   contactId: number;
   sortedCountriesForSelect: Country[];
-
   isSaved: boolean;
+
   loading: boolean;
   phoneForm: FormGroup;
-
   preSelectedCountryCode: Country;
+
   selectedCountryCode: string = '';
-
   alertMessage: string;
-  alertType: string;
 
+  alertType: string;
   phone: Phone = new Phone();
+
+  private subscription: Subscription = new Subscription();
 
   constructor(private config: NgbModalConfig,
               public activeModal: NgbActiveModal,
@@ -60,7 +61,7 @@ export class PhoneAddModalComponent implements OnInit {
     this.phone.phoneNumber = this.phoneForm.controls['phoneNumber'].value;
     this.phone.contactId = this.contactId;
 
-    this.phoneService.addPhone(this.phone)
+    this.subscription = this.phoneService.addPhone(this.phone)
       .subscribe(() => this.callBackOkAddPhone(), error => this.callBackErrorAddPhone(error));
   }
 
@@ -91,5 +92,9 @@ export class PhoneAddModalComponent implements OnInit {
 
   selectChangeHandler(event: any) {
     this.selectedCountryCode = event.target.value;
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }
