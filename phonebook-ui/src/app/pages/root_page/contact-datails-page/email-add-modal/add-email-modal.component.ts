@@ -1,35 +1,33 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {NgbActiveModal, NgbModalConfig} from "@ng-bootstrap/ng-bootstrap";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {SubscriptionErrorHandle} from "src/app/service/subscriptionErrorHandle";
 import {Email} from "../../../../model/email";
 import {EmailService} from "../../../../service/email.service";
 import {Subscription} from "rxjs";
+import {ToastService} from "../../../../service/toast.service";
 
 @Component({
   selector: 'app-email-add-modal',
   templateUrl: './add-email-modal.component.html',
   styleUrls: ['./add-email-modal.component.css']
 })
-export class EmailAddModalComponent implements OnInit {
+export class EmailAddModalComponent implements OnInit, OnDestroy {
 
   @Input()
   private contactId: number;
 
-  isSaved: boolean;
   loading: boolean;
-  emailForm: FormGroup;
-
-  alertMessage: string;
-  alertType: string;
+  emailAddForm: FormGroup;
 
   email: Email = new Email();
-  private emailAddSubscription: Subscription;
+
+  emailAddSubscription: Subscription;
 
   constructor(private config: NgbModalConfig,
               public activeModal: NgbActiveModal,
               private fb: FormBuilder,
-              private emailService: EmailService) {
+              private emailService: EmailService,
+              private toastService: ToastService) {
     config.backdrop = 'static';
   }
 
@@ -39,46 +37,54 @@ export class EmailAddModalComponent implements OnInit {
   }
 
   private createForm() {
-    this.emailForm = this.fb.group({
+    this.emailAddForm = this.fb.group({
       email: [null, [Validators.required, Validators.pattern("^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,10}$")]]
     });
   }
 
-  onClickSave() {
-    this.isSaved = false;
+  onClickSave(): void {
     this.loading = true;
-    this.alertMessage = '';
 
-    this.email.email = this.emailForm.controls['email'].value;
+    this.email.email = this.emailAddForm.controls['email'].value;
     this.email.contactId = this.contactId;
 
-    this.emailAddSubscription = this.emailService.addEmail(this.email).subscribe(() => this.callBackOkAddEmail(),
-      error => this.callBackErrorAddEmail(error));
+    this.emailAddSubscription = this.emailService.addEmail(this.email)
+      .subscribe(() => this.callBackOkAddEmail(), () => this.callBackErrorAddEmail());
   }
 
-  callBackOkAddEmail() {
+  callBackOkAddEmail(): void {
     this.loading = false;
-    this.isSaved = true;
 
-    this.alertType = 'success'
-    this.alertMessage = 'Email: ' + this.email.email + ' saved';
-
-    this.emailForm.reset();
     this.emailService.triggerOnReloadEmailList();
+
+    this.toastService.show('Email saved', {
+      classname: 'bg-success text-light',
+      delay: 5_000,
+      id: 'pop-up-success-add-email'
+    });
+
+    this.onClickCancel();
   }
 
-  callBackErrorAddEmail(error: any) {
-    this.isSaved = false;
+  callBackErrorAddEmail(): void {
+    this.loading = false;
 
-    this.alertType = 'danger'
-    this.alertMessage = SubscriptionErrorHandle(error);
+    this.toastService.show('Add email failed', {
+      classname: `bg-danger text-light`,
+      delay: 7_000,
+      id: `pop-up-error-add-email`
+    });
 
-    if (this.alertMessage)
-      this.loading = false;
+    this.onClickCancel();
   }
 
-onCloseAlert()
-{
-  this.alertMessage = '';
-}
+  onClickCancel(): void {
+    this.emailAddForm.reset();
+    this.activeModal.close();
+  }
+
+  ngOnDestroy(): void {
+    if (this.emailAddSubscription)
+      this.emailAddSubscription.unsubscribe();
+  }
 }
