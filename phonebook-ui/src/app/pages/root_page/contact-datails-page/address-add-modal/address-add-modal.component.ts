@@ -78,7 +78,6 @@ export class AddressAddModalComponent implements OnInit, OnDestroy {
 
     this.toastService.show('Address saved', {
       classname: 'bg-success text-light',
-      delay: 5_000,
       id: 'pop-up-success-add-address'
     });
 
@@ -90,7 +89,6 @@ export class AddressAddModalComponent implements OnInit, OnDestroy {
 
     this.toastService.show('Add address failed', {
       classname: `bg-danger text-light`,
-      delay: 7_000,
       id: `pop-up-error-add-address`
     });
 

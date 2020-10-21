@@ -68,7 +68,6 @@ export class PhoneEditModalComponent implements OnInit, OnDestroy {
 
     this.toastService.show('Edit phone success', {
       classname: 'bg-success text-light',
-      delay: 5_000,
       id: 'pop-up-success-edit-phone'
     });
 
@@ -80,7 +79,6 @@ export class PhoneEditModalComponent implements OnInit, OnDestroy {
 
     this.toastService.show('Edit phone failed', {
       classname: `bg-danger text-light`,
-      delay: 7_000,
       id: `pop-up-error-edit-phone`
     });
 

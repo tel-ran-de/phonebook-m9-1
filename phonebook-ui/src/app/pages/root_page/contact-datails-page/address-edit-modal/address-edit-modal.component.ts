@@ -72,7 +72,6 @@ export class AddressEditModalComponent implements OnInit, OnDestroy {
 
     this.toastService.show('Edit address success', {
       classname: 'bg-success text-light',
-      delay: 5_000,
       id: 'pop-up-success-edit-address'
     });
 
@@ -84,7 +83,6 @@ export class AddressEditModalComponent implements OnInit, OnDestroy {
 
     this.toastService.show('Edit address failed', {
       classname: `bg-danger text-light`,
-      delay: 7_000,
       id: `pop-up-error-edit-address`
     });
 

@@ -50,7 +50,6 @@ export class PhoneTableComponent implements OnInit, OnDestroy {
   callBackOkRemovePhone(): void {
     this.toastService.show('Phone removed', {
       classname: 'bg-success text-light',
-      delay: 5_000,
       id: 'pop-up-success-remove-phone'
     });
 
@@ -60,7 +59,6 @@ export class PhoneTableComponent implements OnInit, OnDestroy {
   callBackErrorRemovePhone(): void {
     this.toastService.show('Remove phone failed', {
       classname: `bg-danger text-light`,
-      delay: 7_000,
       id: `pop-up-error-remove-phone`
     });
   }

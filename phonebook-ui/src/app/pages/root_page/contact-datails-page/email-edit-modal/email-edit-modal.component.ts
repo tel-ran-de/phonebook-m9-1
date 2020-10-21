@@ -57,7 +57,6 @@ export class EmailEditModalComponent implements OnInit, OnDestroy {
 
     this.toastService.show('Edit email success', {
       classname: 'bg-success text-light',
-      delay: 5_000,
       id: 'pop-up-success-edit-email'
     });
 
@@ -69,7 +68,6 @@ export class EmailEditModalComponent implements OnInit, OnDestroy {
 
     this.toastService.show('Edit email failed', {
       classname: `bg-danger text-light`,
-      delay: 7_000,
       id: `pop-up-error-edit-email`
     });
 

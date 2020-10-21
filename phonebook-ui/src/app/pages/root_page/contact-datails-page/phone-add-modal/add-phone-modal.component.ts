@@ -69,7 +69,6 @@ export class PhoneAddModalComponent implements OnInit, OnDestroy {
 
     this.toastService.show('Phone saved', {
       classname: 'bg-success text-light',
-      delay: 5_000,
       id: 'pop-up-success-add-phone'
     });
 
@@ -81,7 +80,6 @@ export class PhoneAddModalComponent implements OnInit, OnDestroy {
 
     this.toastService.show('Add phone failed', {
       classname: `bg-danger text-light`,
-      delay: 7_000,
       id: `pop-up-error-add-phone`
     });
 

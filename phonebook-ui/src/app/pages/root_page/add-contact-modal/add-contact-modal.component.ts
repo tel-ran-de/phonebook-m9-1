@@ -59,7 +59,6 @@ export class AddContactModalComponent implements OnInit {
 
     this.toastService.show('Contact saved successfully', {
       classname: 'bg-success text-light',
-      delay: 10_000,
       id: 'pop-up-success-add-contact'
     });
 
@@ -71,7 +70,6 @@ export class AddContactModalComponent implements OnInit {
 
     this.toastService.show('Add contact failed', {
       classname: `bg-danger text-light`,
-      delay: 7_000,
       id: `pop-up-error-add-contact`
     });
 
