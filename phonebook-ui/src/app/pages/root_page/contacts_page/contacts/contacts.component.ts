@@ -18,6 +18,8 @@ export class ContactsComponent implements OnInit, OnDestroy {
 
   searchContactForm: FormGroup;
 
+  searchTerm: string;
+
   getAllContactsSubscription: Subscription;
   triggerSubscription: Subscription;
   getProfileSubscription: Subscription;
@@ -33,42 +35,46 @@ export class ContactsComponent implements OnInit, OnDestroy {
     this.reloadContactsList();
     this.createForm();
 
-    this.formSubscription = this.searchContactForm.get('searchInput').valueChanges.subscribe(value =>
-      this.contactsDisplay = this.searchContact(value));
+    this.formSubscription = this.searchContactForm.get('searchInput')
+      .valueChanges
+      .subscribe(value => {
+        this.searchTerm = value;
+        this.contactsDisplay = this.searchContact(value)
+      });
 
     this.triggerSubscription = this.contactService.trigger$
       .subscribe(() => this.reloadContactsList());
   }
 
-  private reloadContactsList() {
+  reloadContactsList(): void {
     this.getAllContactsSubscription = this.contactService.getAllContacts()
       .subscribe(contactList => this.callBackGetAllContactOk(contactList));
   }
 
-  getProfile() {
+  getProfile(): void {
     this.profile = new Contact();
     this.getProfileSubscription = this.contactService.getProfile()
       .subscribe(profile => this.callBackGetProfileOk(profile));
   }
 
-  callBackGetProfileOk(value: Contact) {
+  callBackGetProfileOk(value: Contact): void {
     if (!value.firstName)
       value.firstName = 'No first name'
     this.profile = value;
   }
 
   callBackGetAllContactOk(value: Contact[]) {
-    this.contactsDisplay = value;
     this.contactsFromServer = value;
+    this.contactsDisplay = this.searchContactForm.controls['searchInput'].value !== null ? this.searchContact(this.searchTerm) : value;
   }
 
-  createForm() {
+  createForm(): void {
     this.searchContactForm = this.fb.group({
       searchInput: []
     });
   }
 
-  searchContact(text: string) {
+  searchContact(text: string): Contact[] {
     return this.contactsFromServer.filter(value => {
       const term = text.toLowerCase();
       const contact = value.firstName + value.lastName + value.description
