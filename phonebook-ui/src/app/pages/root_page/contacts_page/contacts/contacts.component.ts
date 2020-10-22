@@ -47,7 +47,7 @@ export class ContactsComponent implements OnInit, OnDestroy {
       .subscribe(() => this.reloadContactsList());
   }
 
-  getProfile() {
+  getProfile(): void {
     this.profile = new Contact();
 
     this.loadingProfile = true;
@@ -57,7 +57,7 @@ export class ContactsComponent implements OnInit, OnDestroy {
       .subscribe(profile => this.callBackGetProfileOk(profile), error => this.callProfileError(error));
   }
 
-  callBackGetProfileOk(value: Contact) {
+  callBackGetProfileOk(value: Contact): void {
     this.loadingProfile = false;
 
     if (!value.firstName)
@@ -65,7 +65,7 @@ export class ContactsComponent implements OnInit, OnDestroy {
     this.profile = value;
   }
 
-  callProfileError(error: HttpErrorResponse) {
+  callProfileError(error: HttpErrorResponse): void {
     this.errorMessageProfile = SubscriptionErrorHandle(error);
 
     this.loadingProfile = false;
@@ -79,7 +79,7 @@ export class ContactsComponent implements OnInit, OnDestroy {
       .subscribe(contactList => this.callBackGetAllContactOk(contactList), error => this.callBackGetAllContactError(error));
   }
 
-  callBackGetAllContactOk(value: Contact[]) {
+  callBackGetAllContactOk(value: Contact[]): void {
     this.loading = false;
 
     this.contactsDisplay = value;
@@ -92,13 +92,13 @@ export class ContactsComponent implements OnInit, OnDestroy {
     this.loading = false;
   }
 
-  createForm() {
+  createForm(): void {
     this.searchContactForm = this.fb.group({
       searchInput: []
     });
   }
 
-  searchContact(text: string) {
+  searchContact(text: string): Contact[] {
     return this.contactsFromServer.filter(value => {
       const term = text.toLowerCase();
       const contact = value.firstName + value.lastName + value.description
