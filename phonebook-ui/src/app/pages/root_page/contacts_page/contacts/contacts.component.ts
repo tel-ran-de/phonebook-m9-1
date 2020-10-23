@@ -4,6 +4,8 @@ import {UserService} from 'src/app/service/user.service';
 import {Contact} from 'src/app/model/contact';
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {Subscription} from "rxjs";
+import {SubscriptionErrorHandle} from "../../../../service/subscriptionErrorHandle";
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-contacts',
@@ -13,15 +15,20 @@ import {Subscription} from "rxjs";
 export class ContactsComponent implements OnInit, OnDestroy {
 
   profile: Contact;
-  contactsFromServer: Contact[];
-  contactsDisplay: Contact[];
+  contactsFromServer: Contact[] = [];
+  contactsDisplay: Contact[] = [];
+
 
   searchContactForm: FormGroup;
+  errorMessage: string;
+  errorMessageProfile: string;
 
+  loading: boolean;
   getAllContactsSubscription: Subscription;
   triggerSubscription: Subscription;
   getProfileSubscription: Subscription;
   formSubscription: Subscription;
+  loadingProfile: boolean;
 
   constructor(public contactService: ContactService,
               public userService: UserService,
@@ -40,35 +47,58 @@ export class ContactsComponent implements OnInit, OnDestroy {
       .subscribe(() => this.reloadContactsList());
   }
 
-  private reloadContactsList() {
-    this.getAllContactsSubscription = this.contactService.getAllContacts()
-      .subscribe(contactList => this.callBackGetAllContactOk(contactList));
-  }
-
-  getProfile() {
+  getProfile(): void {
     this.profile = new Contact();
+
+    this.loadingProfile = true;
+    this.errorMessageProfile = '';
+
     this.getProfileSubscription = this.contactService.getProfile()
-      .subscribe(profile => this.callBackGetProfileOk(profile));
+      .subscribe(profile => this.callBackGetProfileOk(profile), error => this.callProfileError(error));
   }
 
-  callBackGetProfileOk(value: Contact) {
+  callBackGetProfileOk(value: Contact): void {
+    this.loadingProfile = false;
+
     if (!value.firstName)
       value.firstName = 'No first name'
     this.profile = value;
   }
 
-  callBackGetAllContactOk(value: Contact[]) {
+  callProfileError(error: HttpErrorResponse): void {
+    this.errorMessageProfile = SubscriptionErrorHandle(error);
+
+    this.loadingProfile = false;
+  }
+
+  reloadContactsList(): void {
+    this.loading = true;
+    this.errorMessage = '';
+
+    this.getAllContactsSubscription = this.contactService.getAllContacts()
+      .subscribe(contactList => this.callBackGetAllContactOk(contactList), error => this.callBackGetAllContactError(error));
+  }
+
+  callBackGetAllContactOk(value: Contact[]): void {
+    this.loading = false;
+
     this.contactsDisplay = value;
     this.contactsFromServer = value;
   }
 
-  createForm() {
+  callBackGetAllContactError(error: HttpErrorResponse) {
+    this.errorMessage = SubscriptionErrorHandle(error);
+
+    this.loading = false;
+  }
+
+  createForm(): void {
     this.searchContactForm = this.fb.group({
       searchInput: []
     });
   }
 
-  searchContact(text: string) {
+  searchContact(text: string): Contact[] {
     return this.contactsFromServer.filter(value => {
       const term = text.toLowerCase();
       const contact = value.firstName + value.lastName + value.description
