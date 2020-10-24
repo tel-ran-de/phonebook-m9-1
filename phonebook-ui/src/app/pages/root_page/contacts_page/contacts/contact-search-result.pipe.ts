@@ -7,17 +7,16 @@ import {Contact} from "../../../../model/contact";
 export class ContactFilterPipe implements PipeTransform {
 
   transform(value: Contact[], text: string): Contact[] {
-    if (!value) {
+    if (!value)
       return [];
-    }
-    if (!text) {
+
+    if (!text)
       return value;
-    }
+
     return value.filter(value => {
       const term = text.toLowerCase();
       const contact = value.firstName + value.lastName + value.description
       return contact.toLowerCase().includes(term);
     });
   }
-
 }
