@@ -56,7 +56,7 @@ export class AddContactModalComponent implements OnInit, OnDestroy {
     this.loading = false;
     this.isSaved = true;
 
-    this.router.navigate(['./contacts/' + contactId])
+    this.redirectTo('/contacts/' + contactId);
 
     this.toastService.show('Contact saved successfully', {
       classname: 'bg-success text-light',
@@ -64,6 +64,11 @@ export class AddContactModalComponent implements OnInit, OnDestroy {
     });
 
     this.onClickCancel();
+  }
+
+  redirectTo(uri: string) {
+    this.router.navigateByUrl('contacts', {skipLocationChange: true}).then(() =>
+      this.router.navigate([uri]));
   }
 
   callBackErrorAddContact(): void {
