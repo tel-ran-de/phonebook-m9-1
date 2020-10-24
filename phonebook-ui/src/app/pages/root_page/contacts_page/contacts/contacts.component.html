@@ -23,8 +23,8 @@
   </li>
 </ul>
 
-<div *ngIf="contactsDisplay" id="contacts-list">
-  <div class="list-group" *ngFor="let contact of contactsDisplay">
+<div *ngIf="contactsToDisplay" id="contacts-list">
+  <div class="list-group" *ngFor="let contact of contactsToDisplay | contactFilter: searchTerm">
     <app-contact-item [contactItem]="contact"></app-contact-item>
   </div>
 </div>

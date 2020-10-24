@@ -13,12 +13,10 @@ import {Subscription} from "rxjs";
 export class ContactsComponent implements OnInit, OnDestroy {
 
   profile: Contact;
-  contactsFromServer: Contact[];
-  contactsDisplay: Contact[];
+  contactsToDisplay: Contact[];
+  searchTerm: string;
 
   searchContactForm: FormGroup;
-
-  searchTerm: string;
 
   getAllContactsSubscription: Subscription;
   triggerSubscription: Subscription;
@@ -39,7 +37,6 @@ export class ContactsComponent implements OnInit, OnDestroy {
       .valueChanges
       .subscribe(value => {
         this.searchTerm = value;
-        this.contactsDisplay = this.searchContact(value)
       });
 
     this.triggerSubscription = this.contactService.trigger$
@@ -63,22 +60,13 @@ export class ContactsComponent implements OnInit, OnDestroy {
     this.profile = value;
   }
 
-  callBackGetAllContactOk(value: Contact[]) {
-    this.contactsFromServer = value;
-    this.contactsDisplay = this.searchContactForm.controls['searchInput'].value !== null ? this.searchContact(this.searchTerm) : value;
+  callBackGetAllContactOk(value: Contact[]): void {
+    this.contactsToDisplay = value;
   }
 
   createForm(): void {
     this.searchContactForm = this.fb.group({
       searchInput: []
-    });
-  }
-
-  searchContact(text: string): Contact[] {
-    return this.contactsFromServer.filter(value => {
-      const term = text.toLowerCase();
-      const contact = value.firstName + value.lastName + value.description
-      return contact.toLowerCase().includes(term);
     });
   }
 
