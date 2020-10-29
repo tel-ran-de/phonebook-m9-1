@@ -1,65 +1,95 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {AddressService} from "src/app/service/address.service";
 import {Address} from "src/app/model/address";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {SubscriptionErrorHandle} from "../../../../service/subscriptionErrorHandle";
+import {AddressAddModalComponent} from "../address-add-modal/address-add-modal.component";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-address',
   templateUrl: './address.component.html',
   styleUrls: ['./address.component.css']
 })
-export class AddressComponent implements OnInit {
+export class AddressComponent implements OnInit, OnDestroy {
 
   @Input()
   contactId: number;
 
-  addressesFromServer: Address[];
+  addressesFromServer: Address[] = [];
   addressesToDisplay: Address[] = [];
 
   searchFormAddress: FormGroup;
   errorMessage: string;
   loading: boolean;
 
-  constructor(private addressService: AddressService, private fb: FormBuilder) {
+  formSubscription: Subscription;
+  getAllSubscription: Subscription;
+  triggerSubscription: Subscription;
+
+  constructor(private addressService: AddressService,
+              private fb: FormBuilder,
+              private modalService: NgbModal) {
   }
 
   ngOnInit(): void {
-    this.loading = true;
-
     this.searchFormAddress = this.fb.group({
       searchInput: []
-    })
-
-    this.searchFormAddress.get("searchInput").valueChanges.subscribe(searchText =>
-      this.addressesToDisplay = this.search(searchText))
+    });
 
     this.reloadAddresses();
-    this.addressService.trigger$.subscribe(() => this.reloadAddresses());
+
+    this.formSubscription = this.searchFormAddress.get("searchInput").valueChanges.subscribe(searchText =>
+      this.addressesToDisplay = this.search(searchText));
+
+    this.triggerSubscription = this.addressService.trigger$
+      .subscribe(() => {
+        this.addressesToDisplay = [];
+        this.reloadAddresses();
+      });
   }
 
   reloadAddresses(): void {
-    this.addressService.getAllAddressesByContactId(this.contactId)
+    this.loading = true;
+
+    this.getAllSubscription = this.addressService.getAllAddressesByContactId(this.contactId)
       .subscribe(addresses => this.callbackOk(addresses), error => this.callbackError(error));
   }
 
-  callbackOk(value: Address[]) {
-    this.errorMessage = ''
-    this.loading = false
-    this.addressesFromServer = value
+  callbackOk(value: Address[]): void {
+    this.errorMessage = '';
+    this.loading = false;
+
+    this.addressesFromServer = value;
     this.addressesToDisplay = value;
   }
 
-  callbackError(error: any) {
-    this.errorMessage = SubscriptionErrorHandle(error)
-    this.loading = false
+  callbackError(error: any): void {
+    this.loading = false;
+
+    this.errorMessage = SubscriptionErrorHandle(error);
   }
 
-  search(text: string) {
+  search(text: string): Address[] {
     return this.addressesFromServer.filter(addressItem => {
-      const term = text.toLowerCase()
-      const valueToString = addressItem.country + " " + addressItem.city + " " + addressItem.zip + " " + addressItem.street
-      return valueToString.toLowerCase().includes(term)
-    })
+      const term = text.toLowerCase();
+      const valueToString = addressItem.country + " " + addressItem.city + " " + addressItem.zip + " " + addressItem.street;
+      return valueToString.toLowerCase().includes(term);
+    });
+  }
+
+  openModalAddAddress(): void {
+    const modalRef = this.modalService.open(AddressAddModalComponent);
+    modalRef.componentInstance.contactId = this.contactId;
+  }
+
+  ngOnDestroy(): void {
+    if (this.formSubscription)
+      this.formSubscription.unsubscribe();
+    if (this.getAllSubscription)
+      this.getAllSubscription.unsubscribe();
+    if (this.triggerSubscription)
+      this.triggerSubscription.unsubscribe();
   }
 }

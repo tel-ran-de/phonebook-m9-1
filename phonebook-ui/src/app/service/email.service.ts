@@ -1,7 +1,10 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {Email} from "../model/email";
-import {Subject} from "rxjs";
+import {Observable, Subject, throwError} from "rxjs";
+import {SubscriptionErrorHandle} from "./subscriptionErrorHandle";
+import {ToastService} from "./toast.service";
+import {catchError} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
@@ -12,24 +15,48 @@ export class EmailService {
 
   private readonly basePath = '/api/email';
 
-
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,
+              private toastService: ToastService) {
   }
 
-  getAllEmailsByContactId(contactId: number) {
-    return this.http.get<Email[]>(`${this.basePath}/${(contactId)}/all`);
+  getAllEmailsByContactId(contactId: number): Observable<Email[]> {
+    return this.http.get<Email[]>(`${this.basePath}/${(contactId)}/all`)
+      .pipe(catchError(error => this.handleError(error, 'get-all-emails')));
   }
 
-  removeEmail(emailId: number) {
-    this.http.delete(`${this.basePath}/${(emailId)}`)
-      .subscribe(() => this.triggerOnReloadEmailList());
+  removeEmail(emailId: number): Observable<any> {
+    return this.http.delete(`${this.basePath}/${(emailId)}`)
+      .pipe(catchError(error => this.handleError(error, 'remove-email')));
   }
 
-  get trigger$() {
+  addEmail(email: Email): Observable<Email> {
+    return this.http.post<Email>(`${(this.basePath)}`, email)
+      .pipe(catchError(error => this.handleError(error, 'add-email')));
+  }
+
+  editEmail(emailToEdit: Email): Observable<Email> {
+    return this.http.put<Email>(`${(this.basePath)}`, emailToEdit)
+      .pipe(catchError(error => this.handleError(error, 'edit-email')));
+  }
+
+  get trigger$(): Observable<any> {
     return this._trigger.asObservable();
   }
 
-  triggerOnReloadEmailList() {
+  triggerOnReloadEmailList(): void {
     this._trigger.next();
   }
+
+  private handleError(error: HttpErrorResponse, popUpId: string) {
+    const errorMessage = SubscriptionErrorHandle(error);
+
+    this.toastService.show(errorMessage, {
+      classname: `bg-danger text-light`,
+      delay: 7_000,
+      id: `pu-error-${popUpId}`
+    });
+
+    return throwError(error);
+  }
 }
+

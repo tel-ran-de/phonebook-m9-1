@@ -1,7 +1,10 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {Phone} from "../model/phone";
-import {Subject} from "rxjs";
+import {Observable, Subject, throwError} from "rxjs";
+import {SubscriptionErrorHandle} from "./subscriptionErrorHandle";
+import {ToastService} from "./toast.service";
+import {catchError} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
@@ -12,31 +15,47 @@ export class PhoneService {
 
   private readonly basePath = '/api/phone';
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,
+              private toastService: ToastService) {
   }
 
-  getAllPhonesByContactId(contactId: number) {
-    return this.http.get<Phone[]>(`${this.basePath}/${(contactId)}/all`);
+  getAllPhonesByContactId(contactId: number): Observable<Phone[]> {
+    return this.http.get<Phone[]>(`${this.basePath}/${(contactId)}/all`)
+      .pipe(catchError(error => this.handleError(error, 'get-all-phones')));
   }
 
-  addPhone(phone: Phone) {
-    return this.http.post<Phone>(`${(this.basePath)}`, phone);
+  addPhone(phone: Phone): Observable<Phone> {
+    return this.http.post<Phone>(`${(this.basePath)}`, phone)
+      .pipe(catchError(error => this.handleError(error, 'add-phone')));
   }
 
-  get trigger$() {
+  editPhone(phoneToEdit: Phone): Observable<Phone> {
+    return this.http.put<Phone>(`${this.basePath}`, phoneToEdit)
+      .pipe(catchError(error => this.handleError(error, 'edit-phone')));
+  }
+
+  removePhone(phoneId: number): Observable<any> {
+    return this.http.delete(`${this.basePath}/${(phoneId)}`)
+      .pipe(catchError(error => this.handleError(error, 'remove-phone')));
+  }
+
+  get trigger$(): Observable<any> {
     return this._trigger.asObservable();
   }
 
-  triggerOnReloadPhonesList() {
+  triggerOnReloadPhonesList(): void {
     this._trigger.next();
   }
 
-  editPhone(phoneToEdit: Phone) {
-    return this.http.put<Phone>(`${this.basePath}`, phoneToEdit);
-  }
+  private handleError(error: HttpErrorResponse, popUpId: string) {
+    const errorMessage = SubscriptionErrorHandle(error);
 
-  removePhone(phoneId: number) {
-    this.http.delete(`${this.basePath}/${(phoneId)}`)
-      .subscribe(() => this.triggerOnReloadPhonesList());
+    this.toastService.show(errorMessage, {
+      classname: `bg-danger text-light`,
+      delay: 7_000,
+      id: `pu-error-${popUpId}`
+    });
+
+    return throwError(error);
   }
 }

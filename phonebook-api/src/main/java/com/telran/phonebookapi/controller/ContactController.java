@@ -30,10 +30,16 @@ public class ContactController {
     }
 
     @PostMapping("")
-    public void addContact(Authentication auth, @Valid @RequestBody ContactDto contactDto) {
+    public ContactDto addContact(Authentication auth, @Valid @RequestBody ContactDto contactDto) {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
         String email = userDetails.getUsername();
-        contactService.add(contactDto.firstName, contactDto.lastName, contactDto.description, email);
+        Contact contact = contactService.add(contactDto.firstName, contactDto.lastName, contactDto.description, email);
+        return ContactDto.builder().
+                id(contact.getId())
+                .firstName(contact.getFirstName())
+                .lastName(contact.getLastName())
+                .description(contact.getDescription())
+                .build();
     }
 
     @GetMapping("/{id}")
@@ -44,7 +50,8 @@ public class ContactController {
         if (!contact.getUser().getEmail().equals(email)) {
             throw new UserAlreadyExistsException(CONTACT_DOES_NOT_BELONG);
         }
-        return ContactDto.builder()
+        return ContactDto.builder().
+                id(contact.getId())
                 .firstName(contact.getFirstName())
                 .lastName(contact.getLastName())
                 .description(contact.getDescription())

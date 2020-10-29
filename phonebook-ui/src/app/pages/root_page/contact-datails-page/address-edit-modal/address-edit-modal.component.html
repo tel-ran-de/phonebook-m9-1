@@ -1,15 +1,15 @@
-<div class="modal-header" id="add-contact-modal">
-  <h4 class="modal-title">Add new address</h4>
+<div class="modal-header" id="edit-address-modal">
+  <h4 class="modal-title">Edit address</h4>
   <a type="button" class="close" aria-label="Close" (click)="onClickCancel()" placement="bottom"
      ngbTooltip="close this window">
     <span aria-hidden="true">&times;</span>
   </a>
 </div>
-<form [formGroup]="addressForm" novalidate (ngSubmit)="onClickSave()" id="phone-form">
+<form [formGroup]="addressEditForm" novalidate (ngSubmit)="onClickSave()" id="edit-address-form">
   <div class="modal-body">
     <div class="form-group">
       <label for="cc-select">Select country</label>
-      <select class="custom-select" (change)="selectChangeHandler($event)" id="cc-select" [disabled]="loading">
+      <select class="custom-select" (change)="onChangeSelectedElement($event)" id="cc-select" [disabled]="loading">
         <option selected [value]="preSelectedCountry.name">
           {{preSelectedCountry.name}}
         </option>
@@ -20,21 +20,18 @@
     </div>
     <div class="form-group">
       <label for="input-city">City</label>
-      <input class="form-control" type="text" placeholder="City..." [readOnly]="loading"
-             formControlName="city" id="input-city">
+      <input class="form-control" type="text" [readOnly]="loading" formControlName="city" id="input-city">
     </div>
     <div class="form-group">
       <label for="input-zip">Zip</label>
-      <input class="form-control" type="text" placeholder="Zip..." [readOnly]="loading"
-             formControlName="zip" id="input-zip">
+      <input class="form-control" type="text" [readOnly]="loading" formControlName="zip" id="input-zip">
     </div>
     <div class="form-group">
       <label for="input-street">Address*</label>
-      <input class="form-control" type="text" placeholder="Address..." [readOnly]="loading"
-             formControlName="street" id="input-street">
+      <input class="form-control" type="text" [readOnly]="loading" formControlName="street" id="input-street">
     </div>
     <div>
-      <button *ngIf="!loading" [disabled]="addressForm.invalid" class="btn btn-primary btn-block" type="submit">Save
+      <button *ngIf="!loading" [disabled]="addressEditForm.invalid" class="btn btn-primary btn-block" type="submit">Save
         address
       </button>
 
@@ -45,13 +42,15 @@
     </div>
   </div>
 </form>
-
 <div class="card-footer">
   <p>
-    <ngb-alert *ngIf="addressForm.invalid && (addressForm.dirty || addressForm.touched)" type="info"
+    <ngb-alert *ngIf="alertMessage" type="danger" (close)="onCloseAlert()" placement="top"
+               ngbTooltip="close this window">
+      {{alertMessage}}
+    </ngb-alert>
+    <ngb-alert *ngIf="addressEditForm.invalid && (addressEditForm.dirty || addressEditForm.touched)" type="info"
                [dismissible]="false">
       To save, you must fill in the address field
     </ngb-alert>
   </p>
 </div>
-

@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {HttpResponse} from "@angular/common/http";
+import {HttpErrorResponse, HttpResponse} from "@angular/common/http";
 import {first} from "rxjs/operators";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
@@ -20,20 +20,20 @@ export class LoginComponent implements OnInit, OnDestroy {
   title = 'Password Recovery';
   projectName = 'Phone book';
 
-  isLoggedIn = false;
   errorMessage: string;
   private headerName = 'Access-Token';
 
   loading: boolean;
-  private subscription: Subscription;
+  loginSubscription: Subscription;
 
   constructor(private fb: FormBuilder,
               private router: Router,
               private userService: UserService,
               private tokenStorage: TokenStorageService) {
+    this.createForm();
   }
 
-  createForm() {
+  createForm(): void {
     this.form = this.fb.group({
       email: [null, [Validators.required,
         Validators.pattern("^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,10}$")]],
@@ -43,36 +43,39 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.createForm();
-
-    if (this.tokenStorage.getToken())
-      this.isLoggedIn = true;
   }
 
-  ngOnDestroy(): void {
-    if (this.subscription)
-      this.subscription.unsubscribe();
-  }
-
-  onSubmit() {
+  onSubmit(): void {
     this.loading = true;
     this.errorMessage = '';
 
-    this.userService.login(this.form.value).pipe(first())
+    this.loginSubscription = this.userService.login(this.form.value)
+      .pipe(first())
       .subscribe(
-        (data: HttpResponse<any>) => {
-          this.tokenStorage.signOut();
-          this.tokenStorage.saveToken(data.headers.get(this.headerName));
-          this.loading = false;
-          this.router.navigate(['./contacts']).then();
-        },
-        error => {
-          if (error.status === 401)
-            this.errorMessage = 'Please check your activation or Login + Password combination';
-          else this.errorMessage = SubscriptionErrorHandle(error);
+        (data: HttpResponse<any>) => this.callbackOkLogin(data), error => this.callbackErrorLogin(error));
+  }
 
-          if (this.errorMessage)
-            this.loading = false;
-        });
+  callbackOkLogin(data: HttpResponse<any>): void {
+    this.tokenStorage.signOut();
+    this.tokenStorage.saveToken(data.headers.get(this.headerName));
+
+    this.loading = false;
+    this.router.navigate(['./contacts']).then();
+  }
+
+  callbackErrorLogin(error: HttpErrorResponse): void {
+    if (error.status === 401)
+      this.errorMessage = 'Please check your activation or Login + Password combination';
+    else this.errorMessage = SubscriptionErrorHandle(error);
+
+    if (this.errorMessage)
+      this.loading = false;
+
+    this.form.reset();
+  }
+
+  ngOnDestroy(): void {
+    if (this.loginSubscription)
+      this.loginSubscription.unsubscribe();
   }
 }
