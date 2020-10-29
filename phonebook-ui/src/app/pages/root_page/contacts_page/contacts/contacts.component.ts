@@ -15,20 +15,20 @@ import {HttpErrorResponse} from "@angular/common/http";
 export class ContactsComponent implements OnInit, OnDestroy {
 
   profile: Contact;
-  contactsFromServer: Contact[] = [];
-  contactsDisplay: Contact[] = [];
-
+  contactsToDisplay: Contact[];
+  searchTerm: string;
 
   searchContactForm: FormGroup;
   errorMessage: string;
   errorMessageProfile: string;
 
   loading: boolean;
+  loadingProfile: boolean;
+
   getAllContactsSubscription: Subscription;
   triggerSubscription: Subscription;
   getProfileSubscription: Subscription;
   formSubscription: Subscription;
-  loadingProfile: boolean;
 
   constructor(public contactService: ContactService,
               public userService: UserService,
@@ -40,8 +40,9 @@ export class ContactsComponent implements OnInit, OnDestroy {
     this.reloadContactsList();
     this.createForm();
 
-    this.formSubscription = this.searchContactForm.get('searchInput').valueChanges.subscribe(value =>
-      this.contactsDisplay = this.searchContact(value));
+    this.formSubscription = this.searchContactForm.get('searchInput')
+      .valueChanges
+      .subscribe(value => this.searchTerm = value);
 
     this.triggerSubscription = this.contactService.trigger$
       .subscribe(() => this.reloadContactsList());
@@ -60,8 +61,6 @@ export class ContactsComponent implements OnInit, OnDestroy {
   callBackGetProfileOk(value: Contact): void {
     this.loadingProfile = false;
 
-    if (!value.firstName)
-      value.firstName = 'No first name'
     this.profile = value;
   }
 
@@ -82,11 +81,10 @@ export class ContactsComponent implements OnInit, OnDestroy {
   callBackGetAllContactOk(value: Contact[]): void {
     this.loading = false;
 
-    this.contactsDisplay = value;
-    this.contactsFromServer = value;
+    this.contactsToDisplay = value;
   }
 
-  callBackGetAllContactError(error: HttpErrorResponse) {
+  callBackGetAllContactError(error: HttpErrorResponse): void {
     this.errorMessage = SubscriptionErrorHandle(error);
 
     this.loading = false;
@@ -95,14 +93,6 @@ export class ContactsComponent implements OnInit, OnDestroy {
   createForm(): void {
     this.searchContactForm = this.fb.group({
       searchInput: []
-    });
-  }
-
-  searchContact(text: string): Contact[] {
-    return this.contactsFromServer.filter(value => {
-      const term = text.toLowerCase();
-      const contact = value.firstName + value.lastName + value.description
-      return contact.toLowerCase().includes(term);
     });
   }
 

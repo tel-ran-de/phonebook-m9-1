@@ -6,6 +6,8 @@
   <div *ngIf="!errorMessageProfile && !loadingProfile" class="d-flex justify-content-between pb-2">
     <button type="button" class="list-group-item list-group-item-action" routerLink="/contacts/{{profile.id}}">
       <b>{{profile.firstName}}</b> {{profile.lastName}}
+      <b><i class="text-center" *ngIf="profile.firstName+profile.lastName+profile.description.length === 0">
+        Click to edit your Profile</i></b>
     </button>
   </div>
 </div>
@@ -34,12 +36,14 @@
 </ul>
 
 <div *ngIf="!errorMessage && !loading" id="contacts-list">
-  <div class="list-group" *ngFor="let contact of contactsDisplay">
+  <div class="list-group" *ngFor="let contact of contactsToDisplay | contactFilter: searchTerm">
     <app-contact-item [contactItem]="contact"></app-contact-item>
+
   </div>
 </div>
 
-<ngb-alert *ngIf="contactsDisplay.length === 0 && !errorMessage && !loading" type="warning" role="alert"
+<ngb-alert *ngIf="(contactsToDisplay| contactFilter: searchTerm).length === 0 && !errorMessage && !loading"
+           type="warning" role="alert"
            class="text-center" [dismissible]="false">
   <b>No results</b>
 </ngb-alert>
