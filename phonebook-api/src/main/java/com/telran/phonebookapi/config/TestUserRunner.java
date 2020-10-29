@@ -40,9 +40,9 @@ public class TestUserRunner implements ApplicationRunner {
             user.addRole(UserRole.USER);
             Contact profile = new Contact();
             user.setMyProfile(profile);
+            profile.setUser(user);
             contactRepository.save(profile);
             userRepository.save(user);
-            profile.setUser(user);
         }
     }
 }
