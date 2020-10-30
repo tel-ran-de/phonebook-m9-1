@@ -38,10 +38,13 @@ public class TestUserRunner implements ApplicationRunner {
             User user = new User(testEmail, bCryptPasswordEncoder.encode(testPassword));
             user.setActive(true);
             user.addRole(UserRole.USER);
-            Contact profile = new Contact();
+            userRepository.save(user);
+
+            Contact profile = new Contact(null, user);
+
             user.setMyProfile(profile);
-            profile.setUser(user);
             contactRepository.save(profile);
+
             userRepository.save(user);
         }
     }
