@@ -46,6 +46,7 @@ import {ContactFilterPipe} from "./pages/root_page/contacts_page/contacts/contac
 import {AddressFilterPipe} from "./pages/root_page/contact-datails-page/address/address-filter.pipe";
 import {EmailFilterPipe} from './pages/root_page/contact-datails-page/email/email-filter.pipe';
 import {PhoneFilterPipe} from './pages/root_page/contact-datails-page/phone/phone-filter.pipe';
+import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
@@ -86,6 +87,7 @@ import {PhoneFilterPipe} from './pages/root_page/contact-datails-page/phone/phon
     AddressFilterPipe,
     EmailFilterPipe,
     PhoneFilterPipe,
+    PageNotFoundComponent,
   ],
   imports: [
     BrowserModule,
