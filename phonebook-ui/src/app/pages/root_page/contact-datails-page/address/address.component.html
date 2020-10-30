@@ -11,23 +11,22 @@
     <button class="btn btn-info text-white" id="btn-add-phone" (click)="openModalAddAddress()">Add address</button>
   </div>
 </div>
-<app-address-table *ngIf="addressesFromServer" [sortedAddressesToDisplay]="addressesToDisplay"></app-address-table>
+<app-address-table *ngIf="addressesFromServer"
+                   [sortedAddressesToDisplay]="addressesToDisplay | addressFilter: searchTerm"></app-address-table>
 
-<div *ngIf="addressesToDisplay.length === 0 && !errorMessage && !loading">
+<div *ngIf="(addressesToDisplay | addressFilter: searchTerm).length === 0 && !errorMessage && !loading">
   <ngb-alert type="warning" role="alert" class="text-center" [dismissible]="false">
     <b>No results</b>
   </ngb-alert>
 </div>
-<div *ngIf="errorMessage">
-  <ngb-alert type="danger" role="alert" class="text-center" [dismissible]="false">
-    <b>{{errorMessage}}</b>
-  </ngb-alert>
-</div>
-<div *ngIf="loading">
-  <ngb-alert type="secondary" role="alert" class="text-center" [dismissible]="false">
-    <b>Loading </b>
-    <div class="spinner-border text-primary" role="status">
-      <span class="sr-only">Loading...</span>
-    </div>
-  </ngb-alert>
-</div>
+
+<ngb-alert *ngIf="errorMessage" type="danger" role="alert" class="text-center" [dismissible]="false">
+  <b>{{errorMessage}}</b>
+</ngb-alert>
+
+<ngb-alert *ngIf="loading" type="secondary" role="alert" class="text-center" [dismissible]="false">
+  <b>Loading </b>
+  <div class="spinner-border text-primary" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+</ngb-alert>
