@@ -1,17 +1,16 @@
 <div class="nav navbar row">
   <form [formGroup]="searchFormAddress" id="search-form-address">
     <div class="form-group form-inline pt-2 mr-auto">
-      Search: <label>
-      <input class="form-control ml-2" type="text" formControlName="searchInput" placeholder="Search..."
-             id="search">
-    </label>
+      <label for="search"> Search: </label>
+      <input class="form-control ml-2" type="text" formControlName="searchInput" placeholder="Search..." id="search">
     </div>
   </form>
   <div class="ml-auto">
     <button class="btn btn-info text-white" id="btn-add-phone" (click)="openModalAddAddress()">Add address</button>
   </div>
 </div>
-<app-address-table *ngIf="addressesFromServer"
+
+<app-address-table *ngIf="!errorMessage && !loading"
                    [sortedAddressesToDisplay]="addressesToDisplay | addressFilter: searchTerm"></app-address-table>
 
 <div *ngIf="(addressesToDisplay | addressFilter: searchTerm).length === 0 && !errorMessage && !loading">
@@ -20,13 +19,17 @@
   </ngb-alert>
 </div>
 
-<ngb-alert *ngIf="errorMessage" type="danger" role="alert" class="text-center" [dismissible]="false">
-  <b>{{errorMessage}}</b>
-</ngb-alert>
+<div *ngIf="errorMessage">
+  <ngb-alert type="danger" role="alert" class="text-center" [dismissible]="false">
+    <b>{{errorMessage}}</b>
+  </ngb-alert>
+</div>
 
-<ngb-alert *ngIf="loading" type="secondary" role="alert" class="text-center" [dismissible]="false">
-  <b>Loading </b>
-  <div class="spinner-border text-primary" role="status">
-    <span class="sr-only">Loading...</span>
-  </div>
-</ngb-alert>
+<div *ngIf="loading">
+  <ngb-alert type="secondary" role="alert" class="text-center" [dismissible]="false">
+    <b>Loading </b>
+    <div class="spinner-border text-primary" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </ngb-alert>
+</div>
