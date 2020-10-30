@@ -54,8 +54,8 @@ public class UserService {
         this.userMapper = userMapper;
     }
 
-    public void addUser(String useEmail, String userPassword) {
-        String userId = useEmail.toLowerCase().trim();
+    public void addUser(String userEmail, String userPassword) {
+        String userId = userEmail.toLowerCase().trim();
 
         if (userRepository.findById(userId).isPresent()) {
             throw new UserAlreadyExistsException(USER_ALREADY_EXISTS);

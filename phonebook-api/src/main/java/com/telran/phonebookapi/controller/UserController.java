@@ -61,6 +61,4 @@ public class UserController {
         String email = userDetails.getUsername();
         userService.changePasswordAuth(email, newPasswordAuthDto.password);
     }
-
 }
-
