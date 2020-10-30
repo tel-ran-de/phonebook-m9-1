@@ -6,17 +6,17 @@ import {Address} from "../../../../model/address";
 })
 export class AddressFilterPipe implements PipeTransform {
 
-  transform(value: Address[], term: string): Address[] {
+  transform(value: Address[], searchTerm: string): Address[] {
     if (!value)
       return [];
 
-    if (!term)
+    if (!searchTerm)
       return value;
 
-
     return value.filter(addressItem => {
+      const term = searchTerm.toLowerCase();
       const valueToString = addressItem.country + " " + addressItem.city + " " + addressItem.zip + " " + addressItem.street;
-      return valueToString.toLowerCase().includes(term.toLowerCase());
+      return valueToString.toLowerCase().includes(term);
     });
   }
 }

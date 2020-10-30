@@ -44,6 +44,8 @@ import {ToastGlobalComponent} from './toast-global/toast-global.component';
 import {AddressEditModalComponent} from "./pages/root_page/contact-datails-page/address-edit-modal/address-edit-modal.component";
 import {ContactFilterPipe} from "./pages/root_page/contacts_page/contacts/contact-filter.pipe";
 import {AddressFilterPipe} from "./pages/root_page/contact-datails-page/address/address-filter.pipe";
+import {EmailFilterPipe} from './pages/root_page/contact-datails-page/email/email-filter.pipe';
+import {PhoneFilterPipe} from './pages/root_page/contact-datails-page/phone/phone-filter.pipe';
 
 @NgModule({
   declarations: [
@@ -82,6 +84,8 @@ import {AddressFilterPipe} from "./pages/root_page/contact-datails-page/address/
     AddressEditModalComponent,
     ContactFilterPipe,
     AddressFilterPipe,
+    EmailFilterPipe,
+    PhoneFilterPipe,
   ],
   imports: [
     BrowserModule,

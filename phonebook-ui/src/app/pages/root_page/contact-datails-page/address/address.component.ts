@@ -6,6 +6,7 @@ import {SubscriptionErrorHandle} from "../../../../service/subscriptionErrorHand
 import {AddressAddModalComponent} from "../address-add-modal/address-add-modal.component";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {Subscription} from "rxjs";
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-address',
@@ -17,7 +18,6 @@ export class AddressComponent implements OnInit, OnDestroy {
   @Input()
   contactId: number;
 
-  addressesFromServer: Address[] = [];
   addressesToDisplay: Address[] = [];
   searchTerm: string;
 
@@ -51,22 +51,18 @@ export class AddressComponent implements OnInit, OnDestroy {
 
   reloadAddresses(): void {
     this.loading = true;
-
     this.getAllSubscription = this.addressService.getAllAddressesByContactId(this.contactId)
-      .subscribe(addresses => this.callbackOk(addresses), error => this.callbackError(error));
+      .subscribe(addresses => this.callbackOkGetAllAddresses(addresses), error => this.callbackErrorGetAllAddresses(error));
   }
 
-  callbackOk(value: Address[]): void {
+  callbackOkGetAllAddresses(value: Address[]): void {
     this.errorMessage = '';
     this.loading = false;
-
-    this.addressesFromServer = value;
     this.addressesToDisplay = value;
   }
 
-  callbackError(error: any): void {
+  callbackErrorGetAllAddresses(error: HttpErrorResponse): void {
     this.loading = false;
-
     this.errorMessage = SubscriptionErrorHandle(error);
   }
 

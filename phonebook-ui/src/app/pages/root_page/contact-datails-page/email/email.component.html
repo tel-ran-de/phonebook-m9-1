@@ -9,18 +9,22 @@
     <button class="btn btn-info text-white" id="btn-add-phone" (click)="openModalAddEmail()">Add email</button>
   </div>
 </div>
-<app-email-table *ngIf="emailsToDisplay" [sortedEmailsToDisplay]="emailsToDisplay"></app-email-table>
 
-<div *ngIf="emailsToDisplay.length === 0 && !errorMessage && !loading">
+<app-email-table *ngIf="!errorMessage && !loading"
+                 [sortedEmailsToDisplay]="emailsToDisplay | emailFilter: searchTerm"></app-email-table>
+
+<div *ngIf="(emailsToDisplay | emailFilter: searchTerm).length === 0 && !errorMessage && !loading">
   <ngb-alert type="warning" role="alert" class="text-center" [dismissible]="false">
     <b>No results</b>
   </ngb-alert>
 </div>
+
 <div *ngIf="errorMessage">
   <ngb-alert type="danger" role="alert" class="text-center" [dismissible]="false">
     <b>{{errorMessage}}</b>
   </ngb-alert>
 </div>
+
 <div *ngIf="loading">
   <ngb-alert type="secondary" role="alert" class="text-center" [dismissible]="false">
     <b>Loading </b>

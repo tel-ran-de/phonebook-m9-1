@@ -6,6 +6,7 @@ import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {EmailAddModalComponent} from "../email-add-modal/add-email-modal.component";
 import {Subscription} from "rxjs";
 import {SubscriptionErrorHandle} from "../../../../service/subscriptionErrorHandle";
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-email',
@@ -13,11 +14,12 @@ import {SubscriptionErrorHandle} from "../../../../service/subscriptionErrorHand
   styleUrls: ['./email.component.css']
 })
 export class EmailComponent implements OnInit, OnDestroy {
+
   @Input()
   contactId: number;
 
-  emailsFromServer: Email[] = [];
   emailsToDisplay: Email[] = [];
+  searchTerm: string;
 
   searchFormEmail: FormGroup;
   errorMessage: string;
@@ -33,14 +35,12 @@ export class EmailComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.searchFormEmail = this.fb.group({
-      searchInput: []
-    });
-
+    this.createForm();
     this.reloadEmails();
 
-    this.formSubscription = this.searchFormEmail.get("searchInput").valueChanges
-      .subscribe(searchText => this.emailsToDisplay = this.search(searchText));
+    this.formSubscription = this.searchFormEmail.get("searchInput")
+      .valueChanges
+      .subscribe(searchText => this.searchTerm = searchText);
 
     this.triggerSubscription = this.emailService.trigger$
       .subscribe(() => {
@@ -51,35 +51,30 @@ export class EmailComponent implements OnInit, OnDestroy {
 
   reloadEmails(): void {
     this.loading = true;
-
     this.getAllSubscription = this.emailService.getAllEmailsByContactId(this.contactId)
-      .subscribe(email => this.callbackOk(email), error => this.callbackError(error));
+      .subscribe(email => this.callbackOkGetAllEmails(email), error => this.callbackErrorGetAllEmails(error));
   }
 
-  callbackOk(value: Email[]): void {
+  callbackOkGetAllEmails(value: Email[]): void {
     this.errorMessage = '';
     this.loading = false;
-
-    this.emailsFromServer = value;
     this.emailsToDisplay = value;
   }
 
-  callbackError(error: any): void {
-    this.errorMessage = SubscriptionErrorHandle(error);
-
+  callbackErrorGetAllEmails(error: HttpErrorResponse): void {
     this.loading = false;
-  }
-
-  search(text: string): Email[] {
-    return this.emailsFromServer.filter(emailItem => {
-      const term = text.toLowerCase();
-      return emailItem.email.toLowerCase().includes(term);
-    });
+    this.errorMessage = SubscriptionErrorHandle(error);
   }
 
   openModalAddEmail(): void {
     const modalRef = this.modalService.open(EmailAddModalComponent);
     modalRef.componentInstance.contactId = this.contactId;
+  }
+
+  createForm(): void {
+    this.searchFormEmail = this.fb.group({
+      searchInput: []
+    });
   }
 
   ngOnDestroy(): void {

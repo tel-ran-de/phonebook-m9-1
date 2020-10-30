@@ -2,26 +2,29 @@
   <form [formGroup]="searchFormPhone" id="search-form-phone">
     <div class="form-group form-inline pt-2 mr-auto">
       <label for="search">Search: </label>
-      <input class="form-control ml-2" type="text" formControlName="searchInput" placeholder="Search..."
-             id="search">
+      <input class="form-control ml-2" type="text" formControlName="searchInput" placeholder="Search..." id="search">
     </div>
   </form>
   <div class="ml-auto">
     <button class="btn btn-info text-white" id="btn-add-phone" (click)="openModalAddPhone()">Add phone</button>
   </div>
 </div>
-<app-phone-table *ngIf="phonesToDisplay" [phonesToDisplay]="phonesToDisplay"></app-phone-table>
 
-<div *ngIf="phonesToDisplay.length === 0 && !errorMessage && !loading">
+<app-phone-table *ngIf="!errorMessage && !loading"
+                 [phonesToDisplay]="phonesToDisplay | phoneFilter: searchTerm"></app-phone-table>
+
+<div *ngIf="(phonesToDisplay | phoneFilter: searchTerm).length === 0 && !errorMessage && !loading">
   <ngb-alert type="warning" role="alert" class="text-center" [dismissible]="false">
     <b>No results</b>
   </ngb-alert>
 </div>
+
 <div *ngIf="errorMessage">
   <ngb-alert type="danger" role="alert" class="text-center" [dismissible]="false">
     <b>{{errorMessage}}</b>
   </ngb-alert>
 </div>
+
 <div *ngIf="loading">
   <ngb-alert type="secondary" role="alert" class="text-center" [dismissible]="false">
     <b>Loading </b>
