@@ -43,7 +43,7 @@ public class EmailController {
     }
 
     @PutMapping("")
-    public void edit(Authentication auth, @RequestBody @Valid EmailDto emailDto) {
+    public void editEmail(Authentication auth, @RequestBody @Valid EmailDto emailDto) {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
         String mail = userDetails.getUsername();
         Email email = emailService.getById(emailDto.id);
@@ -55,7 +55,7 @@ public class EmailController {
     }
 
     @GetMapping("/{id}")
-    public EmailDto getById(Authentication auth, @PathVariable int id) {
+    public EmailDto getEmailById(Authentication auth, @PathVariable int id) {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
         String mail = userDetails.getUsername();
         Email email = emailService.getById(id);
@@ -69,7 +69,7 @@ public class EmailController {
     }
 
     @DeleteMapping("/{id}")
-    public void removeById(Authentication auth, @PathVariable int id) {
+    public void removeEmailById(Authentication auth, @PathVariable int id) {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
         String mail = userDetails.getUsername();
         Email email = emailService.getById(id);
@@ -81,7 +81,7 @@ public class EmailController {
     }
 
     @GetMapping("/{contactId}/all")
-    public List<EmailDto> getAllEmails(Authentication auth, @PathVariable int contactId) {
+    public List<EmailDto> getAllEmailsByAuthUser(Authentication auth, @PathVariable int contactId) {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
         String mail = userDetails.getUsername();
         Contact contact = contactService.getById(contactId);

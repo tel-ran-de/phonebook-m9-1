@@ -43,7 +43,7 @@ public class ContactController {
     }
 
     @GetMapping("/{id}")
-    public ContactDto getAllContactsByUserId(Authentication auth, @PathVariable int id) {
+    public ContactDto getContactById(Authentication auth, @PathVariable int id) {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
         String email = userDetails.getUsername();
         Contact contact = contactService.getById(id);
@@ -56,38 +56,6 @@ public class ContactController {
                 .lastName(contact.getLastName())
                 .description(contact.getDescription())
                 .build();
-    }
-
-    @PutMapping("")
-    public void editContact(Authentication auth, @Valid @RequestBody ContactDto contactDto) {
-        UserDetails userDetails = (UserDetails) auth.getPrincipal();
-        String email = userDetails.getUsername();
-        Contact contact = contactService.getById(contactDto.id);
-        if (!contact.getUser().getEmail().equals(email)) {
-            throw new UserAlreadyExistsException(CONTACT_DOES_NOT_BELONG);
-        }
-        contactService.edit(contactDto.id, contactDto.firstName, contactDto.lastName, contactDto.description);
-    }
-
-
-    @DeleteMapping("/{id}")
-    public void removeById(Authentication auth, @PathVariable int id) {
-        UserDetails userDetails = (UserDetails) auth.getPrincipal();
-        String email = userDetails.getUsername();
-        Contact contact = contactService.getById(id);
-        if (!contact.getUser().getEmail().equals(email)) {
-            throw new UserAlreadyExistsException(CONTACT_DOES_NOT_BELONG);
-        }
-        contactService.removeById(id);
-    }
-
-
-    @GetMapping("")
-    public List<ContactDto> requestAllContactsByUserEmail(Authentication auth) {
-        UserDetails userDetails = (UserDetails) auth.getPrincipal();
-        String email = userDetails.getUsername();
-        return contactService.getAllContactsByUserId(email).stream().map(contactMapper::mapContactToDto)
-                .collect(Collectors.toList());
     }
 
     @GetMapping("/profile")
@@ -103,11 +71,33 @@ public class ContactController {
                 .build();
     }
 
-    @PutMapping("/profile")
-    public void editProfile(Authentication auth, @Valid @RequestBody ContactDto myProfileDto) {
+    @PutMapping("")
+    public void editContact(Authentication auth, @Valid @RequestBody ContactDto contactDto) {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
         String email = userDetails.getUsername();
-        contactService.editProfile(email, myProfileDto.firstName, myProfileDto.lastName, myProfileDto.description);
+        Contact contact = contactService.getById(contactDto.id);
+        if (!contact.getUser().getEmail().equals(email)) {
+            throw new UserAlreadyExistsException(CONTACT_DOES_NOT_BELONG);
+        }
+        contactService.edit(contactDto.id, contactDto.firstName, contactDto.lastName, contactDto.description);
     }
 
+    @DeleteMapping("/{id}")
+    public void removeContactById(Authentication auth, @PathVariable int id) {
+        UserDetails userDetails = (UserDetails) auth.getPrincipal();
+        String email = userDetails.getUsername();
+        Contact contact = contactService.getById(id);
+        if (!contact.getUser().getEmail().equals(email)) {
+            throw new UserAlreadyExistsException(CONTACT_DOES_NOT_BELONG);
+        }
+        contactService.removeById(id);
+    }
+
+    @GetMapping("")
+    public List<ContactDto> getAllContactsByAuthUser(Authentication auth) {
+        UserDetails userDetails = (UserDetails) auth.getPrincipal();
+        String email = userDetails.getUsername();
+        return contactService.getAllContactsByUserId(email).stream().map(contactMapper::mapContactToDto)
+                .collect(Collectors.toList());
+    }
 }

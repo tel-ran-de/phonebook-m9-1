@@ -43,7 +43,7 @@ public class AddressController {
     }
 
     @PutMapping("")
-    public void edit(Authentication auth, @RequestBody @Valid AddressDto addressDto) {
+    public void editAddress(Authentication auth, @RequestBody @Valid AddressDto addressDto) {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
         String email = userDetails.getUsername();
         Address address = addressService.getById(addressDto.id);
@@ -55,7 +55,7 @@ public class AddressController {
     }
 
     @GetMapping("/{id}")
-    public AddressDto getById(Authentication auth, @PathVariable int id) {
+    public AddressDto getAddressById(Authentication auth, @PathVariable int id) {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
         String email = userDetails.getUsername();
         Address address = addressService.getById(id);
@@ -73,7 +73,7 @@ public class AddressController {
     }
 
     @DeleteMapping("/{id}")
-    public void removeById(Authentication auth, @PathVariable int id) {
+    public void removeAddressById(Authentication auth, @PathVariable int id) {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
         String email = userDetails.getUsername();
         Address address = addressService.getById(id);
@@ -85,7 +85,7 @@ public class AddressController {
     }
 
     @GetMapping("/{contactId}/all")
-    public List<AddressDto> getAllAddresses(Authentication auth, @PathVariable int contactId) {
+    public List<AddressDto> getAllAddressesByAuthUser(Authentication auth, @PathVariable int contactId) {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
         String email = userDetails.getUsername();
         Contact contact = contactService.getById(contactId);

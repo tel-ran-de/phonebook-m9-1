@@ -43,9 +43,8 @@ public class PhoneController {
         phoneService.add(phoneDto.countryCode, phoneDto.phoneNumber, contact.getId());
     }
 
-
     @PutMapping("")
-    public void edit(Authentication auth, @RequestBody @Valid PhoneDto phoneDto) {
+    public void editPhone(Authentication auth, @RequestBody @Valid PhoneDto phoneDto) {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
         String email = userDetails.getUsername();
         Phone phone = phoneService.getById(phoneDto.id);
@@ -56,9 +55,8 @@ public class PhoneController {
         phoneService.edit(phone, phoneDto.countryCode, phoneDto.phoneNumber);
     }
 
-
     @GetMapping("/{id}")
-    public PhoneDto getById(Authentication auth, @PathVariable int id) {
+    public PhoneDto getPhoneById(Authentication auth, @PathVariable int id) {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
         String email = userDetails.getUsername();
         Phone phone = phoneService.getById(id);
@@ -74,7 +72,7 @@ public class PhoneController {
     }
 
     @DeleteMapping("/{id}")
-    public void removeById(Authentication auth, @PathVariable int id) {
+    public void removePhoneById(Authentication auth, @PathVariable int id) {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
         String email = userDetails.getUsername();
         Phone phone = phoneService.getById(id);
@@ -85,9 +83,8 @@ public class PhoneController {
         phoneService.removeById(id);
     }
 
-
     @GetMapping("/{contactId}/all")
-    public List<PhoneDto> getAllPhoneNumbers(Authentication auth, @PathVariable int contactId) {
+    public List<PhoneDto> getAllPhonesByAuthUser(Authentication auth, @PathVariable int contactId) {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
         String email = userDetails.getUsername();
         Contact contact = contactService.getById(contactId);
