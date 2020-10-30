@@ -19,6 +19,7 @@ export class AddressComponent implements OnInit, OnDestroy {
 
   addressesFromServer: Address[] = [];
   addressesToDisplay: Address[] = [];
+  searchTerm: string;
 
   searchFormAddress: FormGroup;
   errorMessage: string;
@@ -34,14 +35,12 @@ export class AddressComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.searchFormAddress = this.fb.group({
-      searchInput: []
-    });
-
+    this.createForm();
     this.reloadAddresses();
 
-    this.formSubscription = this.searchFormAddress.get("searchInput").valueChanges.subscribe(searchText =>
-      this.addressesToDisplay = this.search(searchText));
+    this.formSubscription = this.searchFormAddress.get("searchInput")
+      .valueChanges
+      .subscribe(searchText => this.searchTerm = searchText);
 
     this.triggerSubscription = this.addressService.trigger$
       .subscribe(() => {
@@ -71,17 +70,15 @@ export class AddressComponent implements OnInit, OnDestroy {
     this.errorMessage = SubscriptionErrorHandle(error);
   }
 
-  search(text: string): Address[] {
-    return this.addressesFromServer.filter(addressItem => {
-      const term = text.toLowerCase();
-      const valueToString = addressItem.country + " " + addressItem.city + " " + addressItem.zip + " " + addressItem.street;
-      return valueToString.toLowerCase().includes(term);
-    });
-  }
-
   openModalAddAddress(): void {
     const modalRef = this.modalService.open(AddressAddModalComponent);
     modalRef.componentInstance.contactId = this.contactId;
+  }
+
+  createForm(): void {
+    this.searchFormAddress = this.fb.group({
+      searchInput: []
+    });
   }
 
   ngOnDestroy(): void {

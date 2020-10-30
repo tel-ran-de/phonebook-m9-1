@@ -45,4 +45,8 @@ export class ToastService {
     if (toastId !== null)
       this.toasts = this.toasts.filter(t => t.id !== toastId);
   }
+
+  clearToasts() {
+    this.toasts = [];
+  }
 }
