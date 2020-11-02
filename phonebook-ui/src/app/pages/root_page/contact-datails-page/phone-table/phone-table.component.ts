@@ -48,7 +48,7 @@ export class PhoneTableComponent implements OnInit, OnDestroy {
   }
 
   callBackOkRemovePhone(): void {
-    this.toastService.show('Phone removed', {
+    this.toastService.show('phoneRemoveOk', {
       classname: 'bg-success text-light',
       id: 'pop-up-success-remove-phone'
     });
@@ -57,7 +57,7 @@ export class PhoneTableComponent implements OnInit, OnDestroy {
   }
 
   callBackErrorRemovePhone(): void {
-    this.toastService.show('Remove phone failed', {
+    this.toastService.show('phoneRemoveFail', {
       classname: `bg-danger text-light`,
       id: `pop-up-error-remove-phone`
     });

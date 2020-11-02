@@ -7,6 +7,7 @@ import {EmailAddModalComponent} from "../email-add-modal/add-email-modal.compone
 import {Subscription} from "rxjs";
 import {SubscriptionErrorHandle} from "../../../../service/subscriptionErrorHandle";
 import {HttpErrorResponse} from "@angular/common/http";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-email',
@@ -31,7 +32,8 @@ export class EmailComponent implements OnInit, OnDestroy {
 
   constructor(private emailService: EmailService,
               private fb: FormBuilder,
-              private modalService: NgbModal) {
+              private modalService: NgbModal,
+              private translateService: TranslateService) {
   }
 
   ngOnInit(): void {
@@ -63,7 +65,7 @@ export class EmailComponent implements OnInit, OnDestroy {
 
   callbackErrorGetAllEmails(error: HttpErrorResponse): void {
     this.loading = false;
-    this.errorMessage = SubscriptionErrorHandle(error);
+    this.errorMessage = this.translateService.instant('PopUpMsg.' + SubscriptionErrorHandle(error));
   }
 
   openModalAddEmail(): void {

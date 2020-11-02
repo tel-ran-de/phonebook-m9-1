@@ -5,6 +5,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {SubscriptionErrorHandle} from "../../../../service/subscriptionErrorHandle";
 import {Subscription} from "rxjs";
 import {ToastService} from "../../../../service/toast.service";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-contact',
@@ -29,7 +30,8 @@ export class ContactComponent implements OnInit, OnDestroy {
 
   constructor(private contactService: ContactService,
               private fb: FormBuilder,
-              private toastService: ToastService) {
+              private toastService: ToastService,
+              private translateService: TranslateService) {
   }
 
   ngOnInit(): void {
@@ -85,7 +87,7 @@ export class ContactComponent implements OnInit, OnDestroy {
   }
 
   callBackOkEditContact(): void {
-    this.toastService.show('Сontact changed', {
+    this.toastService.show('contact.contactEditOk', {
       classname: 'bg-success text-light',
       id: 'pop-up-success-edit-contact'
     });
@@ -94,9 +96,9 @@ export class ContactComponent implements OnInit, OnDestroy {
   }
 
   callBackErrorEditContact(error: any): void {
-    this.alertMessage = SubscriptionErrorHandle(error);
+    this.alertMessage = this.translateService.instant('PopUpMsg.' + SubscriptionErrorHandle(error));
 
-    this.toastService.show('Сontact changed failed', {
+    this.toastService.show('contact.contactEditFail', {
       classname: `bg-danger text-light`,
       id: `pop-up-error-edit-contact`
     });

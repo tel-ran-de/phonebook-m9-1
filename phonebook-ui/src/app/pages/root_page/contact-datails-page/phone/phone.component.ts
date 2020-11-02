@@ -7,6 +7,7 @@ import {PhoneAddModalComponent} from "../phone-add-modal/add-phone-modal.compone
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {Subscription} from "rxjs";
 import {HttpErrorResponse} from "@angular/common/http";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-phone',
@@ -31,7 +32,8 @@ export class PhoneComponent implements OnInit, OnDestroy {
 
   constructor(private phoneService: PhoneService,
               private fb: FormBuilder,
-              private modalService: NgbModal) {
+              private modalService: NgbModal,
+              private translateService: TranslateService) {
   }
 
   ngOnInit(): void {
@@ -62,7 +64,7 @@ export class PhoneComponent implements OnInit, OnDestroy {
   }
 
   callbackErrorGetAllPhones(error: HttpErrorResponse) {
-    this.errorMessage = SubscriptionErrorHandle(error);
+    this.errorMessage = this.translateService.instant('PopUpMsg.' + SubscriptionErrorHandle(error));
     this.loading = false;
   }
 

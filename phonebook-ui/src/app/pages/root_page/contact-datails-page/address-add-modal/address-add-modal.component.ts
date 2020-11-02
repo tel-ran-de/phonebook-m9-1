@@ -76,7 +76,7 @@ export class AddressAddModalComponent implements OnInit, OnDestroy {
 
     this.addressService.triggerOnReloadAddressesList();
 
-    this.toastService.show('Address saved', {
+    this.toastService.show('address.addressSaveOk', {
       classname: 'bg-success text-light',
       id: 'pop-up-success-add-address'
     });
@@ -87,7 +87,7 @@ export class AddressAddModalComponent implements OnInit, OnDestroy {
   callBackErrorAddAddress() {
     this.loading = false;
 
-    this.toastService.show('Add address failed', {
+    this.toastService.show('address.addressSaveFail', {
       classname: `bg-danger text-light`,
       id: `pop-up-error-add-address`
     });

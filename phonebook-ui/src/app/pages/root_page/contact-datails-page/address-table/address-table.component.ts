@@ -49,7 +49,7 @@ export class AddressTableComponent implements OnInit, OnDestroy {
   }
 
   callBackOkAddressRemove(): void {
-    this.toastService.show('Address removed', {
+    this.toastService.show('address.addressRemoveOk', {
       classname: 'bg-success text-light',
       id: 'pop-up-success-remove-address'
     });
@@ -58,7 +58,7 @@ export class AddressTableComponent implements OnInit, OnDestroy {
   }
 
   callBackErrorAddressRemove() {
-    this.toastService.show('Remove address failed', {
+    this.toastService.show('address.addressRemoveFail', {
       classname: `bg-danger text-light`,
       id: `pop-up-error-remove-address`
     });

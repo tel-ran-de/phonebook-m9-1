@@ -1,14 +1,14 @@
 <div class="modal-header" id="edit-address-modal">
-  <h4 class="modal-title">Edit address</h4>
+  <h4 class="modal-title">{{'FormsTitle.editAddress' | translate}}</h4>
   <a type="button" class="close" aria-label="Close" (click)="onClickCancel()" placement="bottom"
-     ngbTooltip="close this window">
+     ngbTooltip="{{'PlaceHolders.closeModal' | translate}}">
     <span aria-hidden="true">&times;</span>
   </a>
 </div>
 <form [formGroup]="addressEditForm" novalidate (ngSubmit)="onClickSave()" id="edit-address-form">
   <div class="modal-body">
     <div class="form-group">
-      <label for="cc-select">Select country</label>
+      <label for="cc-select">{{'AddressTable.country' | translate}}</label>
       <select class="custom-select" (change)="onChangeSelectedElement($event)" id="cc-select" [disabled]="loading">
         <option selected [value]="preSelectedCountry.name">
           {{preSelectedCountry.name}}
@@ -19,25 +19,25 @@
       </select>
     </div>
     <div class="form-group">
-      <label for="input-city">City</label>
+      <label for="input-city">{{'AddressTable.city' | translate}}</label>
       <input class="form-control" type="text" [readOnly]="loading" formControlName="city" id="input-city">
     </div>
     <div class="form-group">
-      <label for="input-zip">Zip</label>
+      <label for="input-zip">{{'AddressTable.zip' | translate}}</label>
       <input class="form-control" type="text" [readOnly]="loading" formControlName="zip" id="input-zip">
     </div>
     <div class="form-group">
-      <label for="input-street">Address*</label>
+      <label for="input-street">{{'AddressTable.address' | translate}}*</label>
       <input class="form-control" type="text" [readOnly]="loading" formControlName="street" id="input-street">
     </div>
     <div>
-      <button *ngIf="!loading" [disabled]="addressEditForm.invalid" class="btn btn-primary btn-block" type="submit">Save
-        address
+      <button *ngIf="!loading" [disabled]="addressEditForm.invalid" class="btn btn-primary btn-block" type="submit">
+        {{'PlaceHolders.save' | translate}}
       </button>
 
       <button *ngIf="loading" class="btn btn-primary btn-block loading-btn" disabled type="button">
         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-        Loading...
+        {{'PlaceHolders.loading' | translate}}...
       </button>
     </div>
   </div>
@@ -45,12 +45,12 @@
 <div class="card-footer">
   <p>
     <ngb-alert *ngIf="alertMessage" type="danger" (close)="onCloseAlert()" placement="top"
-               ngbTooltip="close this window">
+               ngbTooltip="{{'PlaceHolders.closeModal' | translate}}">
       {{alertMessage}}
     </ngb-alert>
     <ngb-alert *ngIf="addressEditForm.invalid && (addressEditForm.dirty || addressEditForm.touched)" type="info"
                [dismissible]="false">
-      To save, you must fill in the address field
+      {{'FormErrorMsg.addressRequired' | translate}}
     </ngb-alert>
   </p>
 </div>

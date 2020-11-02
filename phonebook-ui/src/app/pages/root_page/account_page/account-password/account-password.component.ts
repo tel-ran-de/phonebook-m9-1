@@ -5,6 +5,7 @@ import {ConfirmedValidator} from "../../../../password-recovery/confirmed.valida
 import {HttpErrorResponse} from "@angular/common/http";
 import {Subscription} from "rxjs";
 import {SubscriptionErrorHandle} from "../../../../service/subscriptionErrorHandle";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-account-password',
@@ -20,7 +21,7 @@ export class AccountPasswordComponent implements OnInit, OnDestroy {
 
   changeSubscription: Subscription;
 
-  constructor(private fb: FormBuilder, private userService: UserService) {
+  constructor(private fb: FormBuilder, private userService: UserService, private translateService: TranslateService) {
     this.createForm();
   }
 
@@ -52,7 +53,7 @@ export class AccountPasswordComponent implements OnInit, OnDestroy {
 
   callbackError(error: HttpErrorResponse): void {
     this.loading = false;
-    this.errorMessage = SubscriptionErrorHandle(error);
+    this.errorMessage = this.translateService.instant(SubscriptionErrorHandle(error));
 
     this.form.reset();
   }

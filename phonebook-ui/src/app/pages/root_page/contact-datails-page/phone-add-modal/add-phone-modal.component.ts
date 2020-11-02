@@ -67,7 +67,7 @@ export class PhoneAddModalComponent implements OnInit, OnDestroy {
 
     this.phoneService.triggerOnReloadPhonesList();
 
-    this.toastService.show('Phone saved', {
+    this.toastService.show('phone.phoneSaveOk', {
       classname: 'bg-success text-light',
       id: 'pop-up-success-add-phone'
     });
@@ -78,7 +78,7 @@ export class PhoneAddModalComponent implements OnInit, OnDestroy {
   callBackErrorAddPhone(): void {
     this.loading = false;
 
-    this.toastService.show('Add phone failed', {
+    this.toastService.show('phone.phoneSaveFail', {
       classname: `bg-danger text-light`,
       id: `pop-up-error-add-phone`
     });

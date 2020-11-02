@@ -3,13 +3,14 @@
     <thead>
     <tr>
       <th scope="col" class="w-95 w-75">
-        <a (click)="sort('email')" [routerLink]="'.'" class="text-secondary" placement="top" ngbTooltip="click to sort">Email
+        <a (click)="sort('email')" [routerLink]="'.'" class="text-secondary" placement="top"
+           ngbTooltip="click to sort">{{ 'EmailTable.email' | translate }}
           <span>
             <app-sort-icon [show]="sortBy === 'email'" [iconUp]="reverseSort"></app-sort-icon>
           </span>
         </a>
       </th>
-      <th scope="col" class="w-5 text-center">Action</th>
+      <th scope="col" class="w-5 text-center">{{ 'ContactDetails.btnAction' | translate }}</th>
     </tr>
     </thead>
     <tbody>
@@ -23,12 +24,14 @@
           <app-action-btn-icon></app-action-btn-icon>
         </button>
 
-      <div ngbDropdownMenu>
-        <button ngbDropdownItem class="btn-email-edit" (click)="onClickEditEmail(emailItem)">Edit</button>
-        <button ngbDropdownItem class="btn-email-remove" placement="bottom" ngbTooltip="permanently deleting"
-                (click)="onClickRemove(emailItem.id)">Remove
-        </button>
-      </div>
+        <div ngbDropdownMenu>
+          <button ngbDropdownItem class="btn-email-edit"
+                  (click)="onClickEditEmail(emailItem)">{{ 'ContactDetails.btnEdit' | translate }}</button>
+          <button ngbDropdownItem class="btn-email-remove" placement="bottom"
+                  ngbTooltip="{{ 'FormErrorMsg.deletingMsg' | translate }}"
+                  (click)="onClickRemove(emailItem.id)">{{ 'ContactDetails.btnRemove' | translate }}
+          </button>
+        </div>
 
       </td>
     </tr>

@@ -1,0 +1,117 @@
+{
+	"AddressTable": {
+		"address": "Улица",
+		"city": "Город",
+		"country": "Страна",
+		"zip": "Индекс"
+	},
+	"ContactDetails": {
+		"addresses": "Адреса",
+		"btnAction": "Действия",
+		"btnAddAddress": "Добавить адрес",
+		"btnAddEmail": "Добавить адрес эл. почты",
+		"btnAddPhone": "Добавить номер телефона",
+		"btnEdit": "Редактировать",
+		"btnRemove": "Удалить",
+		"info": "Информация",
+		"mails": "Эл. адреса",
+		"phones": "Телефоны",
+		"sortInfo": "Нажмите, чтобы отсортировать"
+	},
+	"ContactDetailsInfo": {
+		"fieldAbout": "Описание контакта",
+		"fieldFirstName": "Имя",
+		"fieldLastName": "Фамилия",
+		"title": "Контактная информация"
+	},
+	"Contacts": {
+		"removeContactConfirmMsg": "Я подтверждаю удаление контакта",
+		"removeContactMsg": "Удаленный контакт не может быть восстановлен",
+		"titleContacts": "Список контактов",
+		"titleMyProfile": "Мой профиль",
+		"titleMyProfileNoName": "Нажмите, чтобы изменить свой профиль",
+		"titleRemoveContact": "Удалить контакт"
+	},
+	"EmailTable": {
+		"email": "Эл. адрес"
+	},
+	"FormErrorMsg": {
+		"addressRequired": "Для сохранения необходимо заполнить адресное поле",
+		"deletingMsg": "Окончательное удаление",
+		"editContact": "Для добавления контакта необходимо указать имя",
+		"emailInvalidMsg": "Здесь разрешена только электронная почта",
+		"phoneInvalidMsg": "Допустимая длина телефонного номера 5 - 12 цифр"
+	},
+	"FormsTitle": {
+		"addAddress": "Добавить новый адрес",
+		"addContact": "Добавить контакт",
+		"addEmail": "Добавить новый эл. адрес",
+		"addPhone": "Добавить новый номер телефона",
+		"editAddress": "Изменить адрес",
+		"editEmail": "Редактировать эл. почту",
+		"editPhone": "Изменить номер телефона"
+	},
+	"Header": {
+		"link": {
+			"account": "Учетная запись",
+			"addContact": "Добавить новый контакт",
+			"contacts": "Контакты",
+			"logOut": "Выйти"
+		}
+	},
+	"PhoneTable": {
+		"cc": "Код страны",
+		"pn": "Номер телефона"
+	},
+	"PlaceHolders": {
+		"cancel": "Отменить",
+		"closeModal": "Закрыть окно",
+		"loading": "Загрузка",
+		"noResult": "Нет результатов",
+		"save": "Сохранить",
+		"search": "Поиск...",
+		"searchLabel": "Поиск"
+	},
+	"PopUpMsg": {
+		"Error! This address doesn't exist in our DB": "Ошибка! Этого адреса нет в нашей БД",
+		"Error! This contact doesn't belong this user": "Ошибка! Этот контакт не принадлежит этому пользователю",
+		"Error! This contact doesn't exist in our DB": "Ошибка! Этот контакт не существует",
+		"Error! This email doesn't exist in our DB": "Ошибка! Этого адреса электронной почты не существует",
+		"Error! This phone number doesn't exist in our DB": "Ошибка! Этот номер телефона не существует",
+		"address": {
+			"addressEditFail": "Не удалось изменить адрес",
+			"addressEditOk": "Адрес изменен",
+			"addressRemoveFail": "Не удалось удалить адрес",
+			"addressRemoveOk": "Адрес удален",
+			"addressSaveFail": "Ошибка сохранения адреса",
+			"addressSaveOk": "Адрес сохранен"
+		},
+		"code404_400": "Произошла ошибка. Повторите попытку позже.",
+		"contact": {
+			"contactAddFail": "Не удалось сохранить контакт",
+			"contactAddOk": "Контакт сохранен",
+			"contactEditFail": "Не удалось изменить контакт",
+			"contactEditOk": "Контакт изменен",
+			"contactRemoveFail": "Не удалось удалить контакт",
+			"contactRemoveOk": "Контакт удален"
+		},
+		"email": {
+			"emailEditFail": "Не удалось изменить адрес электронной почты",
+			"emailEditOk": "Электронная почта удалена",
+			"emailRemoveFail": "Не удалось удалить электронную почту",
+			"emailRemoveOk": "Электронная почта удалена",
+			"emailSaveFail": "Ошибка сохранения электронной почты",
+			"emailSaveOk": "Эл. почта сохранена"
+		},
+		"errorNoInternet": "Подключение к Интернету отсутствует",
+		"noErrorMsg": "Сообщение об ошибке отсутствует",
+		"phone": {
+			"phoneEditFail": "Не удалось изменить номер телефона",
+			"phoneEditOk": "Номер телефона изменен",
+			"phoneRemoveFail": "Не удалось удалить номер телефона",
+			"phoneRemoveOk": "Номер телефона удален",
+			"phoneSaveFail": "Не удалось сохранить номер телефона",
+			"phoneSaveOk": "Номер телефона сохранен"
+		}
+	}
+}

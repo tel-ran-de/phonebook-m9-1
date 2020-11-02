@@ -55,7 +55,7 @@ export class EmailEditModalComponent implements OnInit, OnDestroy {
 
     this.emailService.triggerOnReloadEmailList();
 
-    this.toastService.show('Edit email success', {
+    this.toastService.show('email.emailEditOk', {
       classname: 'bg-success text-light',
       id: 'pop-up-success-edit-email'
     });
@@ -66,7 +66,7 @@ export class EmailEditModalComponent implements OnInit, OnDestroy {
   callBackErrorEditEmail(): void {
     this.loading = false;
 
-    this.toastService.show('Edit email failed', {
+    this.toastService.show('email.emailEditFail', {
       classname: `bg-danger text-light`,
       id: `pop-up-error-edit-email`
     });
