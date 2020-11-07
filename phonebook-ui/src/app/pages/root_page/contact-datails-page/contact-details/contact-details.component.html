@@ -1,26 +1,26 @@
 <ul ngbNav #nav="ngbNav" [activeId]="1" class="nav-tabs justify-content-center" keyboard="changeWithArrows"
     id="navbar-contact-details">
   <li [ngbNavItem]="1">
-    <a ngbNavLink placement="top" ngbTooltip="Contact info" id="tab-link-info">Info</a>
-    <ng-template ngbNavContent id="tab-info-content">
+    <a ngbNavLink>{{'ContactDetails.info' | translate}}</a>
+    <ng-template ngbNavContent>
       <app-contact [contactId]="contactId"></app-contact>
     </ng-template>
   </li>
   <li [ngbNavItem]="2">
-    <a ngbNavLink placement="top" ngbTooltip="Contact phones">Phones</a>
-    <ng-template ngbNavContent id="tab-phones-content">
+    <a ngbNavLink>{{'ContactDetails.phones' | translate}}</a>
+    <ng-template ngbNavContent>
       <app-phone [contactId]="contactId"></app-phone>
     </ng-template>
   </li>
   <li [ngbNavItem]="3">
-    <a ngbNavLink placement="top" ngbTooltip="Contact emails">Emails</a>
-    <ng-template ngbNavContent id="tab-emails-content">
+    <a ngbNavLink>{{'ContactDetails.mails' | translate}}</a>
+    <ng-template ngbNavContent>
       <app-email [contactId]="contactId"></app-email>
     </ng-template>
   </li>
   <li [ngbNavItem]="4">
-    <a ngbNavLink placement="top" ngbTooltip="Contact addresses">Addresses</a>
-    <ng-template ngbNavContent id="tab-addresses-content">
+    <a ngbNavLink>{{'ContactDetails.addresses' | translate}}</a>
+    <ng-template ngbNavContent>
       <app-address [contactId]="contactId"></app-address>
     </ng-template>
   </li>

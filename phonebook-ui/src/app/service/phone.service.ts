@@ -5,6 +5,7 @@ import {Observable, Subject, throwError} from "rxjs";
 import {SubscriptionErrorHandle} from "./subscriptionErrorHandle";
 import {ToastService} from "./toast.service";
 import {catchError} from "rxjs/operators";
+import {TranslateService} from "@ngx-translate/core";
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,8 @@ export class PhoneService {
   private readonly basePath = '/api/phone';
 
   constructor(private http: HttpClient,
-              private toastService: ToastService) {
+              private toastService: ToastService,
+              private translateService: TranslateService) {
   }
 
   getAllPhonesByContactId(contactId: number): Observable<Phone[]> {
@@ -48,7 +50,7 @@ export class PhoneService {
   }
 
   private handleError(error: HttpErrorResponse, popUpId: string) {
-    const errorMessage = SubscriptionErrorHandle(error);
+    const errorMessage = this.translateService.instant(SubscriptionErrorHandle(error));
 
     this.toastService.show(errorMessage, {
       classname: `bg-danger text-light`,

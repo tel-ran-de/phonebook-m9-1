@@ -70,7 +70,7 @@ export class AddressEditModalComponent implements OnInit, OnDestroy {
 
     this.addressService.triggerOnReloadAddressesList();
 
-    this.toastService.show('Edit address success', {
+    this.toastService.show('address.addressEditOk', {
       classname: 'bg-success text-light',
       id: 'pop-up-success-edit-address'
     });
@@ -81,7 +81,7 @@ export class AddressEditModalComponent implements OnInit, OnDestroy {
   callBackErrorAddressEdit(): void {
     this.loading = false;
 
-    this.toastService.show('Edit address failed', {
+    this.toastService.show('address.addressEditFail', {
       classname: `bg-danger text-light`,
       id: `pop-up-error-edit-address`
     });

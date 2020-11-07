@@ -1,14 +1,14 @@
 <div class="modal-header" id="add-contact-modal">
-  <h4 class="modal-title">Add new address</h4>
+  <h4 class="modal-title">{{'FormsTitle.addAddress' | translate}}</h4>
   <a type="button" class="close" aria-label="Close" (click)="onClickCancel()" placement="bottom"
-     ngbTooltip="close this window">
+     ngbTooltip="{{'PlaceHolders.closeModal' | translate}}">
     <span aria-hidden="true">&times;</span>
   </a>
 </div>
 <form [formGroup]="addressForm" novalidate (ngSubmit)="onClickSave()" id="phone-form">
   <div class="modal-body">
     <div class="form-group">
-      <label for="cc-select">Select country</label>
+      <label for="cc-select">{{'AddressTable.country' | translate}}</label>
       <select class="custom-select" (change)="selectChangeHandler($event)" id="cc-select" [disabled]="loading">
         <option selected [value]="preSelectedCountry.name">
           {{preSelectedCountry.name}}
@@ -19,28 +19,28 @@
       </select>
     </div>
     <div class="form-group">
-      <label for="input-city">City</label>
-      <input class="form-control" type="text" placeholder="City..." [readOnly]="loading"
+      <label for="input-city">{{'AddressTable.city' | translate}}</label>
+      <input class="form-control" type="text" placeholder="{{'AddressTable.city' | translate}}" [readOnly]="loading"
              formControlName="city" id="input-city">
     </div>
     <div class="form-group">
-      <label for="input-zip">Zip</label>
-      <input class="form-control" type="text" placeholder="Zip..." [readOnly]="loading"
+      <label for="input-zip">{{'AddressTable.zip' | translate}}</label>
+      <input class="form-control" type="text" placeholder="{{'AddressTable.zip' | translate}}" [readOnly]="loading"
              formControlName="zip" id="input-zip">
     </div>
     <div class="form-group">
-      <label for="input-street">Address*</label>
-      <input class="form-control" type="text" placeholder="Address..." [readOnly]="loading"
+      <label for="input-street">{{'AddressTable.address' | translate}}*</label>
+      <input class="form-control" type="text" placeholder="{{'AddressTable.address' | translate}}" [readOnly]="loading"
              formControlName="street" id="input-street">
     </div>
     <div>
-      <button *ngIf="!loading" [disabled]="addressForm.invalid" class="btn btn-primary btn-block" type="submit">Save
-        address
+      <button *ngIf="!loading" [disabled]="addressForm.invalid" class="btn btn-primary btn-block" type="submit">
+        {{'PlaceHolders.save' | translate}}
       </button>
 
       <button *ngIf="loading" class="btn btn-primary btn-block loading-btn" disabled type="button">
         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-        Loading...
+        {{'PlaceHolders.loading' | translate}}...
       </button>
     </div>
   </div>
@@ -50,7 +50,7 @@
   <p>
     <ngb-alert *ngIf="addressForm.invalid && (addressForm.dirty || addressForm.touched)" type="info"
                [dismissible]="false">
-      To save, you must fill in the address field
+      {{'FormErrorMsg.addressRequired' | translate}}
     </ngb-alert>
   </p>
 </div>

@@ -11,7 +11,7 @@ import {RegistrationComponent} from './registration/registration.component';
 import {ActivateEmailComponent} from './activate-email/activate-email.component';
 import {ActivationComponent} from './activation/activation.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from "@angular/common/http";
 import {UserService} from "./service/user.service";
 import {LoginComponent} from './login/login.component';
 import {TokenInterceptor} from "./service/tokenHandle/token.interceptor";
@@ -46,6 +46,8 @@ import {ContactFilterPipe} from "./pages/root_page/contacts_page/contacts/contac
 import {AddressFilterPipe} from "./pages/root_page/contact-datails-page/address/address-filter.pipe";
 import {EmailFilterPipe} from './pages/root_page/contact-datails-page/email/email-filter.pipe';
 import {PhoneFilterPipe} from './pages/root_page/contact-datails-page/phone/phone-filter.pipe';
+import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
+import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 
 @NgModule({
   declarations: [
@@ -89,11 +91,19 @@ import {PhoneFilterPipe} from './pages/root_page/contact-datails-page/phone/phon
   ],
   imports: [
     BrowserModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient],
+      },
+      useDefaultLang: false,
+    }),
     ReactiveFormsModule,
     FormsModule,
     AppRoutingModule,
     NgbModule,
-    HttpClientModule,
+    HttpClientModule
   ],
   providers: [UserService,
     {provide: HTTP_INTERCEPTORS, useClass: HttpError401Interceptor, multi: true},
@@ -102,4 +112,7 @@ import {PhoneFilterPipe} from './pages/root_page/contact-datails-page/phone/phon
   bootstrap: [AppComponent]
 })
 export class AppModule {
+}
+export function HttpLoaderFactory(http: HttpClient): TranslateLoader {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }

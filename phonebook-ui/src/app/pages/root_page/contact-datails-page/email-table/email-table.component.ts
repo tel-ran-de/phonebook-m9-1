@@ -48,7 +48,7 @@ export class EmailTableComponent implements OnInit, OnDestroy {
   }
 
   callBackOkRemoveEmail(): void {
-    this.toastService.show('Email removed', {
+    this.toastService.show('email.emailRemoveOk', {
       classname: 'bg-success text-light',
       id: 'pop-up-success-remove-email'
     });
@@ -57,7 +57,7 @@ export class EmailTableComponent implements OnInit, OnDestroy {
   }
 
   callBackErrorRemoveEmail(): void {
-    this.toastService.show('Remove email failed', {
+    this.toastService.show('email.emailRemoveFail', {
       classname: `bg-danger text-light`,
       id: `pop-up-error-remove-email`
     });

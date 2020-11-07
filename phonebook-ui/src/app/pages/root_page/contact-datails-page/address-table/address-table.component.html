@@ -4,7 +4,7 @@
     <tr>
       <th scope="col">
         <a (click)="sort('country')" [routerLink]="'.'" class="text-secondary sort-by-country" placement="top"
-           ngbTooltip="click to sort by country">Country
+           ngbTooltip="{{ 'ContactDetails.sortInfo' | translate }}">{{ 'AddressTable.country' | translate }}
           <span>
             <app-sort-icon [show]="sortBy === 'country'" [iconUp]="reverseSort"></app-sort-icon>
           </span>
@@ -13,7 +13,7 @@
       <th scope="col">
 
         <a (click)="sort('city')" [routerLink]="'.'" class="text-secondary sort-by-city" placement="top"
-           ngbTooltip="click to sort by city">City
+           ngbTooltip="{{ 'ContactDetails.sortInfo' | translate }}">{{ 'AddressTable.city' | translate }}
           <span>
             <app-sort-icon [show]="sortBy === 'city'" [iconUp]="reverseSort"></app-sort-icon>
           </span>
@@ -23,7 +23,7 @@
       <th scope="col">
 
         <a (click)="sort('zip')" [routerLink]="'.'" class="text-secondary sort-by-zip" placement="top"
-           ngbTooltip="click to sort by zip">Zip
+           ngbTooltip="{{ 'ContactDetails.sortInfo' | translate }}">{{ 'AddressTable.zip' | translate }}
           <span>
             <app-sort-icon [show]="sortBy === 'zip'" [iconUp]="reverseSort"></app-sort-icon>
           </span>
@@ -33,14 +33,14 @@
       <th scope="col">
 
         <a (click)="sort('street')" [routerLink]="'.'" class="text-secondary sort-by-street" placement="top"
-           ngbTooltip="click to sort by street">Address
+           ngbTooltip="{{ 'ContactDetails.sortInfo' | translate }}">{{ 'AddressTable.address' | translate }}
           <span>
             <app-sort-icon [show]="sortBy === 'street'" [iconUp]="reverseSort"></app-sort-icon>
           </span>
         </a>
 
       </th>
-      <th scope="col" class="w-5 ml-auto">Action</th>
+      <th scope="col" class="w-5 ml-auto">{{ 'ContactDetails.btnAction' | translate }}</th>
     </tr>
     </thead>
     <tbody>
@@ -64,10 +64,10 @@
         </button>
 
         <div ngbDropdownMenu>
-          <button ngbDropdownItem class="btn-address-edit" (click)="onClickEdit(address)">Edit</button>
-          <button ngbDropdownItem class="btn-address-remove" placement="bottom" ngbTooltip="permanently deleting"
+          <button ngbDropdownItem class="btn-address-edit" (click)="onClickEdit(address)">{{ 'ContactDetails.btnEdit' | translate }}</button>
+          <button ngbDropdownItem class="btn-address-remove" placement="bottom" ngbTooltip="{{ 'FormErrorMsg.deletingMsg' | translate }}"
                   (click)="onClickRemove(address.id)">
-            Remove
+            {{ 'ContactDetails.btnRemove' | translate }}
           </button>
         </div>
 

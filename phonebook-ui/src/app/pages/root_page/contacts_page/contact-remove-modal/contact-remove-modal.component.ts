@@ -1,7 +1,6 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {NgbActiveModal, NgbModalConfig} from "@ng-bootstrap/ng-bootstrap";
 import {ContactService} from "../../../../service/contact.service";
-import {SubscriptionErrorHandle} from "../../../../service/subscriptionErrorHandle";
 import {ToastService} from "../../../../service/toast.service";
 import {Subscription} from "rxjs";
 
@@ -34,7 +33,6 @@ export class ContactRemoveModalComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.hasNoError = true;
     this.alertType = 'info';
-    this.alertMessage = 'Deleted contact cannot be restored';
   }
 
   onClickRemove(): void {
@@ -43,7 +41,7 @@ export class ContactRemoveModalComponent implements OnInit, OnDestroy {
     this.hasNoError = true;
 
     this.removeContactSubscription = this.contactService.removeContact(this.contactId)
-      .subscribe(() => this.callbackOk(), error => this.callbackError(error));
+      .subscribe(() => this.callbackOk(), () => this.callbackError());
   }
 
   onClickCancel(): void {
@@ -55,7 +53,7 @@ export class ContactRemoveModalComponent implements OnInit, OnDestroy {
 
     this.contactService.triggerOnReloadContactsList();
 
-    this.toastService.show('Contact removed', {
+    this.toastService.show('contact.contactRemoveOk', {
       classname: 'bg-success text-light',
       id: 'pop-up-success-removed-contact'
     });
@@ -63,13 +61,12 @@ export class ContactRemoveModalComponent implements OnInit, OnDestroy {
     this.onClickCancel();
   }
 
-  callbackError(error: any): void {
+  callbackError(): void {
     this.loading = false;
     this.isChecked = false;
     this.hasNoError = false;
 
-    this.alertType = 'danger';
-    this.alertMessage = SubscriptionErrorHandle(error);
+    this.onClickCancel();
   }
 
   ngOnDestroy(): void {
