@@ -7,6 +7,7 @@ import {AddressAddModalComponent} from "../address-add-modal/address-add-modal.c
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {Subscription} from "rxjs";
 import {HttpErrorResponse} from "@angular/common/http";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-address',
@@ -31,7 +32,8 @@ export class AddressComponent implements OnInit, OnDestroy {
 
   constructor(private addressService: AddressService,
               private fb: FormBuilder,
-              private modalService: NgbModal) {
+              private modalService: NgbModal,
+              private translateService: TranslateService) {
   }
 
   ngOnInit(): void {
@@ -63,7 +65,7 @@ export class AddressComponent implements OnInit, OnDestroy {
 
   callbackErrorGetAllAddresses(error: HttpErrorResponse): void {
     this.loading = false;
-    this.errorMessage = SubscriptionErrorHandle(error);
+    this.errorMessage = this.translateService.instant('PopUpMsg.' + SubscriptionErrorHandle(error));
   }
 
   openModalAddAddress(): void {

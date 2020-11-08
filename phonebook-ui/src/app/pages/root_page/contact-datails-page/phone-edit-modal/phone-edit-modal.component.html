@@ -1,7 +1,7 @@
 <div class="modal-header" id="add-contact-modal">
-  <h4 class="modal-title">Edit phone</h4>
+  <h4 class="modal-title">{{'FormsTitle.editPhone' | translate}}</h4>
   <a type="button" class="close" aria-label="Close" (click)="onClickCancel()" placement="bottom"
-     ngbTooltip="close this window">
+     ngbTooltip="{{'PlaceHolders.closeModal' | translate}}">
     <span aria-hidden="true">&times;</span>
   </a>
 </div>
@@ -9,7 +9,7 @@
       *ngIf="preSelectedCountryCode">
   <div class="modal-body">
     <div class="form-group">
-      <label for="cc-select">Select country code</label>
+      <label for="cc-select">{{'PhoneTable.cc' | translate}}</label>
       <select class="custom-select" (change)="onChangeSelectedElement($event)" id="cc-select" [disabled]="loading">
         <option selected [value]="preSelectedCountryCode.dial_code">
           {{preSelectedCountryCode.name}} ({{preSelectedCountryCode.dial_code}})
@@ -19,20 +19,21 @@
         </option>
       </select>
     </div>
-    <label for="selected-cc">Phone number</label>
+    <label for="selected-cc">{{'PhoneTable.pn' | translate}}</label>
     <div class="input-group mb-3">
       <div class="input-group-prepend">
         <span class="input-group-text">{{selectedCountryCode}}</span>
       </div>
-      <input class="form-control" type="tel" placeholder="Phone number..." [readOnly]="loading"
+      <input class="form-control" type="tel" [readOnly]="loading"
              formControlName="phoneNumber" id="selected-cc">
       <div class="input-group-append">
-        <button *ngIf="!loading" [disabled]="phoneEditForm.invalid" class="btn btn-primary" type="submit">Save phone
+        <button *ngIf="!loading" [disabled]="phoneEditForm.invalid" class="btn btn-primary" type="submit">
+          {{'PlaceHolders.save' | translate}}
         </button>
 
         <button *ngIf="loading" class="btn btn-primary" disabled type="button">
           <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-          Loading...
+          {{'PlaceHolders.loading' | translate}}...
         </button>
       </div>
     </div>
@@ -46,7 +47,8 @@
     </ngb-alert>
     <ngb-alert *ngIf="phoneEditForm.invalid && (phoneEditForm.dirty || phoneEditForm.touched)" type="info"
                [dismissible]="false">
-      Allowed length of the phone number 5 - 12 digits    </ngb-alert>
+      {{'FormErrorMsg.phoneInvalidMsg' | translate}}
+    </ngb-alert>
   </p>
 </div>
 

@@ -66,7 +66,7 @@ export class PhoneEditModalComponent implements OnInit, OnDestroy {
 
     this.phoneService.triggerOnReloadPhonesList();
 
-    this.toastService.show('Edit phone success', {
+    this.toastService.show('phone.phoneEditOk', {
       classname: 'bg-success text-light',
       id: 'pop-up-success-edit-phone'
     });
@@ -77,7 +77,7 @@ export class PhoneEditModalComponent implements OnInit, OnDestroy {
   callBackErrorPhoneEdit(): void {
     this.loading = false;
 
-    this.toastService.show('Edit phone failed', {
+    this.toastService.show('phone.phoneEditFail', {
       classname: `bg-danger text-light`,
       id: `pop-up-error-edit-phone`
     });

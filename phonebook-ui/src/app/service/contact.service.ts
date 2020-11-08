@@ -5,6 +5,7 @@ import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {catchError} from "rxjs/operators";
 import {ToastService} from "./toast.service";
 import {SubscriptionErrorHandle} from "./subscriptionErrorHandle";
+import {TranslateService} from "@ngx-translate/core";
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,8 @@ export class ContactService {
   private readonly profilePath = '/profile';
 
   constructor(private http: HttpClient,
-              private toastService: ToastService) {
+              private toastService: ToastService,
+              private translateService: TranslateService) {
   }
 
   getAllContacts(): Observable<Contact[]> {
@@ -59,8 +61,8 @@ export class ContactService {
   }
 
   private handleError(error: HttpErrorResponse, popUpId: string) {
-    const errorMessage = SubscriptionErrorHandle(error);
-
+    const errorMessage = this.translateService.instant(SubscriptionErrorHandle(error));
+console.log(errorMessage)
     this.toastService.show(errorMessage, {
       classname: `bg-danger text-light`,
       delay: 7_000,

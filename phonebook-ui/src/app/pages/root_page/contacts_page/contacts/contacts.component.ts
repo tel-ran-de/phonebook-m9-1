@@ -6,6 +6,7 @@ import {FormBuilder, FormGroup} from "@angular/forms";
 import {Subscription} from "rxjs";
 import {SubscriptionErrorHandle} from "../../../../service/subscriptionErrorHandle";
 import {HttpErrorResponse} from "@angular/common/http";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-contacts',
@@ -32,7 +33,8 @@ export class ContactsComponent implements OnInit, OnDestroy {
 
   constructor(public contactService: ContactService,
               public userService: UserService,
-              private fb: FormBuilder) {
+              private fb: FormBuilder,
+              private translateService: TranslateService) {
   }
 
   ngOnInit(): void {
@@ -65,7 +67,7 @@ export class ContactsComponent implements OnInit, OnDestroy {
   }
 
   callProfileError(error: HttpErrorResponse): void {
-    this.errorMessageProfile = SubscriptionErrorHandle(error);
+    this.errorMessageProfile = this.translateService.instant('PopUpMsg.' + SubscriptionErrorHandle(error));
 
     this.loadingProfile = false;
   }
@@ -85,7 +87,7 @@ export class ContactsComponent implements OnInit, OnDestroy {
   }
 
   callBackGetAllContactError(error: HttpErrorResponse): void {
-    this.errorMessage = SubscriptionErrorHandle(error);
+    this.errorMessage = this.translateService.instant('PopUpMsg.' + SubscriptionErrorHandle(error));
 
     this.loading = false;
   }

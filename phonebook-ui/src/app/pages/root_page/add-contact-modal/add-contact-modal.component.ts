@@ -58,7 +58,7 @@ export class AddContactModalComponent implements OnInit, OnDestroy {
 
     this.redirectTo('/contacts/' + contactId);
 
-    this.toastService.show('Contact saved successfully', {
+    this.toastService.show('contact.contactAddOk', {
       classname: 'bg-success text-light',
       id: 'pop-up-success-add-contact'
     });
@@ -74,7 +74,7 @@ export class AddContactModalComponent implements OnInit, OnDestroy {
   callBackErrorAddContact(): void {
     this.isSaved = false;
 
-    this.toastService.show('Add contact failed', {
+    this.toastService.show('contact.contactAddFail', {
       classname: `bg-danger text-light`,
       id: `pop-up-error-add-contact`
     });

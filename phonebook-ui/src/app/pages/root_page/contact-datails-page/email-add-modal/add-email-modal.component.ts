@@ -57,7 +57,7 @@ export class EmailAddModalComponent implements OnInit, OnDestroy {
 
     this.emailService.triggerOnReloadEmailList();
 
-    this.toastService.show('Email saved', {
+    this.toastService.show('email.emailSaveOk', {
       classname: 'bg-success text-light',
       delay: 5_000,
       id: 'pop-up-success-add-email'
@@ -69,7 +69,7 @@ export class EmailAddModalComponent implements OnInit, OnDestroy {
   callBackErrorAddEmail(): void {
     this.loading = false;
 
-    this.toastService.show('Add email failed', {
+    this.toastService.show('email.emailSaveFail', {
       classname: `bg-danger text-light`,
       delay: 7_000,
       id: `pop-up-error-add-email`

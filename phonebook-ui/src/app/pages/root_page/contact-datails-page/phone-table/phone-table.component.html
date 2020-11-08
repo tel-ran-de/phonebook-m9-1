@@ -4,7 +4,7 @@
     <tr>
       <th scope="col">
         <a (click)="sort('countryCode')" [routerLink]="'.'" class="text-secondary" placement="top"
-           ngbTooltip="click to sort">Country code
+           ngbTooltip="{{ 'ContactDetails.sortInfo' | translate }}">{{ 'PhoneTable.cc' | translate }}
           <span>
             <app-sort-icon [show]="sortBy === 'countryCode'" [iconUp]="reverseSort"></app-sort-icon>
           </span>
@@ -12,13 +12,13 @@
       </th>
       <th scope="col">
         <a (click)="sort('phoneNumber')" [routerLink]="'.'" class="text-secondary" placement="top"
-           ngbTooltip="click to sort">Phone number
+           ngbTooltip="{{ 'ContactDetails.sortInfo' | translate }}">{{ 'PhoneTable.pn' | translate }}
           <span>
             <app-sort-icon [show]="sortBy === 'phoneNumber'" [iconUp]="reverseSort"></app-sort-icon>
           </span>
         </a>
       </th>
-      <th scope="col" class="w-5 text-center">Action</th>
+      <th scope="col" class="w-5 text-center">{{ 'ContactDetails.btnAction' | translate }}</th>
     </tr>
     </thead>
     <tbody>
@@ -36,9 +36,9 @@
         </button>
 
         <div ngbDropdownMenu>
-          <button ngbDropdownItem class="btn-phone-edit" (click)="onClickEdit(phoneItem)">Edit</button>
-          <button ngbDropdownItem class="btn-phone-remove" placement="bottom" ngbTooltip="permanently deleting"
-                  (click)="onClickRemove(phoneItem.id)">Remove
+          <button ngbDropdownItem class="btn-phone-edit" (click)="onClickEdit(phoneItem)">{{ 'ContactDetails.btnEdit' | translate }}</button>
+          <button ngbDropdownItem class="btn-phone-remove" placement="bottom" ngbTooltip="{{ 'FormErrorMsg.deletingMsg' | translate }}"
+                  (click)="onClickRemove(phoneItem.id)">{{ 'ContactDetails.btnRemove' | translate }}
           </button>
         </div>
       </td>

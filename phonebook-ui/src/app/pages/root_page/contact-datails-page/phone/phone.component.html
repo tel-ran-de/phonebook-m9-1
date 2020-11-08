@@ -1,12 +1,14 @@
 <div class="nav navbar row">
   <form [formGroup]="searchFormPhone" id="search-form-phone">
     <div class="form-group form-inline pt-2 mr-auto">
-      <label for="search">Search: </label>
-      <input class="form-control ml-2" type="text" formControlName="searchInput" placeholder="Search..." id="search">
+      <label for="search">{{ 'PlaceHolders.searchLabel' | translate }}</label>
+      <input class="form-control ml-2" type="text" formControlName="searchInput"
+             placeholder="{{'PlaceHolders.search' | translate}}" id="search">
     </div>
   </form>
   <div class="ml-auto">
-    <button class="btn btn-info text-white" id="btn-add-phone" (click)="openModalAddPhone()">Add phone</button>
+    <button class="btn btn-info text-white" id="btn-add-phone"
+            (click)="openModalAddPhone()">{{ 'ContactDetails.btnAddPhone' | translate }}</button>
   </div>
 </div>
 
@@ -15,7 +17,7 @@
 
 <div *ngIf="(phonesToDisplay | phoneFilter: searchTerm).length === 0 && !errorMessage && !loading">
   <ngb-alert type="warning" role="alert" class="text-center" [dismissible]="false">
-    <b>No results</b>
+    <b>{{ 'PlaceHolders.noResult' | translate }}</b>
   </ngb-alert>
 </div>
 
@@ -27,9 +29,9 @@
 
 <div *ngIf="loading">
   <ngb-alert type="secondary" role="alert" class="text-center" [dismissible]="false">
-    <b>Loading </b>
+    <b>{{ 'PlaceHolders.loading' | translate }}</b>
     <div class="spinner-border text-primary" role="status">
-      <span class="sr-only">Loading...</span>
+      <span class="sr-only">{{ 'PlaceHolders.loading' | translate }}...</span>
     </div>
   </ngb-alert>
 </div>

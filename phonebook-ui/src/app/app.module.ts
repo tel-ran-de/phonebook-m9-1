@@ -11,7 +11,7 @@ import {RegistrationComponent} from './registration/registration.component';
 import {ActivateEmailComponent} from './activate-email/activate-email.component';
 import {ActivationComponent} from './activation/activation.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from "@angular/common/http";
 import {UserService} from "./service/user.service";
 import {LoginComponent} from './login/login.component';
 import {TokenInterceptor} from "./service/tokenHandle/token.interceptor";
@@ -47,6 +47,9 @@ import {AddressFilterPipe} from "./pages/root_page/contact-datails-page/address/
 import {EmailFilterPipe} from './pages/root_page/contact-datails-page/email/email-filter.pipe';
 import {PhoneFilterPipe} from './pages/root_page/contact-datails-page/phone/phone-filter.pipe';
 import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
+import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
+import {TranslateHttpLoader} from "@ngx-translate/http-loader";
+
 
 @NgModule({
   declarations: [
@@ -91,11 +94,19 @@ import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
   ],
   imports: [
     BrowserModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient],
+      },
+      useDefaultLang: false,
+    }),
     ReactiveFormsModule,
     FormsModule,
     AppRoutingModule,
     NgbModule,
-    HttpClientModule,
+    HttpClientModule
   ],
   providers: [UserService,
     {provide: HTTP_INTERCEPTORS, useClass: HttpError401Interceptor, multi: true},
@@ -104,4 +115,7 @@ import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
   bootstrap: [AppComponent]
 })
 export class AppModule {
+}
+export function HttpLoaderFactory(http: HttpClient): TranslateLoader {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }

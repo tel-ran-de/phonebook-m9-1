@@ -1,7 +1,9 @@
 on:
-  pull_request_target:
-    branches: [master]
-    types: [closed]
+#  pull_request_target:
+#    branches: [master]
+#    types: [closed]
+  push:
+    branches: [ master ]
 
 name: Deploy to Amazon ECS
 
