@@ -17,6 +17,7 @@ import {PageNotFoundComponent} from "./page-not-found/page-not-found.component";
 const routes: Routes = [
   {path: '', redirectTo: 'contacts', pathMatch: 'full'},
 
+
   {path: 'user/login', component: LoginComponent},
   {path: 'user/registration', component: RegistrationComponent},
   {path: 'user/activate-email', component: ActivateEmailComponent},
@@ -39,10 +40,10 @@ const routes: Routes = [
           {path: "password", component: AccountPasswordComponent},
         ]
       },
+      {path: '**', redirectTo: '404'},
+      {path: '404', component: PageNotFoundComponent},
     ], canActivate: [AuthGuard]
   },
-  {path: '404', component: PageNotFoundComponent},
-  {path: '**', redirectTo: '404'},
 ]
 
 @NgModule({

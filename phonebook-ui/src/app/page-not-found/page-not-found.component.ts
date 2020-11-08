@@ -6,7 +6,7 @@ import {Component} from '@angular/core';
     <div class="d-flex justify-content-center align-items-center" id="pageNotFound" style="height: 100vh">
       <h1 class="mr-3 pr-3 align-top border-right inline-block align-content-center">404</h1>
       <div class="inline-block align-middle">
-        <h2 class="font-weight-normal lead" id="pageNotFoundText">The page you requested was not found.</h2>
+        <h2 class="font-weight-normal lead" id="pageNotFoundText">{{'PageNotFound'|translate}}</h2>
       </div>
     </div>
   `

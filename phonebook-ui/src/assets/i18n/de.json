@@ -1,117 +1,130 @@
 {
-	"AddressTable": {
-		"address": "Straße",
-		"city": "Stadt",
-		"country": "Land",
-		"zip": "Postleitzahl"
-	},
-	"ContactDetails": {
-		"addresses": "Adressen",
-		"btnAction": "Aktionen",
-		"btnAddAddress": "Adresse hinzufügen",
-		"btnAddEmail": "E-Mail hinzufügen",
-		"btnAddPhone": "Telefonnummer hinzufügen",
-		"btnEdit": "Bearbeiten",
-		"btnRemove": "Löschen",
-		"info": "Info",
-		"mails": "E-Mails",
-		"phones": "Telefone",
-		"sortInfo": "Klicken Sie zum Sortieren"
-	},
-	"ContactDetailsInfo": {
-		"fieldAbout": "Kontaktbeschreibung",
-		"fieldFirstName": "Vorname",
-		"fieldLastName": "Nachname",
-		"title": "Kontaktinformation"
-	},
-	"Contacts": {
-		"removeContactConfirmMsg": "Ich bestätige das Löschen des Kontakts",
-		"removeContactMsg": "Gelöschter Kontakt kann nicht wiederhergestellt werden",
-		"titleContacts": "Kontaktliste",
-		"titleMyProfile": "Mein Profil",
-		"titleMyProfileNoName": "Klicken Sie hier, um Ihr Profil zu bearbeiten",
-		"titleRemoveContact": "Kontakt entfernen"
-	},
-	"EmailTable": {
-		"email": "Email"
-	},
-	"FormErrorMsg": {
-		"addressRequired": "Zum Speichern müssen Sie das Adressfeld ausfüllen",
-		"deletingMsg": "Dauerhaft löschen",
-		"editContact": "Um einen Kontakt hinzuzufügen, müssen Sie einen Namen angeben",
-		"emailInvalidMsg": "Hier ist nur E-Mail erlaubt",
-		"phoneInvalidMsg": "Zulässige Länge der Telefonnummer 5 - 12 Stellen"
-	},
-	"FormsTitle": {
-		"addAddress": "Neue Adresse hinzufügen",
-		"addContact": "Kontakt hinzufügen",
-		"addEmail": "Neue E-Mail hinzufügen",
-		"addPhone": "Neue Telefonnummer hinzufügen",
-		"editAddress": "Adresse bearbeiten",
-		"editEmail": "E-Mail bearbeiten",
-		"editPhone": "Telefonnummer bearbeiten"
-	},
-	"Header": {
-		"link": {
-			"account": "Konto",
-			"addContact": "Neue Kontakt hinzufügen",
-			"contacts": "Kontakte",
-			"logOut": "Ausloggen"
-		}
-	},
-	"PhoneTable": {
-		"cc": "Landesvorwahl",
-		"pn": "Telefonnummer"
-	},
-	"PlaceHolders": {
-		"cancel": "Abbruch",
-		"closeModal": "Fenster schließen",
-		"loading": "Wird geladen",
-		"noResult": "Keine Ergebnisse",
-		"save": "Speichern",
-		"search": "Suche...",
-		"searchLabel": "Suche"
-	},
-	"PopUpMsg": {
-		"Error! This address doesn't exist in our DB": "Fehler! Die Adresse existiert in unserer DB nicht",
-		"Error! This contact doesn't belong this user": "Fehler! Der Kontakt gehört nicht diesem Benutzer",
-		"Error! This contact doesn't exist in our DB": "Fehler! Dieser Kontakt existiert nicht",
-		"Error! This email doesn't exist in our DB": "Fehler! Die E-Mail existiert nicht",
-		"Error! This phone number doesn't exist in our DB": "Fehler! Die Telefonnummer existiert nicht",
-		"address": {
-			"addressEditFail": "Adresse konnte nicht geändert werden",
-			"addressEditOk": "Adresse geändert",
-			"addressRemoveFail": "Adresse entfernen fehlgeschlagen",
-			"addressRemoveOk": "Die Adresse ist entfernt",
-			"addressSaveFail": "Adressspeicherung fehlgeschlagen",
-			"addressSaveOk": "Adresse gespeichert"
-		},
-		"code404_400": "Es ist etwas schief gelaufen, bitte versuchen Sie es später noch einmal.",
-		"contact": {
-			"contactAddFail": "Kontakt speichern fehlgeschlagen",
-			"contactAddOk": "Kontakt gespeichert",
-			"contactEditFail": "Kontakt konnte nicht geändert werden",
-			"contactEditOk": "Kontakt geändert",
-			"contactRemoveFail": "Kontakt entfernen fehlgeschlagen",
-			"contactRemoveOk": "Kontakt entfernt"
-		},
-		"email": {
-			"emailEditFail": "E-Mail konnte nicht geändert werden",
-			"emailEditOk": "Die E-Mail ist entfernt",
-			"emailRemoveFail": "E-Mail entfernen fehlgeschlagen",
-			"emailRemoveOk": "Die E-Mail ist entfernt",
-			"emailSaveFail": "E-Mail-Speicherung fehlgeschlagen",
-			"emailSaveOk": "E-Mail gespeichert"
-		},
-		"errorNoInternet": "Keine Internetverbindung",
-		"noErrorMsg": "Es ist keine Fehlermeldung verfügbar",
-		"phone": {
-			"phoneEditFail": "Telefonnummer konnte nicht geändert werden",
-			"phoneEditOk": "Telefonnummer geändert",
-			"phoneRemoveFail": "Telefonnummer entfernen fehlgeschlagen",
-			"phoneRemoveOk": "Die Telefonnummer ist entfernt",
-			"phoneSaveFail": "Speichern der Telefonnummer fehlgeschlagen",
-			"phoneSaveOk": "Telefonnummer gespeichert"
-		}
-	}
+  "AddressTable": {
+    "address": "Straße",
+    "city": "Stadt",
+    "country": "Land",
+    "zip": "Postleitzahl"
+  },
+  "ContactDetails": {
+    "addresses": "Adressen",
+    "btnAction": "Aktionen",
+    "btnAddAddress": "Adresse hinzufügen",
+    "btnAddEmail": "E-Mail hinzufügen",
+    "btnAddPhone": "Telefonnummer hinzufügen",
+    "btnEdit": "Bearbeiten",
+    "btnRemove": "Löschen",
+    "info": "Info",
+    "mails": "E-Mails",
+    "phones": "Telefone",
+    "sortInfo": "Klicken Sie zum Sortieren"
+  },
+  "ContactDetailsInfo": {
+    "fieldAbout": "Kontaktbeschreibung",
+    "fieldFirstName": "Vorname",
+    "fieldLastName": "Nachname",
+    "title": "Kontaktinformation"
+  },
+  "Contacts": {
+    "removeContactConfirmMsg": "Ich bestätige das Löschen des Kontakts",
+    "removeContactMsg": "Gelöschter Kontakt kann nicht wiederhergestellt werden",
+    "titleContacts": "Kontaktliste",
+    "titleMyProfile": "Mein Profil",
+    "titleMyProfileNoName": "Klicken Sie hier, um Ihr Profil zu bearbeiten",
+    "titleRemoveContact": "Kontakt entfernen"
+  },
+  "EmailTable": {
+    "email": "Email"
+  },
+  "FormErrorMsg": {
+    "addressRequired": "Zum Speichern müssen Sie das Adressfeld ausfüllen",
+    "deletingMsg": "Dauerhaft löschen",
+    "editContact": "Um einen Kontakt hinzuzufügen, müssen Sie einen Namen angeben",
+    "emailInvalidMsg": "Hier ist nur E-Mail erlaubt",
+    "phoneInvalidMsg": "Zulässige Länge der Telefonnummer 5 - 12 Stellen",
+    "password": {
+      "passwordIsRequired": "Passwort wird benötigt",
+      "passwordToShort": "Das Passwort muss aus mindestens 8 Zeichen bestehen.",
+      "passwordToLong": "Das Passwort muss min 20 Zeichen lang sein.",
+      "passwordsNotMatch": "Passwörter stimmen nicht überein."
+    }
+  },
+  "FormsTitle": {
+    "addAddress": "Neue Adresse hinzufügen",
+    "addContact": "Kontakt hinzufügen",
+    "addEmail": "Neue E-Mail hinzufügen",
+    "addPhone": "Neue Telefonnummer hinzufügen",
+    "editAddress": "Adresse bearbeiten",
+    "editEmail": "E-Mail bearbeiten",
+    "editPhone": "Telefonnummer bearbeiten"
+  },
+  "Header": {
+    "link": {
+      "account": "Konto",
+      "addContact": "Neue Kontakt hinzufügen",
+      "contacts": "Kontakte",
+      "logOut": "Ausloggen"
+    }
+  },
+  "PhoneTable": {
+    "cc": "Landesvorwahl",
+    "pn": "Telefonnummer"
+  },
+  "AccountPage": {
+    "password": "Passwort",
+    "changePassword": "Passwort ändern",
+    "passChanged": "Ihr Passwort wurde erfolgreich geändert",
+    "submitBtn": "Akzeptieren"
+  },
+  "PlaceHolders": {
+    "cancel": "Abbruch",
+    "closeModal": "Fenster schließen",
+    "loading": "Wird geladen",
+    "noResult": "Keine Ergebnisse",
+    "save": "Speichern",
+    "search": "Suche...",
+    "searchLabel": "Suche"
+  },
+  "PopUpMsg": {
+    "Error! This address doesn't exist in our DB": "Fehler! Die Adresse existiert in unserer DB nicht",
+    "Error! This contact doesn't belong this user": "Fehler! Der Kontakt gehört nicht diesem Benutzer",
+    "Error! This contact doesn't exist in our DB": "Fehler! Dieser Kontakt existiert nicht",
+    "Error! This email doesn't exist in our DB": "Fehler! Die E-Mail existiert nicht",
+    "Error! This phone number doesn't exist in our DB": "Fehler! Die Telefonnummer existiert nicht",
+    "address": {
+      "addressEditFail": "Adresse konnte nicht geändert werden",
+      "addressEditOk": "Adresse geändert",
+      "addressRemoveFail": "Adresse entfernen fehlgeschlagen",
+      "addressRemoveOk": "Die Adresse ist entfernt",
+      "addressSaveFail": "Adressspeicherung fehlgeschlagen",
+      "addressSaveOk": "Adresse gespeichert"
+    },
+    "code404_400": "Es ist etwas schief gelaufen, bitte versuchen Sie es später noch einmal.",
+    "contact": {
+      "contactAddFail": "Kontakt speichern fehlgeschlagen",
+      "contactAddOk": "Kontakt gespeichert",
+      "contactEditFail": "Kontakt konnte nicht geändert werden",
+      "contactEditOk": "Kontakt geändert",
+      "contactRemoveFail": "Kontakt entfernen fehlgeschlagen",
+      "contactRemoveOk": "Kontakt entfernt"
+    },
+    "email": {
+      "emailEditFail": "E-Mail konnte nicht geändert werden",
+      "emailEditOk": "Die E-Mail ist entfernt",
+      "emailRemoveFail": "E-Mail entfernen fehlgeschlagen",
+      "emailRemoveOk": "Die E-Mail ist entfernt",
+      "emailSaveFail": "E-Mail-Speicherung fehlgeschlagen",
+      "emailSaveOk": "E-Mail gespeichert"
+    },
+    "errorNoInternet": "Keine Internetverbindung",
+    "noErrorMsg": "Es ist keine Fehlermeldung verfügbar",
+    "phone": {
+      "phoneEditFail": "Telefonnummer konnte nicht geändert werden",
+      "phoneEditOk": "Telefonnummer geändert",
+      "phoneRemoveFail": "Telefonnummer entfernen fehlgeschlagen",
+      "phoneRemoveOk": "Die Telefonnummer ist entfernt",
+      "phoneSaveFail": "Speichern der Telefonnummer fehlgeschlagen",
+      "phoneSaveOk": "Telefonnummer gespeichert"
+    }
+  },
+  "PageNotFound": "Die angeforderte Seite existiert nicht"
 }
