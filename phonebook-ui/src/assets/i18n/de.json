@@ -71,6 +71,7 @@
   },
   "AccountPage": {
     "password": "Passwort",
+    "confirmPassword": "Passwort bestätigen",
     "changePassword": "Passwort ändern",
     "passChanged": "Ihr Passwort wurde erfolgreich geändert",
     "submitBtn": "Akzeptieren"

@@ -71,6 +71,7 @@
   },
   "AccountPage": {
     "password": "Пароль",
+    "confirmPassword": "Подтверждение пароля",
     "changePassword": "Изменить пароль",
     "passChanged": "Ваш пароль изменен",
     "submitBtn": "Принять"
