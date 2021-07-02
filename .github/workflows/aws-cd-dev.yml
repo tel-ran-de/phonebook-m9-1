@@ -1,9 +1,4 @@
-on:
-#  pull_request_target:
-#    branches: [master]
-#    types: [closed]
-  push:
-    branches: [ master ]
+on: workflow_dispatch
 
 name: Deploy to Amazon ECS
 
