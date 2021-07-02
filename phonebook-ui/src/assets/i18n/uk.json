@@ -1,117 +1,131 @@
 {
-	"AddressTable": {
-		"address": "Вул",
-		"city": "Місто",
-		"country": "Країна",
-		"zip": "POSTCODE"
-	},
-	"ContactDetails": {
-		"addresses": "адреси",
-		"btnAction": "Дії",
-		"btnAddAddress": "Додати адресу",
-		"btnAddEmail": "Додати електронну пошту",
-		"btnAddPhone": "Додайте номер телефону",
-		"btnEdit": "редагувати",
-		"btnRemove": "Видалити",
-		"info": "інформація",
-		"mails": "Електронні листи",
-		"phones": "телефони",
-		"sortInfo": "клацніть для сортування"
-	},
-	"ContactDetailsInfo": {
-		"fieldAbout": "Опис контакту",
-		"fieldFirstName": "ім'я",
-		"fieldLastName": "Прізвище",
-		"title": "Контактна інформація"
-	},
-	"Contacts": {
-		"removeContactConfirmMsg": "Я підтверджую видалення контакту",
-		"removeContactMsg": "Видалений контакт не можна відновити",
-		"titleContacts": "Список контактів",
-		"titleMyProfile": "Мій профіль",
-		"titleMyProfileNoName": "Натисніть, щоб відредагувати свій профіль",
-		"titleRemoveContact": "Видалити контакт"
-	},
-	"EmailTable": {
-		"email": "Електронна пошта"
-	},
-	"FormErrorMsg": {
-		"addressRequired": "Для збереження потрібно заповнити поле адреси",
-		"deletingMsg": "Остаточно видалити",
-		"editContact": "Щоб додати контакт, потрібно вказати ім’я",
-		"emailInvalidMsg": "Тут дозволяється лише електронна пошта",
-		"phoneInvalidMsg": "Дозволена довжина телефонного номера 5 - 12 цифр"
-	},
-	"FormsTitle": {
-		"addAddress": "Додати нову адресу",
-		"addContact": "додати контакт",
-		"addEmail": "Додати новий електронний лист",
-		"addPhone": "Додайте новий номер телефону",
-		"editAddress": "Редагувати адресу",
-		"editEmail": "Редагувати електронну пошту",
-		"editPhone": "Редагувати номер телефону"
-	},
-	"Header": {
-		"link": {
-			"account": "Рахунок",
-			"addContact": "Додати новий контакт",
-			"contacts": "Контакти",
-			"logOut": "Вийти"
-		}
-	},
-	"PhoneTable": {
-		"cc": "Код країни",
-		"pn": "Номер телефону"
-	},
-	"PlaceHolders": {
-		"cancel": "Скасувати",
-		"closeModal": "Закрийте вікна",
-		"loading": "Завантаження",
-		"noResult": "Немає результатів",
-		"save": "Зберегти",
-		"search": "Пошук ...",
-		"searchLabel": "Пошук"
-	},
-	"PopUpMsg": {
-		"Error! This address doesn't exist in our DB": "Помилка Ця адреса не існує в нашій БД",
-		"Error! This contact doesn't belong this user": "Помилка Цей контакт не належить цьому користувачеві",
-		"Error! This contact doesn't exist in our DB": "Помилка Цей контакт не існує",
-		"Error! This email doesn't exist in our DB": "Помилка Цей електронний лист не існує",
-		"Error! This phone number doesn't exist in our DB": "Помилка Цей номер телефону не існує",
-		"address": {
-			"addressEditFail": "Не вдалося змінити адресу",
-			"addressEditOk": "Адреса змінена",
-			"addressRemoveFail": "Не вдалося видалити адресу",
-			"addressRemoveOk": "Адресу видалено",
-			"addressSaveFail": "Не вдалося зберегти адресу",
-			"addressSaveOk": "Адресу збережено"
-		},
-		"code404_400": "Сталося щось погане. Будь ласка, спробуйте пізніше.",
-		"contact": {
-			"contactAddFail": "Не вдалося зберегти контакт",
-			"contactAddOk": "Контакт збережено",
-			"contactEditFail": "Не вдалося змінити контакт",
-			"contactEditOk": "Контакт змінено",
-			"contactRemoveFail": "Не вдалося видалити контакт",
-			"contactRemoveOk": "Контакт видалено"
-		},
-		"email": {
-			"emailEditFail": "Не вдалося змінити електронну адресу",
-			"emailEditOk": "Електронну адресу змінено",
-			"emailRemoveFail": "Не вдалося видалити електронну пошту",
-			"emailRemoveOk": "Електронну адресу видалено",
-			"emailSaveFail": "Помилка збереження електронної пошти",
-			"emailSaveOk": "Електронну пошту збережено"
-		},
-		"errorNoInternet": "Немає підключення до Інтернету",
-		"noErrorMsg": "Повідомлення про помилку недоступне",
-		"phone": {
-			"phoneEditFail": "Не вдалося змінити номер телефону",
-			"phoneEditOk": "Номер телефону змінено",
-			"phoneRemoveFail": "Не вдалося видалити номер телефону",
-			"phoneRemoveOk": "Номер телефону вилучено",
-			"phoneSaveFail": "Не вдалося зберегти номер телефону",
-			"phoneSaveOk": "Номер телефону збережено"
-		}
-	}
+  "AddressTable": {
+    "address": "Вул",
+    "city": "Місто",
+    "country": "Країна",
+    "zip": "Поштовий індекс"
+  },
+  "ContactDetails": {
+    "addresses": "адреси",
+    "btnAction": "Дії",
+    "btnAddAddress": "Додати адресу",
+    "btnAddEmail": "Додати електронну пошту",
+    "btnAddPhone": "Додайте номер телефону",
+    "btnEdit": "редагувати",
+    "btnRemove": "Видалити",
+    "info": "інформація",
+    "mails": "електронні листи",
+    "phones": "телефони",
+    "sortInfo": "клацніть для сортування"
+  },
+  "ContactDetailsInfo": {
+    "fieldAbout": "Опис контакту",
+    "fieldFirstName": "ім'я",
+    "fieldLastName": "Прізвище",
+    "title": "Контактна інформація"
+  },
+  "Contacts": {
+    "removeContactConfirmMsg": "Я підтверджую видалення контакту",
+    "removeContactMsg": "Видалений контакт не можна відновити",
+    "titleContacts": "Список контактів",
+    "titleMyProfile": "Мій профіль",
+    "titleMyProfileNoName": "Натисніть, щоб відредагувати свій профіль",
+    "titleRemoveContact": "Видалити контакт"
+  },
+  "EmailTable": {
+    "email": "Електронна пошта"
+  },
+  "FormErrorMsg": {
+    "addressRequired": "Для збереження потрібно заповнити поле адреси",
+    "deletingMsg": "Остаточно видалити",
+    "editContact": "Щоб додати контакт, потрібно вказати ім’я",
+    "emailInvalidMsg": "Тут дозволяється лише електронна пошта",
+    "phoneInvalidMsg": "Дозволена довжина телефонного номера 5 - 12 цифр",
+    "password": {
+      "passwordIsRequired": "Потрібен пароль",
+      "passwordToShort": "Пароль повинен містити щонайменше 8 символів.",
+      "passwordToLong": "Пароль повинен містити щонайменше 20 символів.",
+      "passwordsNotMatch": "Паролі не співпадають."
+    }
+  },
+  "FormsTitle": {
+    "addAddress": "Додати нову адресу",
+    "addContact": "Додати контакт",
+    "addEmail": "Додати новий електронний лист",
+    "addPhone": "Додайте новий номер телефону",
+    "editAddress": "Редагувати адресу",
+    "editEmail": "Редагувати електронну пошту",
+    "editPhone": "Редагувати номер телефону"
+  },
+  "Header": {
+    "link": {
+      "account": "Рахунок",
+      "addContact": "Додати новий контакт",
+      "contacts": "Контакти",
+      "logOut": "Вийти"
+    }
+  },
+  "PhoneTable": {
+    "cc": "Код країни",
+    "pn": "Номер телефону"
+  },
+  "AccountPage": {
+    "password": "Пароль",
+    "confirmPassword": "Підтвердьте пароль",
+    "changePassword": "Змінити пароль",
+    "passChanged": "Ваш пароль успішно змінено",
+    "submitBtn": "Прийняти"
+  },
+  "PlaceHolders": {
+    "cancel": "Скасувати",
+    "closeModal": "Закрийте вікна",
+    "loading": "Завантаження",
+    "noResult": "Немає результатів",
+    "save": "Зберегти",
+    "search": "Пошук ...",
+    "searchLabel": "Пошук"
+  },
+  "PopUpMsg": {
+    "Error! This address doesn't exist in our DB": "Помилка Ця адреса не існує в нашій БД",
+    "Error! This contact doesn't belong this user": "Помилка Цей контакт не належить цьому користувачеві",
+    "Error! This contact doesn't exist in our DB": "Помилка Цей контакт не існує",
+    "Error! This email doesn't exist in our DB": "Помилка Цей електронний лист не існує",
+    "Error! This phone number doesn't exist in our DB": "Помилка Цей номер телефону не існує",
+    "address": {
+      "addressEditFail": "Не вдалося змінити адресу",
+      "addressEditOk": "Адреса змінена",
+      "addressRemoveFail": "Не вдалося видалити адресу",
+      "addressRemoveOk": "Адресу видалено",
+      "addressSaveFail": "Не вдалося зберегти адресу",
+      "addressSaveOk": "Адресу збережено"
+    },
+    "code404_400": "Сталося щось погане. Будь ласка, спробуйте пізніше.",
+    "contact": {
+      "contactAddFail": "Не вдалося зберегти контакт",
+      "contactAddOk": "Контакт збережено",
+      "contactEditFail": "Не вдалося змінити контакт",
+      "contactEditOk": "Контакт змінено",
+      "contactRemoveFail": "Не вдалося видалити контакт",
+      "contactRemoveOk": "Контакт видалено"
+    },
+    "email": {
+      "emailEditFail": "Не вдалося змінити електронну адресу",
+      "emailEditOk": "Електронну адресу змінено",
+      "emailRemoveFail": "Не вдалося видалити електронну пошту",
+      "emailRemoveOk": "Електронну адресу видалено",
+      "emailSaveFail": "Помилка збереження електронної пошти",
+      "emailSaveOk": "Електронну пошту збережено"
+    },
+    "errorNoInternet": "Немає підключення до Інтернету",
+    "noErrorMsg": "Повідомлення про помилку недоступне",
+    "phone": {
+      "phoneEditFail": "Не вдалося змінити номер телефону",
+      "phoneEditOk": "Номер телефону змінено",
+      "phoneRemoveFail": "Не вдалося видалити номер телефону",
+      "phoneRemoveOk": "Номер телефону вилучено",
+      "phoneSaveFail": "Не вдалося зберегти номер телефону",
+      "phoneSaveOk": "Номер телефону збережено"
+    }
+  },
+  "PageNotFound": "Запитувана сторінка не існує"
 }

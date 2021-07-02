@@ -1,117 +1,131 @@
 {
-	"AddressTable": {
-		"address": "Street",
-		"city": "City",
-		"country": "Country",
-		"zip": "Postcode"
-	},
-	"ContactDetails": {
-		"addresses": "Addresses",
-		"btnAction": "Actions",
-		"btnAddAddress": "Add address",
-		"btnAddEmail": "Add email",
-		"btnAddPhone": "Add phone number",
-		"btnEdit": "Edit",
-		"btnRemove": "Remove ",
-		"info": "Info",
-		"mails": "E-mails",
-		"phones": "Phones",
-		"sortInfo": "Click to sort"
-	},
-	"ContactDetailsInfo": {
-		"fieldAbout": "Contact description",
-		"fieldFirstName": "First name",
-		"fieldLastName": "Last name",
-		"title": "Contact info"
-	},
-	"Contacts": {
-		"removeContactConfirmMsg": "I confirm the deletion of the contact",
-		"removeContactMsg": "Deleted contact cannot be restored",
-		"titleContacts": "Contacts list",
-		"titleMyProfile": "My profile",
-		"titleMyProfileNoName": "Click to edit your profile",
-		"titleRemoveContact": "Remove contact"
-	},
-	"EmailTable": {
-		"email": "Email"
-	},
-	"FormErrorMsg": {
-		"addressRequired": "To save, you must fill in the address field",
-		"deletingMsg": "Permanently deleting",
-		"editContact": "To add a contact, you must specify a name",
-		"emailInvalidMsg": "Only email is allowed here",
-		"phoneInvalidMsg": "Allowed length of the phone number 5 - 12 digits"
-	},
-	"FormsTitle": {
-		"addAddress": "Add new address",
-		"addContact": "Add contact",
-		"addEmail": "Add new email",
-		"addPhone": "Add new phone number",
-		"editAddress": "Edit address",
-		"editEmail": "Edit email",
-		"editPhone": "Edit phone number"
-	},
-	"Header": {
-		"link": {
-			"account": "Account",
-			"addContact": "Add new contact",
-			"contacts": "Contacts",
-			"logOut": "Logout"
-		}
-	},
-	"PhoneTable": {
-		"cc": "Country code",
-		"pn": "Phone number"
-	},
-	"PlaceHolders": {
-		"cancel": "Cancel",
-		"closeModal": "Close windows",
-		"loading": "Loading",
-		"noResult": "No results",
-		"save": "Save",
-		"search": "Search...",
-		"searchLabel": "Search"
-	},
-	"PopUpMsg": {
-		"Error! This address doesn't exist in our DB": "Error! This address doesn't exist in our DB",
-		"Error! This contact doesn't belong this user": "Error! This contact doesn't belong this user",
-		"Error! This contact doesn't exist in our DB": "Error! This contact doesn't exist",
-		"Error! This email doesn't exist in our DB": "Error! This email doesn't exist",
-		"Error! This phone number doesn't exist in our DB": "Error! This phone number doesn't exist",
-		"address": {
-			"addressEditFail": "Failed to change address",
-			"addressEditOk": "Address changed",
-			"addressRemoveFail": "Remove address failed",
-			"addressRemoveOk": "Address removed",
-			"addressSaveFail": "Address save failed",
-			"addressSaveOk": "Address saved"
-		},
-		"code404_400": "Something bad happened, please try again later.",
-		"contact": {
-			"contactAddFail": "Contact save fail",
-			"contactAddOk": "Contact saved",
-			"contactEditFail": "Failed to change contact",
-			"contactEditOk": "Contact changed",
-			"contactRemoveFail": "Remove contact failed",
-			"contactRemoveOk": "Contact removed"
-		},
-		"email": {
-			"emailEditFail": "Failed to change email",
-			"emailEditOk": "Email changed",
-			"emailRemoveFail": "Remove email failed",
-			"emailRemoveOk": "Email removed",
-			"emailSaveFail": "Email save failed",
-			"emailSaveOk": "Email saved"
-		},
-		"errorNoInternet": "No internet connection",
-		"noErrorMsg": "No error message is available",
-		"phone": {
-			"phoneEditFail": "Failed to change phone number",
-			"phoneEditOk": "Phone number changed",
-			"phoneRemoveFail": "Remove phone number failed",
-			"phoneRemoveOk": "Phone number removed",
-			"phoneSaveFail": "Phone number save failed",
-			"phoneSaveOk": "Phone number saved"
-		}
-	}
+  "AddressTable": {
+    "address": "Street",
+    "city": "City",
+    "country": "Country",
+    "zip": "Postcode"
+  },
+  "ContactDetails": {
+    "addresses": "Addresses",
+    "btnAction": "Actions",
+    "btnAddAddress": "Add address",
+    "btnAddEmail": "Add email",
+    "btnAddPhone": "Add phone number",
+    "btnEdit": "Edit",
+    "btnRemove": "Remove ",
+    "info": "Info",
+    "mails": "E-mails",
+    "phones": "Phones",
+    "sortInfo": "Click to sort"
+  },
+  "ContactDetailsInfo": {
+    "fieldAbout": "Contact description",
+    "fieldFirstName": "First name",
+    "fieldLastName": "Last name",
+    "title": "Contact info"
+  },
+  "Contacts": {
+    "removeContactConfirmMsg": "I confirm the deletion of the contact",
+    "removeContactMsg": "Deleted contact cannot be restored",
+    "titleContacts": "Contacts list",
+    "titleMyProfile": "My profile",
+    "titleMyProfileNoName": "Click to edit your profile",
+    "titleRemoveContact": "Remove contact"
+  },
+  "EmailTable": {
+    "email": "Email"
+  },
+  "FormErrorMsg": {
+    "addressRequired": "To save, you must fill in the address field",
+    "deletingMsg": "Permanently deleting",
+    "editContact": "To add a contact, you must specify a name",
+    "emailInvalidMsg": "Only email is allowed here",
+    "phoneInvalidMsg": "Allowed length of the phone number 5 - 12 digits",
+    "password": {
+      "passwordIsRequired": "Password is required",
+      "passwordToShort": "Password must be at least 8 characters.",
+      "passwordToLong": "Password must be at least 20 characters.",
+      "passwordsNotMatch": "Passwords do not match."
+    }
+  },
+  "FormsTitle": {
+    "addAddress": "Add new address",
+    "addContact": "Add contact",
+    "addEmail": "Add new email",
+    "addPhone": "Add new phone number",
+    "editAddress": "Edit address",
+    "editEmail": "Edit email",
+    "editPhone": "Edit phone number"
+  },
+  "Header": {
+    "link": {
+      "account": "Account",
+      "addContact": "Add new contact",
+      "contacts": "Contacts",
+      "logOut": "Logout"
+    }
+  },
+  "PhoneTable": {
+    "cc": "Country code",
+    "pn": "Phone number"
+  },
+  "AccountPage": {
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "changePassword": "Change password",
+    "passChanged": "Your password has been successfully changed",
+    "submitBtn": "Accept"
+  },
+  "PlaceHolders": {
+    "cancel": "Cancel",
+    "closeModal": "Close windows",
+    "loading": "Loading",
+    "noResult": "No results",
+    "save": "Save",
+    "search": "Search...",
+    "searchLabel": "Search"
+  },
+  "PopUpMsg": {
+    "Error! This address doesn't exist in our DB": "Error! This address doesn't exist in our DB",
+    "Error! This contact doesn't belong this user": "Error! This contact doesn't belong this user",
+    "Error! This contact doesn't exist in our DB": "Error! This contact doesn't exist",
+    "Error! This email doesn't exist in our DB": "Error! This email doesn't exist",
+    "Error! This phone number doesn't exist in our DB": "Error! This phone number doesn't exist",
+    "address": {
+      "addressEditFail": "Failed to change address",
+      "addressEditOk": "Address changed",
+      "addressRemoveFail": "Remove address failed",
+      "addressRemoveOk": "Address removed",
+      "addressSaveFail": "Address save failed",
+      "addressSaveOk": "Address saved"
+    },
+    "code404_400": "Something bad happened, please try again later.",
+    "contact": {
+      "contactAddFail": "Contact save fail",
+      "contactAddOk": "Contact saved",
+      "contactEditFail": "Failed to change contact",
+      "contactEditOk": "Contact changed",
+      "contactRemoveFail": "Remove contact failed",
+      "contactRemoveOk": "Contact removed"
+    },
+    "email": {
+      "emailEditFail": "Failed to change email",
+      "emailEditOk": "Email changed",
+      "emailRemoveFail": "Remove email failed",
+      "emailRemoveOk": "Email removed",
+      "emailSaveFail": "Email save failed",
+      "emailSaveOk": "Email saved"
+    },
+    "errorNoInternet": "No internet connection",
+    "noErrorMsg": "No error message is available",
+    "phone": {
+      "phoneEditFail": "Failed to change phone number",
+      "phoneEditOk": "Phone number changed",
+      "phoneRemoveFail": "Remove phone number failed",
+      "phoneRemoveOk": "Phone number removed",
+      "phoneSaveFail": "Phone number save failed",
+      "phoneSaveOk": "Phone number saved"
+    }
+  },
+  "PageNotFound": "The page you requested was not found"
 }

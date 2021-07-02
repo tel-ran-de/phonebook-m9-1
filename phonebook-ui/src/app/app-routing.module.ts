@@ -12,6 +12,7 @@ import {ContactsComponent} from "./pages/root_page/contacts_page/contacts/contac
 import {AccountComponent} from "./pages/root_page/account_page/account/account.component";
 import {AccountPasswordComponent} from "./pages/root_page/account_page/account-password/account-password.component";
 import {ContactDetailsComponent} from "./pages/root_page/contact-datails-page/contact-details/contact-details.component";
+import {PageNotFoundComponent} from "./page-not-found/page-not-found.component";
 
 const routes: Routes = [
   {path: '', redirectTo: 'contacts', pathMatch: 'full'},
@@ -38,6 +39,8 @@ const routes: Routes = [
           {path: "password", component: AccountPasswordComponent},
         ]
       },
+      {path: '**', redirectTo: '404'},
+      {path: '404', component: PageNotFoundComponent},
     ], canActivate: [AuthGuard]
   },
 ]
