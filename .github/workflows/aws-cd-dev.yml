@@ -4,7 +4,6 @@ name: Deploy to Amazon ECS
 
 jobs:
   build_deploy:
-    if: github.event.pull_request.merged == true
     name: Build and deploy
     runs-on: ubuntu-latest
     steps:
