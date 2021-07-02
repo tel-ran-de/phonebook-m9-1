@@ -64,7 +64,7 @@
         },
         {
           "name": "SPRING_MAIL_PASSWORD",
-          "value": "Telran111111222"
+          "value": "Telran123456"
         },
         {
           "name": "SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH",
