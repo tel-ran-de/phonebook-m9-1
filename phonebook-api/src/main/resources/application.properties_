@@ -27,3 +27,11 @@ com.telran.auth.jwt.secret=MpzjCrQGNgG9sVxv
 //minutes
 com.telran.auth.jwt.access-token.expiration=1440
 spring.profiles.active=dev
+
+#Swagger
+springdoc.swagger-ui.operationsSorter=method
+springdoc.swagger-ui.tagsSorter=alpha
+
+springdoc.pathsToMatch=/api/**
+springdoc.swagger-ui.persistAuthorization=true
+springdoc.show-login-endpoint=true

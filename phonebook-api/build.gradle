@@ -39,9 +39,8 @@ dependencies {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
 
-    compile 'io.springfox:springfox-boot-starter:3.0.0'
-    compile 'io.springfox:springfox-swagger-ui:3.0.0'
-    compile 'io.springfox:springfox-bean-validators:3.0.0'
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.5.1'
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-data-rest', version: '1.5.1'
 }
 
 test {

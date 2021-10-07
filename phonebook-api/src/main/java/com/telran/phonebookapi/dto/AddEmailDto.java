@@ -1,6 +1,6 @@
 package com.telran.phonebookapi.dto;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -16,8 +16,8 @@ public class AddEmailDto {
     @Email(message = "Please, check entered email is correct",
             regexp = "^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,10}$")
     @NotBlank
-    @ApiModelProperty(example = "valid.email@email.com", notes = "used validation pattern: ^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,10}$")
+    @Schema(example = "valid.email@email.com", description = "used validation pattern: ^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,10}$")
     public String email;
-    @ApiModelProperty(example = "1")
+    @Schema(example = "1")
     public int contactId;
 }

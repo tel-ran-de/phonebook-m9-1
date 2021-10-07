@@ -1,6 +1,6 @@
 package com.telran.phonebookapi.dto;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -13,12 +13,12 @@ import javax.validation.constraints.NotBlank;
 public class AddPhoneDto {
 
     @NotBlank
-    @ApiModelProperty(example = "+49")
+    @Schema(example = "+49")
     public String countryCode;
     @NotBlank
-    @ApiModelProperty(example = "017677788890")
+    @Schema(example = "017677788890")
     public String phoneNumber;
-    @ApiModelProperty(example = "1")
+    @Schema(example = "1")
 
     public int contactId;
 }

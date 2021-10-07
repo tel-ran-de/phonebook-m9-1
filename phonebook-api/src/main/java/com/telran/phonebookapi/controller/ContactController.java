@@ -7,10 +7,10 @@ import com.telran.phonebookapi.mapper.ContactMapper;
 import com.telran.phonebookapi.model.Contact;
 import com.telran.phonebookapi.service.ContactService;
 import com.telran.phonebookapi.service.UserService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.Authorization;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,9 +20,10 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Tag(name = "Contact")
+@SecurityRequirement(name = "JWT")
 @RestController
 @RequestMapping("/api/contact")
-@Api(tags = "Contact API")
 public class ContactController {
 
     static final String CONTACT_DOES_NOT_BELONG = "Error! This contact doesn't belong this user";
@@ -36,7 +37,7 @@ public class ContactController {
         this.contactMapper = contactMapper;
     }
 
-    @ApiOperation(value = "add new contact", authorizations = {@Authorization(value = "JWT")}, tags = {"add"})
+    @Operation(summary = "Add new contact")
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     public ContactDto addContact(Authentication auth, @Valid @RequestBody AddContactDto addNewContact) {
@@ -51,7 +52,7 @@ public class ContactController {
                 .build();
     }
 
-    @ApiOperation(value = "update contact", authorizations = {@Authorization(value = "JWT")}, tags = {"update"})
+    @Operation(summary = "Update contact")
     @PutMapping("")
     public void editContact(Authentication auth, @Valid @RequestBody ContactDto editContact) {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
@@ -63,9 +64,9 @@ public class ContactController {
         contactService.edit(editContact.id, editContact.firstName, editContact.lastName, editContact.description);
     }
 
-    @ApiOperation(value = "get contact by contact id", authorizations = {@Authorization(value = "JWT")}, tags = {"get by id"})
+    @Operation(summary = "Get contact by contact id")
     @GetMapping("/{id}")
-    public ContactDto getContactById(Authentication auth, @ApiParam(value = "contact id", example = "1") @PathVariable int id) {
+    public ContactDto getContactById(Authentication auth, @Parameter(description = "contact id", example = "1") @PathVariable int id) {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
         String email = userDetails.getUsername();
         Contact contact = contactService.getById(id);
@@ -80,8 +81,7 @@ public class ContactController {
                 .build();
     }
 
-    @ApiOperation(value = "get user profile", authorizations = {@Authorization(value = "JWT")}
-            , notes = "get the profile of the authorized user", tags = {"get by id"})
+    @Operation(summary = "Get user profile", description = "Get the profile of the authorized user")
     @GetMapping("/profile")
     public ContactDto getProfile(Authentication auth) {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
@@ -95,9 +95,9 @@ public class ContactController {
                 .build();
     }
 
-    @ApiOperation(value = "delete contact by contact id", authorizations = {@Authorization(value = "JWT")}, tags = {"delete by id"})
+    @Operation(summary = "Delete contact by contact id")
     @DeleteMapping("/{id}")
-    public void removeContactById(Authentication auth, @ApiParam(value = "contact id", example = "1") @PathVariable int id) {
+    public void removeContactById(Authentication auth, @Parameter(description = "contact id", example = "1") @PathVariable int id) {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
         String email = userDetails.getUsername();
         Contact contact = contactService.getById(id);
@@ -107,7 +107,7 @@ public class ContactController {
         contactService.removeById(id);
     }
 
-    @ApiOperation(value = "get all contacts by authenticated user", authorizations = {@Authorization(value = "JWT")}, tags = {"get all"})
+    @Operation(summary = "Get list of contacts by authenticated user")
     @GetMapping("")
     public List<ContactDto> getAllContactsByAuthUser(Authentication auth) {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();

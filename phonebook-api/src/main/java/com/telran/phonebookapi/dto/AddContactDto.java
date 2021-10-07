@@ -1,6 +1,6 @@
 package com.telran.phonebookapi.dto;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -11,11 +11,11 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AddContactDto {
-    @ApiModelProperty(example = "Max")
+    @Schema(example = "Max")
     @NotBlank
     public String firstName;
-    @ApiModelProperty(example = "Mustermann")
+    @Schema(example = "Mustermann")
     public String lastName;
-    @ApiModelProperty(example = "This is example contact")
+    @Schema(example = "This is example contact")
     public String description;
 }

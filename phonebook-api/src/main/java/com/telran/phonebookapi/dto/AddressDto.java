@@ -1,6 +1,6 @@
 package com.telran.phonebookapi.dto;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -12,14 +12,14 @@ public class AddressDto {
 
     public int id;
 
-    @ApiModelProperty(example = "Berlin")
+    @Schema(example = "Berlin")
     public String city;
-    @ApiModelProperty(example = "Germany")
+    @Schema(example = "Germany")
     public String country;
-    @ApiModelProperty(example = "Friedrichstraße 176-179")
+    @Schema(example = "Friedrichstraße 176-179")
     public String street;
-    @ApiModelProperty(example = "10117 ")
+    @Schema(example = "10117 ")
     public String zip;
-    @ApiModelProperty(example = "1")
+    @Schema(example = "1")
     public int contactId;
 }

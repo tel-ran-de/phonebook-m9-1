@@ -8,10 +8,10 @@ import com.telran.phonebookapi.model.Contact;
 import com.telran.phonebookapi.model.Phone;
 import com.telran.phonebookapi.service.ContactService;
 import com.telran.phonebookapi.service.PhoneService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.Authorization;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,9 +23,10 @@ import java.util.stream.Collectors;
 
 import static com.telran.phonebookapi.controller.ContactController.CONTACT_DOES_NOT_BELONG;
 
+@Tag(name = "Phone")
+@SecurityRequirement(name = "JWT")
 @RestController
 @RequestMapping("/api/phone")
-@Api(tags = "Phone API")
 public class PhoneController {
 
     PhoneService phoneService;
@@ -38,7 +39,7 @@ public class PhoneController {
         this.phoneMapper = phoneMapper;
     }
 
-    @ApiOperation(value = "add new phone", authorizations = {@Authorization(value = "JWT")}, tags = {"add"})
+    @Operation(summary = "Add new phone")
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     public void addPhone(Authentication auth, @RequestBody @Valid AddPhoneDto phoneDto) {
@@ -51,7 +52,7 @@ public class PhoneController {
         phoneService.add(phoneDto.countryCode, phoneDto.phoneNumber, contact.getId());
     }
 
-    @ApiOperation(value = "update phone", authorizations = {@Authorization(value = "JWT")}, tags = {"update"})
+    @Operation(summary = "Update phone")
     @PutMapping("")
     public void editPhone(Authentication auth, @RequestBody @Valid PhoneDto phoneDto) {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
@@ -64,9 +65,9 @@ public class PhoneController {
         phoneService.edit(phone, phoneDto.countryCode, phoneDto.phoneNumber);
     }
 
-    @ApiOperation(value = "get phone by phone id", authorizations = {@Authorization(value = "JWT")}, tags = {"get by id"})
+    @Operation(summary = "Get phone by phone id")
     @GetMapping("/{id}")
-    public PhoneDto getPhoneById(Authentication auth, @ApiParam(value = "phone id", example = "1") @PathVariable int id) {
+    public PhoneDto getPhoneById(Authentication auth, @Parameter(description = "phone id", example = "1") @PathVariable int id) {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
         String email = userDetails.getUsername();
         Phone phone = phoneService.getById(id);
@@ -81,9 +82,9 @@ public class PhoneController {
                 .build();
     }
 
-    @ApiOperation(value = "delete phone by phone id", authorizations = {@Authorization(value = "JWT")}, tags = {"delete by id"})
+    @Operation(summary = "Delete phone by phone id")
     @DeleteMapping("/{id}")
-    public void removePhoneById(Authentication auth, @ApiParam(value = "phone id", example = "1") @PathVariable int id) {
+    public void removePhoneById(Authentication auth, @Parameter(description = "phone id", example = "1") @PathVariable int id) {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
         String email = userDetails.getUsername();
         Phone phone = phoneService.getById(id);
@@ -94,9 +95,9 @@ public class PhoneController {
         phoneService.removeById(id);
     }
 
-    @ApiOperation(value = "get all phones by contact id", authorizations = {@Authorization(value = "JWT")}, tags = {"get all"})
+    @Operation(summary = "Get list of phones by contact id")
     @GetMapping("/{contactId}/all")
-    public List<PhoneDto> getAllPhonesByAuthUser(Authentication auth, @ApiParam(value = "contact id", example = "1") @PathVariable int contactId) {
+    public List<PhoneDto> getAllPhonesByAuthUser(Authentication auth, @Parameter(description = "contact id", example = "1") @PathVariable int contactId) {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
         String email = userDetails.getUsername();
         Contact contact = contactService.getById(contactId);

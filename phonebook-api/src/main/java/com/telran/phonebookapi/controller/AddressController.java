@@ -8,10 +8,10 @@ import com.telran.phonebookapi.model.Address;
 import com.telran.phonebookapi.model.Contact;
 import com.telran.phonebookapi.service.AddressService;
 import com.telran.phonebookapi.service.ContactService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.Authorization;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,9 +23,10 @@ import java.util.stream.Collectors;
 
 import static com.telran.phonebookapi.controller.ContactController.CONTACT_DOES_NOT_BELONG;
 
+@Tag(name = "Address")
+@SecurityRequirement(name = "JWT")
 @RestController
 @RequestMapping("/api/address")
-@Api(tags = "Address API")
 public class AddressController {
 
     AddressService addressService;
@@ -38,7 +39,7 @@ public class AddressController {
         this.addressMapper = addressMapper;
     }
 
-    @ApiOperation(value = "add new address", authorizations = {@Authorization(value = "JWT")}, tags = {"add"})
+    @Operation(summary = "Add new address")
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     public void addAddress(Authentication auth, @RequestBody @Valid AddAddressDto addAddress) {
@@ -51,7 +52,7 @@ public class AddressController {
         addressService.add(addAddress.city, addAddress.country, addAddress.street, addAddress.zip, contact.getId());
     }
 
-    @ApiOperation(value = "update address", authorizations = {@Authorization(value = "JWT")}, tags = {"update"})
+    @Operation(summary = "Update address")
     @PutMapping("")
     public void editAddress(Authentication auth, @RequestBody @Valid AddressDto editAddress) {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
@@ -64,9 +65,9 @@ public class AddressController {
         addressService.edit(address, editAddress.city, editAddress.country, editAddress.street, editAddress.zip);
     }
 
-    @ApiOperation(value = "get addresses by address id", authorizations = {@Authorization(value = "JWT")}, tags = {"get by id"})
+    @Operation(summary = "Get address by address id")
     @GetMapping("/{id}")
-    public AddressDto getAddressById(Authentication auth, @ApiParam(value = "address id", example = "1") @PathVariable int id) {
+    public AddressDto getAddressById(Authentication auth, @Parameter(description = "address id", example = "1") @PathVariable int id) {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
         String email = userDetails.getUsername();
         Address address = addressService.getById(id);
@@ -83,9 +84,9 @@ public class AddressController {
                 .build();
     }
 
-    @ApiOperation(value = "delete address by address id", authorizations = {@Authorization(value = "JWT")}, tags = {"delete by id"})
+    @Operation(summary = "Delete address by address id")
     @DeleteMapping("/{id}")
-    public void removeAddressById(Authentication auth, @ApiParam(value = "address id", example = "1") @PathVariable int id) {
+    public void removeAddressById(Authentication auth, @Parameter(description = "address id", example = "1") @PathVariable int id) {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
         String email = userDetails.getUsername();
         Address address = addressService.getById(id);
@@ -96,9 +97,9 @@ public class AddressController {
         addressService.removeById(id);
     }
 
-    @ApiOperation(value = "get all addresses by contact id", authorizations = {@Authorization(value = "JWT")}, tags = {"get all"})
+    @Operation(summary = "Get list of addresses by contact id")
     @GetMapping("/{contactId}/all")
-    public List<AddressDto> getAllAddressesByAuthUser(Authentication auth, @ApiParam(value = "contact id", example = "1") @PathVariable int contactId) {
+    public List<AddressDto> getAllAddressesByAuthUser(Authentication auth, @Parameter(description = "contact id", example = "1") @PathVariable int contactId) {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
         String email = userDetails.getUsername();
         Contact contact = contactService.getById(contactId);
