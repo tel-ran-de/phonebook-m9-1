@@ -10,10 +10,8 @@ import javax.validation.constraints.NotBlank;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PhoneDto {
+public class AddPhoneDto {
 
-    @ApiModelProperty(example = "1")
-    public int id;
     @NotBlank
     @ApiModelProperty(example = "+49")
     public String countryCode;

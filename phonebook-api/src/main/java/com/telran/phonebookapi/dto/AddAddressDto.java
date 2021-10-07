@@ -8,10 +8,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddressDto {
-
-    public int id;
-
+public class AddAddressDto {
     @ApiModelProperty(example = "Berlin")
     public String city;
     @ApiModelProperty(example = "Germany")

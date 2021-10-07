@@ -10,11 +10,7 @@ import javax.validation.constraints.NotBlank;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ContactDto {
-
-    @ApiModelProperty(example = "1", notes = "need for edit contact and for response")
-    public int id;
-
+public class AddContactDto {
     @ApiModelProperty(example = "Max")
     @NotBlank
     public String firstName;

@@ -1,5 +1,6 @@
 package com.telran.phonebookapi.controller;
 
+import com.telran.phonebookapi.dto.AddEmailDto;
 import com.telran.phonebookapi.dto.EmailDto;
 import com.telran.phonebookapi.exception.UserAlreadyExistsException;
 import com.telran.phonebookapi.mapper.EmailMapper;
@@ -7,6 +8,11 @@ import com.telran.phonebookapi.model.Contact;
 import com.telran.phonebookapi.model.Email;
 import com.telran.phonebookapi.service.ContactService;
 import com.telran.phonebookapi.service.EmailService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.Authorization;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +25,7 @@ import static com.telran.phonebookapi.controller.ContactController.CONTACT_DOES_
 
 @RestController
 @RequestMapping("/api/email")
+@Api(tags = "Email API")
 public class EmailController {
 
     EmailService emailService;
@@ -31,8 +38,10 @@ public class EmailController {
         this.emailMapper = emailMapper;
     }
 
+    @ApiOperation(value = "add new email", authorizations = {@Authorization(value = "JWT")}, tags = {"add"})
     @PostMapping("")
-    public void addEmail(Authentication auth, @RequestBody @Valid EmailDto emailDto) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public void addEmail(Authentication auth, @RequestBody @Valid AddEmailDto emailDto) {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
         String email = userDetails.getUsername();
         Contact contact = contactService.getById(emailDto.contactId);
@@ -42,6 +51,7 @@ public class EmailController {
         emailService.add(emailDto.email, contact.getId());
     }
 
+    @ApiOperation(value = "update email", authorizations = {@Authorization(value = "JWT")}, tags = {"update"})
     @PutMapping("")
     public void editEmail(Authentication auth, @RequestBody @Valid EmailDto emailDto) {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
@@ -54,8 +64,9 @@ public class EmailController {
         emailService.edit(email, emailDto.email);
     }
 
+    @ApiOperation(value = "get email by email id", authorizations = {@Authorization(value = "JWT")}, tags = {"get by id"})
     @GetMapping("/{id}")
-    public EmailDto getEmailById(Authentication auth, @PathVariable int id) {
+    public EmailDto getEmailById(Authentication auth, @ApiParam(value = "email id", example = "1") @PathVariable int id) {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
         String mail = userDetails.getUsername();
         Email email = emailService.getById(id);
@@ -68,8 +79,9 @@ public class EmailController {
                 .build();
     }
 
+    @ApiOperation(value = "delete email by email id", authorizations = {@Authorization(value = "JWT")})
     @DeleteMapping("/{id}")
-    public void removeEmailById(Authentication auth, @PathVariable int id) {
+    public void removeEmailById(Authentication auth, @ApiParam(value = "email id", example = "1") @PathVariable int id) {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
         String mail = userDetails.getUsername();
         Email email = emailService.getById(id);
@@ -80,8 +92,9 @@ public class EmailController {
         emailService.removeById(id);
     }
 
+    @ApiOperation(value = "get all emails by contact id", authorizations = {@Authorization(value = "JWT")}, tags = {"get all"})
     @GetMapping("/{contactId}/all")
-    public List<EmailDto> getAllEmailsByAuthUser(Authentication auth, @PathVariable int contactId) {
+    public List<EmailDto> getAllEmailsByAuthUser(Authentication auth, @ApiParam(value = "contact id", example = "1") @PathVariable int contactId) {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
         String mail = userDetails.getUsername();
         Contact contact = contactService.getById(contactId);
