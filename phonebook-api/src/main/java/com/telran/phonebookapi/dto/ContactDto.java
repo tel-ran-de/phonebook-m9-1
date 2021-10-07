@@ -1,43 +1,25 @@
 package com.telran.phonebookapi.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.Builder;
+import lombok.NoArgsConstructor;
 
-
-import java.util.ArrayList;
-import java.util.List;
+import javax.validation.constraints.NotBlank;
 
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class ContactDto {
 
+    @Schema(example = "1", description = "need for edit contact and for response")
     public int id;
 
+    @Schema(example = "Max")
+    @NotBlank
     public String firstName;
-
+    @Schema(example = "Mustermann")
     public String lastName;
-
+    @Schema(example = "This is example contact")
     public String description;
-
-    public String userId;
-
-    @Builder.Default
-    public List<PhoneDto> phoneNumbers = new ArrayList<>();
-
-    @Builder.Default
-    public List<AddressDto> addresses = new ArrayList<>();
-
-    @Builder.Default
-    public List<EmailDto> emails = new ArrayList<>();
-
-    public ContactDto(int id, String firstName, String lastName, String description, String userId) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.description = description;
-        this.userId = userId;
-    }
-
 }

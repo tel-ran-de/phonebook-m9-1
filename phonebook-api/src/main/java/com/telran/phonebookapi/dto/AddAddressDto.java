@@ -8,9 +8,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddressDto {
-
-    public int id;
+public class AddAddressDto {
 
     @Schema(example = "Berlin")
     public String city;

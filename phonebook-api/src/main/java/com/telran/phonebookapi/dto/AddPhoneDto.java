@@ -10,10 +10,8 @@ import javax.validation.constraints.NotBlank;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PhoneDto {
+public class AddPhoneDto {
 
-    @Schema(example = "1")
-    public int id;
     @NotBlank
     @Schema(example = "+49")
     public String countryCode;

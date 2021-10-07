@@ -10,17 +10,12 @@ import javax.validation.constraints.NotBlank;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PhoneDto {
-
-    @Schema(example = "1")
-    public int id;
+public class AddContactDto {
+    @Schema(example = "Max")
     @NotBlank
-    @Schema(example = "+49")
-    public String countryCode;
-    @NotBlank
-    @Schema(example = "017677788890")
-    public String phoneNumber;
-    @Schema(example = "1")
-
-    public int contactId;
+    public String firstName;
+    @Schema(example = "Mustermann")
+    public String lastName;
+    @Schema(example = "This is example contact")
+    public String description;
 }
