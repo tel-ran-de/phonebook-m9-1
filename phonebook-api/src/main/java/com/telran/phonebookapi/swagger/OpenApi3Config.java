@@ -43,7 +43,7 @@ public class OpenApi3Config {
     public SecurityScheme apiKeySecuritySchema() {
         return new SecurityScheme()
                 .name("Access-Token")
-                .description("The activation token(JWT) can be taken along the path: User -> Get test user")
+                .description("The activation token(JWT) can be taken along the path: User -> Get JWT of test user")
                 .in(SecurityScheme.In.HEADER)
                 .type(SecurityScheme.Type.APIKEY);
     }
