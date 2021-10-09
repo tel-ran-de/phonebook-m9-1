@@ -35,7 +35,8 @@ public class MyContactController {
     @Operation(summary = "Add new contact")
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public MyContactDto addContact(Authentication auth, @Valid @RequestBody AddMyContactDto addNewContact) {
+    public MyContactDto addContact(@RequestHeader(value = "Access-Token", required = false) String accessToken,
+                                   Authentication auth, @Valid @RequestBody AddMyContactDto addNewContact) {
         String email = getUserEmail(auth);
 
         MyContact contact = myContactService.add(email, addNewContact.firstName, addNewContact.lastName,
@@ -46,7 +47,8 @@ public class MyContactController {
 
     @Operation(summary = "Update contact")
     @PutMapping("")
-    public MyContactDto editContact(Authentication auth, @Valid @RequestBody MyContactDto editContact) {
+    public MyContactDto editContact(@RequestHeader(value = "Access-Token", required = false) String accessToken,
+                                    Authentication auth, @Valid @RequestBody MyContactDto editContact) {
         String email = getUserEmail(auth);
 
         MyContact contact = myContactService.edit(email, editContact.id,
@@ -59,7 +61,8 @@ public class MyContactController {
 
     @Operation(summary = "Get contact by contact id")
     @GetMapping("/{id}")
-    public MyContactDto getContactById(Authentication auth, @Parameter(description = "contact id", example = "1") @PathVariable int id) {
+    public MyContactDto getContactById(@RequestHeader(value = "Access-Token", required = false) String accessToken,
+                                       Authentication auth, @Parameter(description = "contact id", example = "1") @PathVariable int id) {
         String email = getUserEmail(auth);
 
         MyContact contact = myContactService.getById(email, id);
@@ -68,7 +71,8 @@ public class MyContactController {
 
     @Operation(summary = "Delete contact by contact id")
     @DeleteMapping("/{id}")
-    public void removeContactById(Authentication auth, @Parameter(description = "contact id", example = "1") @PathVariable int id) {
+    public void removeContactById(@RequestHeader(value = "Access-Token", required = false) String accessToken,
+                                  Authentication auth, @Parameter(description = "contact id", example = "1") @PathVariable int id) {
         String email = getUserEmail(auth);
 
         myContactService.removeById(email, id);
@@ -77,7 +81,8 @@ public class MyContactController {
 
     @Operation(summary = "Delete all contact by authenticated user")
     @DeleteMapping("/all")
-    public void removeAllContactsById(Authentication auth) {
+    public void removeAllContactsById(@RequestHeader(value = "Access-Token", required = false) String accessToken,
+                                      Authentication auth) {
         String email = getUserEmail(auth);
 
         myContactService.removeAllContactsByUser(email);
@@ -85,7 +90,8 @@ public class MyContactController {
 
     @Operation(summary = "Get list of contacts by authenticated user")
     @GetMapping("")
-    public List<MyContactDto> getAllContactsByAuthUser(Authentication auth) {
+    public List<MyContactDto> getAllContactsByAuthUser(@RequestHeader(value = "Access-Token", required = false) String accessToken,
+                                                       Authentication auth) {
         String email = getUserEmail(auth);
 
         return myContactService.getAllContactsByUserId(email)

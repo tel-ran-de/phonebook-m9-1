@@ -54,7 +54,7 @@ public class UserService {
         this.userMapper = userMapper;
     }
 
-    public void addUser(String userEmail, String userPassword) {
+    public String addUser(String userEmail, String userPassword) {
         String userId = userEmail.toLowerCase().trim();
 
         if (userRepository.findById(userId).isPresent()) {
@@ -74,6 +74,8 @@ public class UserService {
             activationTokenRepository.save(new ActivationToken(token, user));
             emailSender.sendMail(user.getEmail(), ACTIVATION_SUBJECT, ACTIVATION_MESSAGE
                     + uiHost + UI_ACTIVATION_LINK + token);
+
+            return token;
         }
     }
 

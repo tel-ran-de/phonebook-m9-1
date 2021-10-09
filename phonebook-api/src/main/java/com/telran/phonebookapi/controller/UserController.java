@@ -46,14 +46,14 @@ public class UserController {
             description = "An email will be sent with a link to activation to the address specified during registration. The link will contain an activation token" +
                     "\n\nEmail validation pattern: ^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,10}$")
     @PostMapping("")
-    public void addUser(@Parameter(description = "user registration body") @Valid @RequestBody AddUserDto registerUser) {
-        userService.addUser(registerUser.email, registerUser.password);
+    @ResponseStatus(HttpStatus.CREATED)
+    public String addUser(@Parameter(description = "user registration body") @Valid @RequestBody AddUserDto registerUser) {
+        return userService.addUser(registerUser.email, registerUser.password);
     }
 
     @Operation(summary = "Activate registered user",
             description = "As a parameter, you need to specify the token that was sent to the email of the registered user")
     @GetMapping("/activation/{token}")
-    @ResponseStatus(HttpStatus.CREATED)
     public void activateUser(@NotBlank @Parameter(description = "password recovery token") @PathVariable String token) {
         userService.activateUser(token);
     }

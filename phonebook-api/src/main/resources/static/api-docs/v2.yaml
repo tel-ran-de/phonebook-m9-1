@@ -1,0 +1,539 @@
+---
+openapi: 3.0.1
+info:
+  title: Phone book REST API
+  description: This is project of students Tel-Ran.de college
+  termsOfService: http://dev.phonebook-1.telran-edu.de/
+  contact:
+    name: Tel-Ran.de
+    url: https://www.tel-ran.de
+    email: go@tel-ran.de
+  version: "2.0"
+servers:
+  - url: http://dev.phonebook-1.telran-edu.de
+security:
+  - JWT: [ ]
+paths:
+  /api/user/login:
+    post:
+      tags:
+        - Authorization
+      summary: Login
+      description: Register user request body
+      operationId: logIn
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddUserDto'
+        required: true
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+          content: { }
+      security: [ ]
+  /api/user/password:
+    put:
+      tags:
+        - Update user password
+      summary: Update password
+      description: Updating the password. The recovery token is contained within the request body
+      operationId: changePassword
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewPasswordDto'
+        required: true
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+          content: { }
+      security: [ ]
+  /api/user/auth-password:
+    put:
+      tags:
+        - Update user password
+      summary: Updating the password of registered user
+      description: "Updating the password of registered user. \n\nUser data(needs user email) for updating is contained in the JWT"
+      operationId: changePasswordAuth
+      parameters:
+        - name: Access-Token
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewPasswordAuthDto'
+        required: true
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+          content: { }
+      security:
+        - JWT: [ ]
+  /api/my-contacts:
+    get:
+      tags:
+        - My Contact
+      summary: Get list of contacts by authenticated user
+      operationId: getAllContactsByAuthUser
+      parameters:
+        - name: Access-Token
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MyContactDto'
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+          content: { }
+      security:
+        - JWT: [ ]
+    put:
+      tags:
+        - My Contact
+      summary: Update contact
+      operationId: editContact
+      parameters:
+        - name: Access-Token
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MyContactDto'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/MyContactDto'
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+          content: { }
+      security:
+        - JWT: [ ]
+    post:
+      tags:
+        - My Contact
+      summary: Add new contact
+      operationId: addContact
+      parameters:
+        - name: Access-Token
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddMyContactDto'
+        required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/MyContactDto'
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+          content: { }
+      security:
+        - JWT: [ ]
+  /api/user:
+    get:
+      tags:
+        - User
+      summary: Get the data of the authenticated user
+      description: |-
+        Returns the data of the logged in user.
+
+        User data(needs user email) for updating is contained in the JWT
+      operationId: getUser
+      parameters:
+        - name: Access-Token
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UserDto'
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+          content: { }
+      security:
+        - JWT: [ ]
+    post:
+      tags:
+        - Authorization
+      summary: New user registration
+      description: |-
+        An email will be sent with a link to activation to the address specified during registration. The link will contain an activation token
+
+        Email validation pattern: ^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,10}$
+      operationId: addUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddUserDto'
+        required: true
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+          content: { }
+      security: [ ]
+  /api/user/password/recovery:
+    post:
+      tags:
+        - Update user password
+      summary: Password recovery request
+      description: Unauthorized user request for updating the password
+      operationId: recoverPassword
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecoveryPasswordDto'
+        required: true
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+          content: { }
+      security: [ ]
+  /api/user/token:
+    get:
+      tags:
+        - User
+      summary: Get JWT of test user
+      description: |-
+        This token will expire on 07 October 2036
+
+        Test user email: test@gmail.com
+      operationId: getTestUserToken
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+          content: { }
+      security: [ ]
+  /api/user/activation/{token}:
+    get:
+      tags:
+        - Authorization
+      summary: Activate registered user
+      description: As a parameter, you need to specify the token that was sent to the email of the registered user
+      operationId: activateUser
+      parameters:
+        - name: Access-Token
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+        - name: token
+          in: path
+          description: password recovery token
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+          content: { }
+      security: [ ]
+  /api/my-contacts/{id}:
+    get:
+      tags:
+        - My Contact
+      summary: Get contact by contact id
+      operationId: getContactById
+      parameters:
+        - name: Access-Token
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+        - name: id
+          in: path
+          description: contact id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            format: int32
+          example: 1
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/MyContactDto'
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+          content: { }
+      security:
+        - JWT: [ ]
+    delete:
+      tags:
+        - My Contact
+      summary: Delete contact by contact id
+      operationId: removeContactById
+      parameters:
+        - name: Access-Token
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+        - name: id
+          in: path
+          description: contact id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            format: int32
+          example: 1
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+          content: { }
+      security:
+        - JWT: [ ]
+  /api/my-contacts/all:
+    delete:
+      tags:
+        - My Contact
+      summary: Delete all contact by authenticated user
+      operationId: removeAllContactsById
+      parameters:
+        - name: Access-Token
+          in: header
+          required: false
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+          content: { }
+      security:
+        - JWT: [ ]
+components:
+  schemas:
+    NewPasswordDto:
+      required:
+        - password
+        - token
+      type: object
+      properties:
+        password:
+          maxLength: 20
+          minLength: 8
+          type: string
+          description: The password is shorter than 20 or longer than 20
+          example: valid_password
+        token:
+          maxLength: 100
+          minLength: 10
+          type: string
+          description: this token was sent, saved to the database and sent to the email inside the link when requesting to restore the password
+    NewPasswordAuthDto:
+      required:
+        - password
+      type: object
+      properties:
+        password:
+          maxLength: 20
+          minLength: 8
+          type: string
+          description: The password is shorter than 20 or longer than 20
+          example: valid_password
+    MyContactDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        firstName:
+          type: string
+        lastName:
+          type: string
+        description:
+          type: string
+        address:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+    AddUserDto:
+      required:
+        - email
+        - password
+      type: object
+      properties:
+        email:
+          type: string
+          description: 'used validation pattern: ^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,10}$'
+          example: valid.email@email.com
+        password:
+          maxLength: 20
+          minLength: 8
+          type: string
+          description: The password is shorter than 20 or longer than 20
+          example: valid_password
+      description: user registration body
+    RecoveryPasswordDto:
+      required:
+        - email
+      type: object
+      properties:
+        email:
+          type: string
+          description: 'used validation pattern: ^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,10}$'
+          example: valid.email@email.com
+    AddMyContactDto:
+      type: object
+      properties:
+        firstName:
+          type: string
+          example: Max
+        lastName:
+          type: string
+          example: Mustermann
+        description:
+          type: string
+          example: This is an example of a contact
+        address:
+          type: string
+          example: Berlin, 10117, Friedrichstraße 176-179
+        phone:
+          type: string
+          example: "017677788890"
+        email:
+          type: string
+          example: max.mustermann@gamil.mock
+    UserDto:
+      required:
+        - email
+        - password
+      type: object
+      properties:
+        email:
+          type: string
+          description: 'used validation pattern: ^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,10}$'
+          example: valid.email@email.com
+        password:
+          maxLength: 20
+          minLength: 8
+          type: string
+          description: The password is shorter than 20 or longer than 20
+          example: valid_password
+        roles:
+          type: array
+          description: ROLE_USER
+          example: ROLE_USER
+          items:
+            type: string
+            description: ROLE_USER
+            example: ROLE_USER
+  securitySchemes:
+    JWT:
+      type: apiKey
+      name: Access-Token
+      in: header
