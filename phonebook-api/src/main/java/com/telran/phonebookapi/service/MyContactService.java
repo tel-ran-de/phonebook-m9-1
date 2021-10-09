@@ -8,6 +8,7 @@ import com.telran.phonebookapi.persistance.IUserRepository;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 import java.util.List;
 
 import static com.telran.phonebookapi.service.ContactService.CONTACT_DOES_NOT_EXIST;
@@ -76,6 +77,7 @@ public class MyContactService {
         contactRepository.deleteById(id);
     }
 
+    @Transactional
     public void removeAllContactsByUser(String userEmail) {
         User user = getUserById(userEmail);
 
