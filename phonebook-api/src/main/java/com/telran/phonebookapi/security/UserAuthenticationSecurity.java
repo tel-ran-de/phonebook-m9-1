@@ -54,7 +54,7 @@ public class UserAuthenticationSecurity extends WebSecurityConfigurerAdapter {
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .csrf().disable()
+                .cors().disable()
                 .csrf().disable()
                 .logout().disable()
                 .formLogin().disable()
