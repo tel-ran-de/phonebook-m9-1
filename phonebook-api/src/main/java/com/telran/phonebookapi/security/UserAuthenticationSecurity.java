@@ -55,6 +55,7 @@ public class UserAuthenticationSecurity extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .csrf().disable()
+                .csrf().disable()
                 .logout().disable()
                 .formLogin().disable()
                 .httpBasic().disable();
