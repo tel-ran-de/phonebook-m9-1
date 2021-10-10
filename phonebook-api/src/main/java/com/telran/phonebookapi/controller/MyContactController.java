@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 @SecurityRequirement(name = "JWT")
 @RestController
 @RequestMapping("/api/my-contacts")
+@CrossOrigin()
 public class MyContactController {
 
     private final MyContactService myContactService;
