@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 @Tag(name = "User")
 @RestController
 @RequestMapping("/api/user")
+@CrossOrigin()
 public class UserController {
 
     UserService userService;
