@@ -10,11 +10,20 @@ services:
     volumes:
       - ./database:/var/lib/postgresql/data
     ports:
-      - 5442:5432
+      - "5442:5432"
 
   app:
-    image: phonebook
+    build:
+      context: ./
+    depends_on:
+      - db
     environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/phonebook
+      - SPRING_FLYWAY_URL=jdbc:postgresql://db:5432/phonebook
+      - SPRING_FLYWAY_USER=postgres
+      - SPRING_FLYWAY_PASSWORD=111111222
       - POSTGRES_PASSWORD=111111222
       - POSTGRES_DB=phonebook
-# something more
+    ports:
+      - "8080:8080"
+
