@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: phonebook-deployment
+  namespace: phonebook
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: phonebook
+  template:
+    metadata:
+      labels:
+        app: phonebook
+    spec:
+      containers:
+        - name: phonebook-service
+          image: ghcr.io/tel-ran-de/phonebook-m9-1:ec841cd4b353b5f4e9aca2fb120c1e548ee1076d
+          ports:
+            - containerPort: 8080
+          imagePullPolicy: Always
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "200m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+      imagePullSecrets:
+        - name: ghcr-secret
+      env:
+        - name: SPRING_DATASOURCE_URL
+          valueFrom:
+            secretKeyRef:
+              name: phonebook-secrets
+              key: SPRING_DATASOURCE_URL
+        - name: SPRING_FLYWAY_URL
+          valueFrom:
+            secretKeyRef:
+              name: phonebook-secrets
+              key: SPRING_FLYWAY_URL
+        - name: SPRING_FLYWAY_USER
+          valueFrom:
+            secretKeyRef:
+              name: phonebook-secrets
+              key: SPRING_FLYWAY_USER
+        - name: SPRING_FLYWAY_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: phonebook-secrets
+              key: SPRING_FLYWAY_PASSWORD
+        - name: SPRING_DATASOURCE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: phonebook-secrets
+              key: SPRING_DATASOURCE_PASSWORD
+        - name: SPRING_DATASOURCE_username
+          valueFrom:
+            secretKeyRef:
+              name: phonebook-secrets
+              key: SPRING_DATASOURCE_username
+        - name: POSTGRES_DB
+          valueFrom:
+            secretKeyRef:
+              name: phonebook-secrets
+              key: POSTGRES_DB

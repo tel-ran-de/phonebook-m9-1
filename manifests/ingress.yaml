@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: phonebook-ingress
+  namespace: phonebook
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - phonebook.tel-ran.de
+      secretName: phonebook-tls
+  rules:
+    - host: phonebook.tel-ran.de
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: phonebook-service
+                port:
+                  number: 80
