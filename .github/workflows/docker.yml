@@ -33,14 +33,13 @@ jobs:
       - name: Commit updated deployment files
         run: |
           IMAGE_TAG="ghcr.io/${{ github.repository }}:${{ github.sha }}"
-          cd manifests
-          sed -i "s|ghcr.io/tel-ran-de/phonebook:.*|${IMAGE_TAG}|g" deployment.yaml
+          # cd manifests
+          # sed -i "s|ghcr.io/tel-ran-de/chatty-api:.*|${IMAGE_TAG}|g" deployment.yaml
           
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git commit -a -m "Update Docker image tag to ${IMAGE_TAG}"
 
       - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GH_TOKEN }}
+        run: |
+          git push origin master
