@@ -34,7 +34,7 @@ jobs:
         run: |
           IMAGE_TAG="ghcr.io/${{ github.repository }}:${{ github.sha }}"
           # cd manifests
-          # sed -i "s|ghcr.io/tel-ran-de/chatty-api:.*|${IMAGE_TAG}|g" deployment.yaml
+          # sed -i "s|ghcr.io/tel-ran-de/phonebook-m9-1:.*|${IMAGE_TAG}|g" deployment.yaml
           
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
