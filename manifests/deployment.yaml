@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: phonebook-service
-          image: ghcr.io/tel-ran-de/phonebook-m9-1:7ad7741148e75ee18c97a03c7edc5077e861b554
+          image: ghcr.io/tel-ran-de/phonebook-m9-1:38cc981d7e4249dbadb3fc68105c04c231583a90
           ports:
             - containerPort: 8080
           imagePullPolicy: Always
@@ -31,41 +31,41 @@ spec:
             limits:
               memory: "1Gi"
               cpu: "1"
+          env:
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: phonebook-secrets
+                  key: SPRING_DATASOURCE_URL
+            - name: SPRING_FLYWAY_URL
+              valueFrom:
+                secretKeyRef:
+                  name: phonebook-secrets
+                  key: SPRING_FLYWAY_URL
+            - name: SPRING_FLYWAY_USER
+              valueFrom:
+                secretKeyRef:
+                  name: phonebook-secrets
+                  key: SPRING_FLYWAY_USER
+            - name: SPRING_FLYWAY_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: phonebook-secrets
+                  key: SPRING_FLYWAY_PASSWORD
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: phonebook-secrets
+                  key: SPRING_DATASOURCE_PASSWORD
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: phonebook-secrets
+                  key: SPRING_DATASOURCE_username
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: phonebook-secrets
+                  key: POSTGRES_DB
       imagePullSecrets:
         - name: ghcr-secret
-      env:
-        - name: SPRING_DATASOURCE_URL
-          valueFrom:
-            secretKeyRef:
-              name: phonebook-secrets
-              key: SPRING_DATASOURCE_URL
-        - name: SPRING_FLYWAY_URL
-          valueFrom:
-            secretKeyRef:
-              name: phonebook-secrets
-              key: SPRING_FLYWAY_URL
-        - name: SPRING_FLYWAY_USER
-          valueFrom:
-            secretKeyRef:
-              name: phonebook-secrets
-              key: SPRING_FLYWAY_USER
-        - name: SPRING_FLYWAY_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: phonebook-secrets
-              key: SPRING_FLYWAY_PASSWORD
-        - name: SPRING_DATASOURCE_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: phonebook-secrets
-              key: SPRING_DATASOURCE_PASSWORD
-        - name: SPRING_DATASOURCE_username
-          valueFrom:
-            secretKeyRef:
-              name: phonebook-secrets
-              key: SPRING_DATASOURCE_username
-        - name: POSTGRES_DB
-          valueFrom:
-            secretKeyRef:
-              name: phonebook-secrets
-              key: POSTGRES_DB
