@@ -57,7 +57,7 @@ spec:
                 secretKeyRef:
                   name: phonebook-secrets
                   key: SPRING_DATASOURCE_PASSWORD
-            - name: SPRING_DATASOURCE_USERNAME
+            - name: SPRING_DATASOURCE_username
               valueFrom:
                 secretKeyRef:
                   name: phonebook-secrets
