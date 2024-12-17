@@ -1,4 +1,4 @@
-CREATE TABLE public.users_roles
+CREATE TABLE IF NOT EXISTS public.users_roles
 (
     users_email character varying(255) COLLATE pg_catalog."default" NOT NULL,
     roles integer,

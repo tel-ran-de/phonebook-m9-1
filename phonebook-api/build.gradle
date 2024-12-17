@@ -7,7 +7,7 @@ plugins {
 
 group = 'com.telran'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+sourceCompatibility = '14'
 
 configurations {
     compileOnly {
@@ -29,11 +29,11 @@ dependencies {
 
     compile 'org.flywaydb:flyway-core:6.5.0'
 
-    compileOnly 'org.projectlombok:lombok'
+    compileOnly 'org.projectlombok:lombok:1.18.20'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     implementation 'org.postgresql:postgresql'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-    annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok:1.18.20'
     implementation 'com.h2database:h2'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
