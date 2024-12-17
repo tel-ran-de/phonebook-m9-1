@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: phonebook-service
-          image: ghcr.io/tel-ran-de/phonebook-m9-1:a7164a764f1bd65aa48cb324be61501b05d93638
+          image: ghcr.io/tel-ran-de/phonebook-m9-1:89a683f37211149a9fc8f7a3a7df0de265574662
           ports:
             - containerPort: 8080
           imagePullPolicy: Always
